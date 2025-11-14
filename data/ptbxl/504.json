@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "7678",
+        "ecg_id": "3932",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [5.98 - 6.14 s]",
+            "answer": 1,
+            "answer_str": "(b) [3.37 - 3.52 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [5.98 - 6.14 s]",
-                "(b) [6.40 - 6.64 s]",
-                "(c) [6.67 - 6.77 s]",
-                "(d) [7.03 - 7.24 s]"
+                "(a) [0.69 - 0.80 s]",
+                "(b) [3.37 - 3.52 s]",
+                "(c) [6.07 - 6.32 s]",
+                "(d) [7.21 - 7.46 s]"
             ]
         },
         {
@@ -54,14 +54,14 @@
         },
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [4.32 - 4.48 s]",
+            "answer": 3,
+            "answer_str": "(d) [7.48 - 7.64 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.20 - 2.36 s]",
-                "(b) [3.70 - 3.95 s]",
-                "(c) [4.32 - 4.48 s]",
-                "(d) [5.83 - 5.95 s]"
+                "(a) [1.40 - 1.62 s]",
+                "(b) [1.91 - 2.19 s]",
+                "(c) [3.19 - 3.30 s]",
+                "(d) [7.48 - 7.64 s]"
             ]
         },
         {
@@ -95,14 +95,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the monophasic positive QRS wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [7.59 - 7.75 s]",
+            "answer": 1,
+            "answer_str": "(b) [2.54 - 2.70 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.47 - 0.70 s]",
-                "(b) [3.34 - 3.46 s]",
-                "(c) [4.10 - 4.27 s]",
-                "(d) [7.59 - 7.75 s]"
+                "(a) [0.52 - 0.74 s]",
+                "(b) [2.54 - 2.70 s]",
+                "(c) [4.02 - 4.13 s]",
+                "(d) [6.88 - 7.13 s]"
             ]
         },
         {
@@ -118,10 +118,14 @@
         {
             "question": "Which of the following leads show the notched QRS complex? Select all possible leads from the options below.",
             "answer": [
-                1
+                1,
+                2,
+                3
             ],
             "answer_str": [
-                "(b) Lead aVL"
+                "(b) Lead aVL",
+                "(c) Lead V5",
+                "(d) Lead V6"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -133,14 +137,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the notched QRS complex? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [5.98 - 6.14 s]",
+            "answer": 3,
+            "answer_str": "(d) [6.66 - 6.82 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [4.53 - 4.75 s]",
-                "(b) [5.98 - 6.14 s]",
-                "(c) [7.45 - 7.56 s]",
-                "(d) [7.87 - 8.09 s]"
+                "(a) [1.91 - 2.19 s]",
+                "(b) [2.31 - 2.50 s]",
+                "(c) [4.84 - 4.97 s]",
+                "(d) [6.66 - 6.82 s]"
             ]
         }
     ]

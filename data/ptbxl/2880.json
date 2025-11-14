@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "6130",
+        "ecg_id": "9902",
         "target_dx": "lateral_ischemia",
         "dx_label": "positive",
-        "path_idx": 0
+        "path_idx": 1
     },
     "data": [
         {
@@ -39,14 +39,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST depression? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [6.02 - 6.12 s]",
+            "answer": 1,
+            "answer_str": "(b) [0.99 - 1.10 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.16 - 1.37 s]",
-                "(b) [1.55 - 1.66 s]",
-                "(c) [1.98 - 2.28 s]",
-                "(d) [6.02 - 6.12 s]"
+                "(a) [0.46 - 0.74 s]",
+                "(b) [0.99 - 1.10 s]",
+                "(c) [4.02 - 4.31 s]",
+                "(d) [5.08 - 5.19 s]"
             ]
         }
     ]

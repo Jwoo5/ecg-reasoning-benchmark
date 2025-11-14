@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "17861",
+        "ecg_id": "17578",
         "target_dx": "complete_right_bundle_branch_block",
         "dx_label": "negative",
-        "path_idx": 0
+        "path_idx": 4
     },
     "data": [
         {
@@ -20,9 +20,11 @@
         {
             "question": "Which of the following leads show the RSR' pattern? Select all possible leads from the options below.",
             "answer": [
+                0,
                 1
             ],
             "answer_str": [
+                "(a) Lead V1",
                 "(b) Lead V2"
             ],
             "question_type": "lead_grounding",
@@ -33,14 +35,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with RSR' pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [8.22 - 8.33 s]",
+            "answer": 1,
+            "answer_str": "(b) [1.37 - 1.49 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.09 - 3.37 s]",
-                "(b) [5.18 - 5.39 s]",
-                "(c) [8.22 - 8.33 s]",
-                "(d) [8.97 - 9.09 s]"
+                "(a) [0.75 - 0.95 s]",
+                "(b) [1.37 - 1.49 s]",
+                "(c) [1.54 - 1.82 s]",
+                "(d) [9.12 - 9.24 s]"
             ]
         },
         {

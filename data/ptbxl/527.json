@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "13200",
+        "ecg_id": "297",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "negative",
-        "path_idx": 0
+        "path_idx": 4
     },
     "data": [
         {
@@ -19,15 +19,14 @@
         },
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [1.82 - 1.94 s]",
+            "answer": 3,
+            "answer_str": "(d) [7.12 - 7.25 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.55 - 0.77 s]",
-                "(b) [1.82 - 1.94 s]",
-                "(c) [3.46 - 3.69 s]",
-                "(d) [7.26 - 7.44 s]",
-                "(e) [7.26 - 7.44 s]"
+                "(a) [0.87 - 1.02 s]",
+                "(b) [3.87 - 4.08 s]",
+                "(c) [5.01 - 5.25 s]",
+                "(d) [7.12 - 7.25 s]"
             ]
         },
         {
@@ -55,15 +54,14 @@
         },
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [4.41 - 4.53 s]",
+            "answer": 0,
+            "answer_str": "(a) [5.39 - 5.51 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.39 - 3.68 s]",
-                "(b) [3.91 - 4.09 s]",
-                "(c) [4.41 - 4.53 s]",
-                "(d) [5.30 - 5.56 s]",
-                "(e) [5.51 - 5.73 s]"
+                "(a) [5.39 - 5.51 s]",
+                "(b) [5.61 - 5.89 s]",
+                "(c) [6.10 - 6.22 s]",
+                "(d) [6.48 - 6.68 s]"
             ]
         },
         {
