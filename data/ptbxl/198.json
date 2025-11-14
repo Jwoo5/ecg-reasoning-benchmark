@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "5290",
+        "ecg_id": "111",
         "target_dx": "first_degree_av_block",
         "dx_label": "negative",
-        "path_idx": 0
+        "path_idx": 1
     },
     "data": [
         {
@@ -29,14 +29,14 @@
         },
         {
             "question": "In which of the following segments can you observe a P wave that demonstrates a non-prolonged PR interval? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [3.40 - 3.52 s]",
+            "answer": 3,
+            "answer_str": "(d) [7.75 - 7.87 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.40 - 3.52 s]",
-                "(b) [4.88 - 5.08 s]",
-                "(c) [7.00 - 7.08 s]",
-                "(d) [8.27 - 8.50 s]"
+                "(a) [1.06 - 1.24 s]",
+                "(b) [4.32 - 4.54 s]",
+                "(c) [6.02 - 6.13 s]",
+                "(d) [7.75 - 7.87 s]"
             ]
         },
         {

@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "12769",
+        "ecg_id": "15607",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": "negative",
-        "path_idx": 0
+        "path_idx": 3
     },
     "data": [
         {
@@ -30,14 +30,13 @@
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 3,
-            "answer_str": "(d) [5.78 - 5.96 s]",
+            "answer_str": "(d) [9.11 - 9.27 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.15 - 3.33 s]",
-                "(b) [4.03 - 4.21 s]",
-                "(c) [5.17 - 5.42 s]",
-                "(d) [5.78 - 5.96 s]",
-                "(e) [6.60 - 6.82 s]"
+                "(a) [1.98 - 2.09 s]",
+                "(b) [6.37 - 6.59 s]",
+                "(c) [8.81 - 8.98 s]",
+                "(d) [9.11 - 9.27 s]"
             ]
         },
         {
@@ -64,15 +63,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [2.11 - 2.31 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.20 - 0.34 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.92 - 1.15 s]",
-                "(b) [2.11 - 2.31 s]",
-                "(c) [5.17 - 5.42 s]",
-                "(d) [6.84 - 7.01 s]",
-                "(e) [6.97 - 7.16 s]"
+                "(a) [0.20 - 0.34 s]",
+                "(b) [1.42 - 1.64 s]",
+                "(c) [5.44 - 5.72 s]",
+                "(d) [7.92 - 8.04 s]"
             ]
         },
         {

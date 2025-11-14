@@ -4,7 +4,7 @@
         "ecg_id": "1222",
         "target_dx": "second_degree_av_block",
         "dx_label": "positive",
-        "path_idx": 0
+        "path_idx": 1
     },
     "data": [
         {
@@ -23,9 +23,9 @@
             "answer_str": "(d) [6th QRS wave - 7th QRS wave]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2nd QRS wave - 3rd QRS wave]",
-                "(b) [4th QRS wave - 5th QRS wave]",
-                "(c) [5th QRS wave - 6th QRS wave]",
+                "(a) [1st QRS wave - 2nd QRS wave]",
+                "(b) [2nd QRS wave - 3rd QRS wave]",
+                "(c) [4th QRS wave - 5th QRS wave]",
                 "(d) [6th QRS wave - 7th QRS wave]"
             ]
         },
@@ -51,14 +51,14 @@
         },
         {
             "question": "In which of the following segments can you observe the non-conducted P wave, specifically in the prolonged RR interval that you identified earlier? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [7.32 - 7.48 s]",
+            "answer": 3,
+            "answer_str": "(d) [7.32 - 7.48 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.13 - 1.29 s]",
-                "(b) [6.88 - 7.11 s]",
-                "(c) [7.32 - 7.48 s]",
-                "(d) [8.67 - 8.79 s]"
+                "(a) [0.58 - 0.82 s]",
+                "(b) [6.28 - 6.45 s]",
+                "(c) [6.68 - 6.78 s]",
+                "(d) [7.32 - 7.48 s]"
             ]
         }
     ]

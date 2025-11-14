@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "5752",
+        "ecg_id": "12143",
         "target_dx": "left_anterior_fascicular_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [1.80 - 1.95 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.37 - 0.49 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.48 - 0.60 s]",
-                "(b) [1.80 - 1.95 s]",
-                "(c) [2.05 - 2.29 s]",
-                "(d) [4.68 - 4.97 s]"
+                "(a) [0.37 - 0.49 s]",
+                "(b) [2.65 - 2.87 s]",
+                "(c) [5.34 - 5.48 s]",
+                "(d) [7.89 - 8.16 s]"
             ]
         },
         {
@@ -69,13 +69,13 @@
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 2,
-            "answer_str": "(c) [5.18 - 5.33 s]",
+            "answer_str": "(c) [7.64 - 7.77 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.48 - 0.60 s]",
-                "(b) [1.20 - 1.47 s]",
-                "(c) [5.18 - 5.33 s]",
-                "(d) [6.56 - 6.78 s]"
+                "(a) [1.28 - 1.37 s]",
+                "(b) [6.14 - 6.42 s]",
+                "(c) [7.64 - 7.77 s]",
+                "(d) [7.85 - 8.10 s]"
             ]
         },
         {
@@ -109,14 +109,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [2.93 - 3.09 s]",
+            "answer": 3,
+            "answer_str": "(d) [7.64 - 7.77 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.94 - 1.14 s]",
-                "(b) [2.93 - 3.09 s]",
-                "(c) [3.89 - 3.99 s]",
-                "(d) [7.94 - 8.17 s]"
+                "(a) [1.28 - 1.37 s]",
+                "(b) [1.65 - 1.90 s]",
+                "(c) [2.65 - 2.87 s]",
+                "(d) [7.64 - 7.77 s]"
             ]
         }
     ]

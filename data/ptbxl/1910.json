@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "3039",
+        "ecg_id": "17802",
         "target_dx": "anterior_myocardial_infarction",
         "dx_label": "positive",
-        "path_idx": 0
+        "path_idx": 1
     },
     "data": [
         {
@@ -39,14 +39,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [8.25 - 8.38 s]",
+            "answer": 0,
+            "answer_str": "(a) [1.41 - 1.55 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [4.00 - 4.22 s]",
-                "(b) [5.12 - 5.37 s]",
-                "(c) [8.25 - 8.38 s]",
-                "(d) [9.00 - 9.11 s]"
+                "(a) [1.41 - 1.55 s]",
+                "(b) [4.14 - 4.39 s]",
+                "(c) [6.67 - 6.80 s]",
+                "(d) [7.87 - 8.11 s]"
             ]
         }
     ]

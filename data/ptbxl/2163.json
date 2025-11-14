@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "18359",
+        "ecg_id": "5061",
         "target_dx": "inferior_myocardial_infarction",
         "dx_label": "positive",
         "path_idx": 0
@@ -48,15 +48,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 4,
-            "answer_str": "(e) [9.04 - 9.15 s]",
+            "answer": 2,
+            "answer_str": "(c) [1.28 - 1.39 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.95 - 2.19 s]",
-                "(b) [3.43 - 3.64 s]",
-                "(c) [4.07 - 4.23 s]",
-                "(d) [6.35 - 6.55 s]",
-                "(e) [9.04 - 9.15 s]"
+                "(a) [0.22 - 0.34 s]",
+                "(b) [0.57 - 0.79 s]",
+                "(c) [1.28 - 1.39 s]",
+                "(d) [8.68 - 8.85 s]"
             ]
         }
     ]
