@@ -1,0 +1,88 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "19993",
+        "target_dx": "right_ventricular_hypertrophy",
+        "dx_label": "positive",
+        "path_idx": 1
+    },
+    "data": [
+        {
+            "question": "Is right bundle branch block present on this ECG?, including incomplete and complete RBBB?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show right axis deviation, where the QRS axis is between 100 and 180 degrees?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 1,
+            "answer_str": "(b) [2.08 - 2.18 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.90 - 2.01 s]",
+                "(b) [2.08 - 2.18 s]",
+                "(c) [3.97 - 4.19 s]",
+                "(d) [8.10 - 8.29 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 1,
+            "answer_str": "(b) [120 - 150 degrees]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [90 - 120 degrees]",
+                "(b) [120 - 150 degrees]",
+                "(c) [150 - 180 degrees]"
+            ]
+        },
+        {
+            "question": "Does lead V1 show a dominant R wave, where the amplitude of the positive deflection in the QRS complex is greater than the amplitude of the negative deflection?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 3,
+            "answer_str": "(d) [6.29 - 6.39 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [0.63 - 0.84 s]",
+                "(b) [2.22 - 2.38 s]",
+                "(c) [4.41 - 4.53 s]",
+                "(d) [6.29 - 6.39 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 2,
+            "answer_str": "(c) [0.6 - 0.9 mV]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) Below 0.3 mV",
+                "(b) [0.3 - 0.6 mV]",
+                "(c) [0.6 - 0.9 mV]",
+                "(d) [0.9 - 1.2 mV]"
+            ]
+        }
+    ]
+}

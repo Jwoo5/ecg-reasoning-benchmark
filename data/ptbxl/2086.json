@@ -1,0 +1,52 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "12432",
+        "target_dx": "inferior_myocardial_infarction",
+        "dx_label": "positive",
+        "path_idx": 1
+    },
+    "data": [
+        {
+            "question": "Does this ECG show ST elevation in at least two of the inferior leads, including leads II, III, and aVF?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show ST elevation? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1,
+                2
+            ],
+            "answer_str": [
+                "(a) Lead II",
+                "(b) Lead III",
+                "(c) Lead aVF"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead II",
+                "(b) Lead III",
+                "(c) Lead aVF"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 2,
+            "answer_str": "(c) [5.36 - 5.50 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [0.50 - 0.72 s]",
+                "(b) [1.69 - 1.78 s]",
+                "(c) [5.36 - 5.50 s]",
+                "(d) [5.54 - 5.78 s]"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "15696",
+        "target_dx": "anterior_ischemia",
+        "dx_label": "positive",
+        "path_idx": 0
+    },
+    "data": [
+        {
+            "question": "Does this ECG show ST depression in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show inverted T waves in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the inverted T waves? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "answer_str": [
+                "(a) Lead V2",
+                "(b) Lead V3",
+                "(c) Lead V4",
+                "(d) Lead V5"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead V2",
+                "(b) Lead V3",
+                "(c) Lead V4",
+                "(d) Lead V5"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 3,
+            "answer_str": "(d) [7.02 - 7.17 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.58 - 1.69 s]",
+                "(b) [5.14 - 5.37 s]",
+                "(c) [5.91 - 6.03 s]",
+                "(d) [7.02 - 7.17 s]"
+            ]
+        }
+    ]
+}

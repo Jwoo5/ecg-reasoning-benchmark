@@ -1,0 +1,51 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "14247",
+        "target_dx": "lateral_ischemia",
+        "dx_label": "positive",
+        "path_idx": 1
+    },
+    "data": [
+        {
+            "question": "Does this ECG show ST depression in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show ST depression? Select all possible leads from the options below.",
+            "answer": [
+                2,
+                3
+            ],
+            "answer_str": [
+                "(c) Lead V5",
+                "(d) Lead V6"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead I",
+                "(b) Lead aVL",
+                "(c) Lead V5",
+                "(d) Lead V6"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST depression? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 1,
+            "answer_str": "(b) [2.52 - 2.63 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.00 - 1.20 s]",
+                "(b) [2.52 - 2.63 s]",
+                "(c) [8.87 - 9.09 s]",
+                "(d) [9.31 - 9.41 s]"
+            ]
+        }
+    ]
+}

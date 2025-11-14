@@ -1,0 +1,131 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "18665",
+        "target_dx": "complete_right_bundle_branch_block",
+        "dx_label": "positive",
+        "path_idx": 1
+    },
+    "data": [
+        {
+            "question": "Does this ECG show any kind of RSR' pattern in lead V1 or V2, where there is an additional positive deflection (r' or R') following the initial r or R wave?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the RSR' pattern? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1
+            ],
+            "answer_str": [
+                "(a) Lead V1",
+                "(b) Lead V2"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead V1",
+                "(b) Lead V2"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with RSR' pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 3,
+            "answer_str": "(d) [8.26 - 8.41 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.99 - 2.21 s]",
+                "(b) [4.37 - 4.60 s]",
+                "(c) [7.82 - 8.12 s]",
+                "(d) [8.26 - 8.41 s]",
+                "(e) [8.45 - 8.66 s]"
+            ]
+        },
+        {
+            "question": "Does this ECG show a slurred S wave in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that a slurred S wave is defined as a S wave with a duration greater than that of the preceding R wave or greater than 40 milliseconds, when there is a preceding R wave.",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the slurred S wave? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "answer_str": [
+                "(a) Lead I",
+                "(b) Lead aVL",
+                "(c) Lead V5",
+                "(d) Lead V6"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead I",
+                "(b) Lead aVL",
+                "(c) Lead V5",
+                "(d) Lead V6"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with slurred S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 1,
+            "answer_str": "(b) [1.67 - 1.83 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.21 - 1.49 s]",
+                "(b) [1.67 - 1.83 s]",
+                "(c) [4.72 - 4.89 s]",
+                "(d) [8.45 - 8.66 s]",
+                "(e) [8.45 - 8.66 s]"
+            ]
+        },
+        {
+            "question": "Is the QRS duration prolonged on this ECG? Note that a QRS duration is considered to be prolonged if it is greater than 120 milliseconds.",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 4,
+            "answer_str": "(e) [8.26 - 8.41 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [4.37 - 4.60 s]",
+                "(b) [4.64 - 4.84 s]",
+                "(c) [5.87 - 6.14 s]",
+                "(d) [7.84 - 8.04 s]",
+                "(e) [8.26 - 8.41 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured QRS duration fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 3,
+            "answer_str": "(d) [150 - 160 ms]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [120 - 130 ms]",
+                "(b) [130 - 140 ms]",
+                "(c) [140 - 150 ms]",
+                "(d) [150 - 160 ms]",
+                "(e) Above 160 ms"
+            ]
+        }
+    ]
+}

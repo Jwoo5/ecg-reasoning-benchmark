@@ -1,0 +1,33 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "8048",
+        "target_dx": "first_degree_av_block",
+        "dx_label": "negative",
+        "path_idx": 2
+    },
+    "data": [
+        {
+            "question": "Is every P wave consistently followed by a QRS complex?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you observe a non-conducted P wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [1.44 - 1.56 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.44 - 1.56 s]",
+                "(b) [3.59 - 3.69 s]",
+                "(c) [3.80 - 3.93 s]",
+                "(d) [5.67 - 5.94 s]"
+            ]
+        }
+    ]
+}

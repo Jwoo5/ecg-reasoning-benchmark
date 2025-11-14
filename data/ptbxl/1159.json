@@ -1,0 +1,56 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "816",
+        "target_dx": "premature_atrial_complex",
+        "dx_label": "positive",
+        "path_idx": 0
+    },
+    "data": [
+        {
+            "question": "Are there any premature beats on this ECG, where a QRS complex occurs earlier than the expected time based on the preceding RR intervals?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [0.99 - 1.09 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [0.99 - 1.09 s]",
+                "(b) [5.86 - 5.97 s]",
+                "(c) [6.05 - 6.28 s]",
+                "(d) [7.27 - 7.45 s]"
+            ]
+        },
+        {
+            "question": "For the QRS complex in the selected segment, is the QRS duration prolonged compared to the normal beats on this ECG?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which range does the measured QRS duration for the premature beat fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 1,
+            "answer_str": "(b) [100 - 110 ms]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) Below 100 ms",
+                "(b) [100 - 110 ms]",
+                "(c) [110 - 120 ms]",
+                "(d) [120 - 130 ms]",
+                "(e) Above 130 ms"
+            ]
+        }
+    ]
+}

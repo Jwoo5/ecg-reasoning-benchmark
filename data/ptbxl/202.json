@@ -1,0 +1,65 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "11209",
+        "target_dx": "second_degree_av_block",
+        "dx_label": "positive",
+        "path_idx": 1
+    },
+    "data": [
+        {
+            "question": "Does this ECG show any possibility of dropped beats, where an RR interval is significantly longer than the preceding RR intervals?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following intervals between two consecutive QRS waves shows the significantly prolonged RR interval? To ensure clear indexing, the '1st QRS wave' refers to the QRS wave located at [0.89 - 0.99 s] on the ECG strip.",
+            "answer": 1,
+            "answer_str": "(b) [3rd QRS wave - 4th QRS wave]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1st QRS wave - 2nd QRS wave]",
+                "(b) [3rd QRS wave - 4th QRS wave]",
+                "(c) [5th QRS wave - 6th QRS wave]",
+                "(d) [6th QRS wave - 7th QRS wave]"
+            ]
+        },
+        {
+            "question": "Does this ECG show fibrillatory waves with no visible P waves, suggesting symptoms of atrial fibrillation?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Is a non-conducted P wave present in the prolonged RR interval that you identified earlier?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you observe the non-conducted P wave, specifically in the prolonged RR interval that you identified earlier? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 3,
+            "answer_str": "(d) [3.54 - 3.76 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [0.67 - 0.76 s]",
+                "(b) [2.87 - 2.97 s]",
+                "(c) [3.09 - 3.31 s]",
+                "(d) [3.54 - 3.76 s]"
+            ]
+        }
+    ]
+}

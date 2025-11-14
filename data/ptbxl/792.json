@@ -1,0 +1,31 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "2432",
+        "target_dx": "complete_right_bundle_branch_block",
+        "dx_label": "negative",
+        "path_idx": 5
+    },
+    "data": [
+        {
+            "question": "Does this ECG show any kind of RSR' pattern in lead V1 or V2, where there is an additional positive deflection (r' or R') following the initial r or R wave?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show a broad monophasic R wave in lead V1? Note that a broad monophasic R wave is defined as a positive R wave with a duration greater than 120 milliseconds and a R wave peak time greater than 55 milliseconds.",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        }
+    ]
+}

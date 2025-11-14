@@ -1,0 +1,55 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "20582",
+        "target_dx": "right_ventricular_hypertrophy",
+        "dx_label": "positive",
+        "path_idx": 2
+    },
+    "data": [
+        {
+            "question": "Is right bundle branch block present on this ECG?, including incomplete and complete RBBB?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Is the QRS axis greater than 60 degrees on this ECG?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [4.08 - 4.22 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [4.08 - 4.22 s]",
+                "(b) [8.19 - 8.32 s]",
+                "(c) [9.02 - 9.23 s]",
+                "(d) [9.47 - 9.71 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 1,
+            "answer_str": "(b) [90 - 120 degrees]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [60 - 90 degrees]",
+                "(b) [90 - 120 degrees]",
+                "(c) [120 - 150 degrees]",
+                "(d) [150 - 180 degrees]"
+            ]
+        }
+    ]
+}

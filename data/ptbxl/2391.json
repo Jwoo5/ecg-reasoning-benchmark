@@ -1,0 +1,31 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "1134",
+        "target_dx": "lateral_myocardial_infarction",
+        "dx_label": "negative",
+        "path_idx": 2
+    },
+    "data": [
+        {
+            "question": "Does this ECG show ST elevation in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show pathological Q waves in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that a pathological Q wave in these leads is defined as a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        }
+    ]
+}
