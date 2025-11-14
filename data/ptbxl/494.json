@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "18376",
+        "ecg_id": "20983",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [3.45 - 3.63 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.41 - 0.60 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.30 - 1.44 s]",
-                "(b) [3.45 - 3.63 s]",
-                "(c) [5.74 - 6.00 s]",
-                "(d) [7.60 - 7.90 s]"
+                "(a) [0.41 - 0.60 s]",
+                "(b) [2.25 - 2.50 s]",
+                "(c) [6.61 - 6.75 s]",
+                "(d) [7.75 - 7.98 s]"
             ]
         },
         {
@@ -55,13 +55,13 @@
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 1,
-            "answer_str": "(b) [2.46 - 2.64 s]",
+            "answer_str": "(b) [3.60 - 3.77 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.30 - 1.44 s]",
-                "(b) [2.46 - 2.64 s]",
-                "(c) [6.94 - 7.15 s]",
-                "(d) [8.55 - 8.85 s]"
+                "(a) [1.84 - 1.96 s]",
+                "(b) [3.60 - 3.77 s]",
+                "(c) [7.75 - 7.98 s]",
+                "(d) [8.69 - 8.87 s]"
             ]
         },
         {
@@ -95,14 +95,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the monophasic positive QRS wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [3.45 - 3.63 s]",
+            "answer": 3,
+            "answer_str": "(d) [9.15 - 9.32 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.45 - 3.63 s]",
-                "(b) [5.04 - 5.22 s]",
-                "(c) [5.63 - 5.92 s]",
-                "(d) [7.18 - 7.33 s]"
+                "(a) [0.62 - 0.85 s]",
+                "(b) [0.89 - 1.16 s]",
+                "(c) [7.39 - 7.54 s]",
+                "(d) [9.15 - 9.32 s]"
             ]
         },
         {
@@ -118,9 +118,11 @@
         {
             "question": "Which of the following leads show the notched QRS complex? Select all possible leads from the options below.",
             "answer": [
+                1,
                 2
             ],
             "answer_str": [
+                "(b) Lead aVL",
                 "(c) Lead V5"
             ],
             "question_type": "lead_grounding",
@@ -134,13 +136,13 @@
         {
             "question": "Within the selected leads, in which of the following segments can you observe the notched QRS complex? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 1,
-            "answer_str": "(b) [1.49 - 1.67 s]",
+            "answer_str": "(b) [2.80 - 2.96 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.71 - 1.00 s]",
-                "(b) [1.49 - 1.67 s]",
-                "(c) [2.72 - 2.94 s]",
-                "(d) [9.11 - 9.26 s]"
+                "(a) [1.03 - 1.19 s]",
+                "(b) [2.80 - 2.96 s]",
+                "(c) [4.67 - 4.93 s]",
+                "(d) [6.16 - 6.42 s]"
             ]
         }
     ]

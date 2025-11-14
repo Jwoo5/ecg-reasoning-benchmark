@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "7661",
+        "ecg_id": "12236",
         "target_dx": "left_posterior_fascicular_block",
         "dx_label": "negative",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [7.33 - 7.45 s]",
+            "answer": 1,
+            "answer_str": "(b) [7.88 - 8.01 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.20 - 2.43 s]",
-                "(b) [4.18 - 4.39 s]",
-                "(c) [7.33 - 7.45 s]",
-                "(d) [8.79 - 8.93 s]"
+                "(a) [4.70 - 4.99 s]",
+                "(b) [7.88 - 8.01 s]",
+                "(c) [8.40 - 8.52 s]",
+                "(d) [9.47 - 9.67 s]"
             ]
         },
         {
@@ -54,10 +54,12 @@
         {
             "question": "Which of the following leads show the rS pattern? Select all possible leads from the options below.",
             "answer": [
-                0
+                0,
+                1
             ],
             "answer_str": [
-                "(a) Lead I"
+                "(a) Lead I",
+                "(b) Lead aVL"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -67,14 +69,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [6.52 - 6.65 s]",
+            "answer": 1,
+            "answer_str": "(b) [2.85 - 2.98 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.77 - 0.92 s]",
-                "(b) [3.22 - 3.42 s]",
-                "(c) [6.15 - 6.43 s]",
-                "(d) [6.52 - 6.65 s]"
+                "(a) [1.95 - 2.09 s]",
+                "(b) [2.85 - 2.98 s]",
+                "(c) [5.21 - 5.39 s]",
+                "(d) [8.85 - 9.14 s]"
             ]
         },
         {

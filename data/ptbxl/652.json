@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "14431",
+        "ecg_id": "7501",
         "target_dx": "complete_right_bundle_branch_block",
         "dx_label": "positive",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
@@ -20,12 +20,10 @@
         {
             "question": "Which of the following leads show the RSR' pattern? Select all possible leads from the options below.",
             "answer": [
-                0,
-                1
+                0
             ],
             "answer_str": [
-                "(a) Lead V1",
-                "(b) Lead V2"
+                "(a) Lead V1"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -35,14 +33,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with RSR' pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [6.82 - 6.96 s]",
+            "answer": 2,
+            "answer_str": "(c) [7.86 - 7.99 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.73 - 1.86 s]",
-                "(b) [3.12 - 3.35 s]",
-                "(c) [3.49 - 3.79 s]",
-                "(d) [6.82 - 6.96 s]"
+                "(a) [4.26 - 4.37 s]",
+                "(b) [6.37 - 6.64 s]",
+                "(c) [7.86 - 7.99 s]",
+                "(d) [8.96 - 9.22 s]"
             ]
         },
         {
@@ -79,14 +77,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with slurred S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [8.77 - 8.91 s]",
+            "answer": 1,
+            "answer_str": "(b) [1.92 - 2.05 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.12 - 3.35 s]",
-                "(b) [5.64 - 5.76 s]",
-                "(c) [8.45 - 8.70 s]",
-                "(d) [8.77 - 8.91 s]"
+                "(a) [1.73 - 1.86 s]",
+                "(b) [1.92 - 2.05 s]",
+                "(c) [5.64 - 5.93 s]",
+                "(d) [7.23 - 7.47 s]"
             ]
         },
         {
@@ -102,13 +100,13 @@
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 0,
-            "answer_str": "(a) [2.92 - 3.06 s]",
+            "answer_str": "(a) [1.92 - 2.05 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.92 - 3.06 s]",
-                "(b) [6.03 - 6.27 s]",
-                "(c) [6.49 - 6.76 s]",
-                "(d) [8.56 - 8.68 s]"
+                "(a) [1.92 - 2.05 s]",
+                "(b) [6.44 - 6.69 s]",
+                "(c) [6.81 - 6.94 s]",
+                "(d) [8.09 - 8.37 s]"
             ]
         },
         {

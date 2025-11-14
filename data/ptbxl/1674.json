@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "6391",
+        "ecg_id": "14022",
         "target_dx": "left_ventricular_hypertrophy",
         "dx_label": "negative",
-        "path_idx": 7
+        "path_idx": 0
     },
     "data": [
         {
@@ -20,13 +20,13 @@
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 1,
-            "answer_str": "(b) [4.80 - 4.90 s]",
+            "answer_str": "(b) [0.51 - 0.62 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.69 - 1.92 s]",
-                "(b) [4.80 - 4.90 s]",
-                "(c) [7.80 - 7.94 s]",
-                "(d) [8.32 - 8.48 s]"
+                "(a) [0.37 - 0.49 s]",
+                "(b) [0.51 - 0.62 s]",
+                "(c) [0.90 - 1.17 s]",
+                "(d) [9.18 - 9.40 s]"
             ]
         },
         {
@@ -54,13 +54,13 @@
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 1,
-            "answer_str": "(b) [3.96 - 4.05 s]",
+            "answer_str": "(b) [2.23 - 2.34 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.79 - 3.01 s]",
-                "(b) [3.96 - 4.05 s]",
-                "(c) [7.80 - 7.94 s]",
-                "(d) [8.95 - 9.16 s]"
+                "(a) [0.99 - 1.22 s]",
+                "(b) [2.23 - 2.34 s]",
+                "(c) [3.27 - 3.46 s]",
+                "(d) [7.18 - 7.28 s]"
             ]
         },
         {
@@ -78,10 +78,10 @@
         {
             "question": "Which of the following leads show the larger R amplitude? Select the lead from the options below.",
             "answer": [
-                0
+                1
             ],
             "answer_str": [
-                "(a) Lead V5"
+                "(b) Lead V6"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -91,20 +91,20 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in the selected lead? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [0.73 - 0.82 s]",
+            "answer": 3,
+            "answer_str": "(d) [9.00 - 9.10 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.73 - 0.82 s]",
-                "(b) [1.99 - 2.23 s]",
-                "(c) [5.46 - 5.56 s]",
-                "(d) [6.59 - 6.83 s]"
+                "(a) [1.25 - 1.35 s]",
+                "(b) [5.35 - 5.63 s]",
+                "(c) [8.34 - 8.56 s]",
+                "(d) [9.00 - 9.10 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [2.0 - 2.5 mV]",
+            "answer": 0,
+            "answer_str": "(a) [1.0 - 2.0 mV]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) [1.0 - 2.0 mV]",
@@ -125,20 +125,20 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V3? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [2.34 - 2.44 s]",
+            "answer": 3,
+            "answer_str": "(d) [9.00 - 9.10 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.34 - 2.44 s]",
-                "(b) [5.46 - 5.56 s]",
-                "(c) [6.03 - 6.32 s]",
-                "(d) [7.40 - 7.62 s]"
+                "(a) [2.67 - 2.93 s]",
+                "(b) [7.18 - 7.28 s]",
+                "(c) [7.49 - 7.72 s]",
+                "(d) [9.00 - 9.10 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured S amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 2,
-            "answer_str": "(c) [0.6 - 0.9 mV]",
+            "answer": 3,
+            "answer_str": "(d) Above 0.9 mV",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 0.3 mV",
@@ -149,14 +149,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [4.80 - 4.90 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.51 - 0.62 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.31 - 3.52 s]",
-                "(b) [4.80 - 4.90 s]",
-                "(c) [6.21 - 6.31 s]",
-                "(d) [8.44 - 8.69 s]"
+                "(a) [0.51 - 0.62 s]",
+                "(b) [4.70 - 4.80 s]",
+                "(c) [7.49 - 7.72 s]",
+                "(d) [7.81 - 8.00 s]"
             ]
         },
         {
@@ -173,8 +173,8 @@
         },
         {
             "question": "For the selected segment, which range does the measured QRS duration fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [90 - 100 ms]",
+            "answer": 2,
+            "answer_str": "(c) [100 - 110 ms]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 90 ms",

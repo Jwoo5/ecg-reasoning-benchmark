@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "10370",
+        "ecg_id": "6827",
         "target_dx": "left_anterior_fascicular_block",
         "dx_label": "negative",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [5.25 - 5.39 s]",
+            "answer": 2,
+            "answer_str": "(c) [8.69 - 8.78 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.84 - 1.07 s]",
-                "(b) [1.71 - 1.93 s]",
-                "(c) [2.26 - 2.37 s]",
-                "(d) [5.25 - 5.39 s]"
+                "(a) [2.77 - 2.99 s]",
+                "(b) [4.97 - 5.14 s]",
+                "(c) [8.69 - 8.78 s]",
+                "(d) [9.32 - 9.44 s]"
             ]
         },
         {
@@ -53,10 +53,12 @@
         {
             "question": "Which of the following leads show the qR pattern? Select all possible leads from the options below.",
             "answer": [
-                0
+                0,
+                1
             ],
             "answer_str": [
-                "(a) Lead I"
+                "(a) Lead I",
+                "(b) Lead aVL"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -67,13 +69,13 @@
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 3,
-            "answer_str": "(d) [7.08 - 7.23 s]",
+            "answer_str": "(d) [2.49 - 2.58 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.62 - 2.82 s]",
-                "(b) [4.07 - 4.24 s]",
-                "(c) [5.10 - 5.22 s]",
-                "(d) [7.08 - 7.23 s]"
+                "(a) [0.33 - 0.59 s]",
+                "(b) [1.12 - 1.29 s]",
+                "(c) [2.33 - 2.44 s]",
+                "(d) [2.49 - 2.58 s]"
             ]
         },
         {

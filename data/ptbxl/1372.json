@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "21213",
+        "ecg_id": "21363",
         "target_dx": "premature_ventricular_complex",
         "dx_label": "positive",
         "path_idx": 0
@@ -19,14 +19,15 @@
         },
         {
             "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [3.81 - 3.95 s]",
+            "answer": 3,
+            "answer_str": "(d) [4.59 - 4.74 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.81 - 3.95 s]",
-                "(b) [4.96 - 5.10 s]",
-                "(c) [7.94 - 8.03 s]",
-                "(d) [8.70 - 8.82 s]"
+                "(a) [0.66 - 0.81 s]",
+                "(b) [2.68 - 2.79 s]",
+                "(c) [2.90 - 3.05 s]",
+                "(d) [4.59 - 4.74 s]",
+                "(e) [7.39 - 7.48 s]"
             ]
         },
         {

@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "20308",
+        "ecg_id": "3427",
         "target_dx": "left_anterior_fascicular_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -20,13 +20,13 @@
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 3,
-            "answer_str": "(d) [7.43 - 7.54 s]",
+            "answer_str": "(d) [8.41 - 8.53 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.52 - 3.64 s]",
-                "(b) [6.07 - 6.23 s]",
-                "(c) [6.68 - 6.90 s]",
-                "(d) [7.43 - 7.54 s]"
+                "(a) [2.43 - 2.55 s]",
+                "(b) [7.49 - 7.72 s]",
+                "(c) [7.73 - 7.94 s]",
+                "(d) [8.41 - 8.53 s]"
             ]
         },
         {
@@ -68,14 +68,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [3.71 - 3.83 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.31 - 0.41 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.20 - 1.40 s]",
-                "(b) [3.07 - 3.30 s]",
-                "(c) [3.71 - 3.83 s]",
-                "(d) [4.40 - 4.55 s]"
+                "(a) [0.31 - 0.41 s]",
+                "(b) [1.81 - 2.09 s]",
+                "(c) [4.01 - 4.22 s]",
+                "(d) [9.39 - 9.51 s]"
             ]
         },
         {
@@ -91,14 +91,10 @@
         {
             "question": "Which of the following leads show the rS pattern? Select all possible leads from the options below.",
             "answer": [
-                0,
-                1,
-                2
+                0
             ],
             "answer_str": [
-                "(a) Lead II",
-                "(b) Lead III",
-                "(c) Lead aVF"
+                "(a) Lead II"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -109,14 +105,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [1.89 - 2.01 s]",
+            "answer": 2,
+            "answer_str": "(c) [6.14 - 6.24 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.89 - 2.01 s]",
-                "(b) [5.19 - 5.45 s]",
-                "(c) [7.21 - 7.36 s]",
-                "(d) [9.49 - 9.69 s]"
+                "(a) [0.54 - 0.75 s]",
+                "(b) [2.43 - 2.55 s]",
+                "(c) [6.14 - 6.24 s]",
+                "(d) [8.03 - 8.29 s]"
             ]
         }
     ]

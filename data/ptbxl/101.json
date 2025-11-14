@@ -4,7 +4,7 @@
         "ecg_id": "13938",
         "target_dx": "first_degree_av_block",
         "dx_label": "negative",
-        "path_idx": 2
+        "path_idx": 0
     },
     "data": [
         {
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you observe a non-conducted P wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [3.21 - 3.37 s]",
+            "answer": 1,
+            "answer_str": "(b) [3.21 - 3.37 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.21 - 3.37 s]",
-                "(b) [6.43 - 6.66 s]",
+                "(a) [2.25 - 2.36 s]",
+                "(b) [3.21 - 3.37 s]",
                 "(c) [7.05 - 7.15 s]",
-                "(d) [7.53 - 7.72 s]"
+                "(d) [7.28 - 7.50 s]"
             ]
         }
     ]

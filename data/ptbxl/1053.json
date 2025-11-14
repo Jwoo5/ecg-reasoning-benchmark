@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "10273",
+        "ecg_id": "15517",
         "target_dx": "left_posterior_fascicular_block",
         "dx_label": "negative",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
@@ -19,15 +19,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [3.03 - 3.13 s]",
+            "answer": 2,
+            "answer_str": "(c) [6.40 - 6.52 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.35 - 0.55 s]",
-                "(b) [3.03 - 3.13 s]",
-                "(c) [3.19 - 3.37 s]",
-                "(d) [3.82 - 4.02 s]",
-                "(e) [6.00 - 6.16 s]"
+                "(a) [1.30 - 1.50 s]",
+                "(b) [4.40 - 4.53 s]",
+                "(c) [6.40 - 6.52 s]",
+                "(d) [7.58 - 7.79 s]"
             ]
         },
         {
@@ -68,15 +67,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [4.95 - 5.05 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.03 - 0.14 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.71 - 2.93 s]",
-                "(b) [4.95 - 5.05 s]",
-                "(c) [5.13 - 5.31 s]",
-                "(d) [5.13 - 5.31 s]",
-                "(e) [5.66 - 5.85 s]"
+                "(a) [0.03 - 0.14 s]",
+                "(b) [2.98 - 3.24 s]",
+                "(c) [3.97 - 4.14 s]",
+                "(d) [8.07 - 8.20 s]"
             ]
         },
         {
