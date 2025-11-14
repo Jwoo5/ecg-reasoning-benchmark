@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "4466",
+        "ecg_id": "19465",
         "target_dx": "inferior_myocardial_infarction",
         "dx_label": "positive",
         "path_idx": 0
@@ -9,16 +9,6 @@
     "data": [
         {
             "question": "Does this ECG show ST elevation in at least two of the inferior leads, including leads II, III, and aVF?",
-            "answer": false,
-            "answer_str": "(b) No",
-            "question_type": "finding",
-            "options": [
-                "(a) Yes",
-                "(b) No"
-            ]
-        },
-        {
-            "question": "Does this ECG show pathological Q waves in at least two of the inferior leads, including leads II, III, and aVF? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
             "answer": true,
             "answer_str": "(a) Yes",
             "question_type": "finding",
@@ -28,14 +18,12 @@
             ]
         },
         {
-            "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
+            "question": "Which of the following leads show ST elevation? Select all possible leads from the options below.",
             "answer": [
-                0,
                 1,
                 2
             ],
             "answer_str": [
-                "(a) Lead II",
                 "(b) Lead III",
                 "(c) Lead aVF"
             ],
@@ -47,15 +35,15 @@
             ]
         },
         {
-            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [6.99 - 7.10 s]",
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 2,
+            "answer_str": "(c) [6.53 - 6.67 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.35 - 0.45 s]",
-                "(b) [5.34 - 5.58 s]",
-                "(c) [6.28 - 6.57 s]",
-                "(d) [6.99 - 7.10 s]"
+                "(a) [2.74 - 2.84 s]",
+                "(b) [3.83 - 4.12 s]",
+                "(c) [6.53 - 6.67 s]",
+                "(d) [9.56 - 9.77 s]"
             ]
         }
     ]

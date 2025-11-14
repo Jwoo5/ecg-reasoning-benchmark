@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "706",
+        "ecg_id": "17419",
         "target_dx": "anterior_myocardial_infarction",
         "dx_label": "positive",
         "path_idx": 0
@@ -31,13 +31,11 @@
             "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
             "answer": [
                 0,
-                1,
-                2
+                1
             ],
             "answer_str": [
                 "(a) Lead V1",
-                "(b) Lead V2",
-                "(c) Lead V3"
+                "(b) Lead V2"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -49,15 +47,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [7.69 - 7.80 s]",
+            "answer": 0,
+            "answer_str": "(a) [1.16 - 1.25 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.37 - 2.56 s]",
-                "(b) [5.36 - 5.56 s]",
-                "(c) [7.69 - 7.80 s]",
-                "(d) [8.04 - 8.31 s]",
-                "(e) [8.98 - 9.26 s]"
+                "(a) [1.16 - 1.25 s]",
+                "(b) [7.41 - 7.70 s]",
+                "(c) [8.92 - 9.04 s]",
+                "(d) [9.27 - 9.46 s]"
             ]
         }
     ]

@@ -1,16 +1,16 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "2576",
-        "target_dx": "anterior_ischemia",
-        "dx_label": "positive",
+        "ecg_id": "13611",
+        "target_dx": "lateral_myocardial_infarction",
+        "dx_label": "negative",
         "path_idx": 0
     },
     "data": [
         {
-            "question": "Does this ECG show ST depression in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
-            "answer": true,
-            "answer_str": "(a) Yes",
+            "question": "Does this ECG show ST elevation in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+            "answer": false,
+            "answer_str": "(b) No",
             "question_type": "finding",
             "options": [
                 "(a) Yes",
@@ -18,37 +18,13 @@
             ]
         },
         {
-            "question": "Which of the following leads show ST depression? Select all possible leads from the options below.",
-            "answer": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "answer_str": [
-                "(a) Lead V2",
-                "(b) Lead V3",
-                "(c) Lead V4",
-                "(d) Lead V5"
-            ],
-            "question_type": "lead_grounding",
+            "question": "Does this ECG show pathological Q waves in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that a pathological Q wave in these leads is defined as a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
             "options": [
-                "(a) Lead V2",
-                "(b) Lead V3",
-                "(c) Lead V4",
-                "(d) Lead V5"
-            ]
-        },
-        {
-            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST depression? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [4.67 - 4.79 s]",
-            "question_type": "wave_grounding",
-            "options": [
-                "(a) [3.37 - 3.56 s]",
-                "(b) [4.67 - 4.79 s]",
-                "(c) [7.76 - 7.91 s]",
-                "(d) [9.06 - 9.37 s]"
+                "(a) Yes",
+                "(b) No"
             ]
         }
     ]

@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "13281",
+        "ecg_id": "20506",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -20,13 +20,13 @@
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 0,
-            "answer_str": "(a) [2.39 - 2.58 s]",
+            "answer_str": "(a) [2.42 - 2.59 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.39 - 2.58 s]",
-                "(b) [4.43 - 4.60 s]",
-                "(c) [5.76 - 5.98 s]",
-                "(d) [7.78 - 7.90 s]"
+                "(a) [2.42 - 2.59 s]",
+                "(b) [4.40 - 4.58 s]",
+                "(c) [5.64 - 5.90 s]",
+                "(d) [6.00 - 6.11 s]"
             ]
         },
         {
@@ -54,14 +54,14 @@
         },
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [7.97 - 8.16 s]",
+            "answer": 3,
+            "answer_str": "(d) [7.65 - 7.82 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [5.76 - 5.98 s]",
-                "(b) [7.97 - 8.16 s]",
-                "(c) [8.20 - 8.48 s]",
-                "(d) [8.62 - 8.71 s]"
+                "(a) [5.64 - 5.92 s]",
+                "(b) [7.10 - 7.41 s]",
+                "(c) [7.48 - 7.59 s]",
+                "(d) [7.65 - 7.82 s]"
             ]
         },
         {
@@ -78,12 +78,10 @@
             "question": "Which of the following leads show the monophasic positive QRS wave? Select all possible leads from the options below.",
             "answer": [
                 0,
-                1,
                 2
             ],
             "answer_str": [
                 "(a) Lead I",
-                "(b) Lead aVL",
                 "(c) Lead V6"
             ],
             "question_type": "lead_grounding",
@@ -96,13 +94,13 @@
         {
             "question": "Within the selected leads, in which of the following segments can you observe the monophasic positive QRS wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 0,
-            "answer_str": "(a) [0.11 - 0.29 s]",
+            "answer_str": "(a) [0.21 - 0.38 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.11 - 0.29 s]",
-                "(b) [4.96 - 5.12 s]",
-                "(c) [6.58 - 6.80 s]",
-                "(d) [7.78 - 7.90 s]"
+                "(a) [0.21 - 0.38 s]",
+                "(b) [4.88 - 5.05 s]",
+                "(c) [6.00 - 6.11 s]",
+                "(d) [6.35 - 6.65 s]"
             ]
         },
         {
@@ -128,11 +126,9 @@
         {
             "question": "Which of the following leads show the broad monophasic R wave? Select all possible leads from the options below.",
             "answer": [
-                0,
                 1
             ],
             "answer_str": [
-                "(a) Lead V5",
                 "(b) Lead V6"
             ],
             "question_type": "lead_grounding",
@@ -143,14 +139,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with broad monophasic R wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [6.36 - 6.54 s]",
+            "answer": 1,
+            "answer_str": "(b) [6.17 - 6.33 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.50 - 3.66 s]",
-                "(b) [3.75 - 3.85 s]",
-                "(c) [6.36 - 6.54 s]",
-                "(d) [6.58 - 6.80 s]"
+                "(a) [3.38 - 3.65 s]",
+                "(b) [6.17 - 6.33 s]",
+                "(c) [6.38 - 6.61 s]",
+                "(d) [8.25 - 8.31 s]"
             ]
         }
     ]

@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "15472",
+        "ecg_id": "1473",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": "negative",
         "path_idx": 0
@@ -29,20 +29,20 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [4.89 - 4.99 s]",
+            "answer": 0,
+            "answer_str": "(a) [0.47 - 0.56 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.55 - 1.77 s]",
-                "(b) [4.89 - 4.99 s]",
-                "(c) [7.61 - 7.73 s]",
-                "(d) [8.00 - 8.23 s]"
+                "(a) [0.47 - 0.56 s]",
+                "(b) [1.84 - 2.08 s]",
+                "(c) [2.10 - 2.31 s]",
+                "(d) [9.33 - 9.56 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 0,
-            "answer_str": "(a) [90 - 120 degrees]",
+            "answer": 1,
+            "answer_str": "(b) [120 - 150 degrees]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) [90 - 120 degrees]",
@@ -62,14 +62,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [7.79 - 7.88 s]",
+            "answer": 1,
+            "answer_str": "(b) [7.89 - 7.99 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.32 - 0.57 s]",
-                "(b) [0.61 - 0.84 s]",
-                "(c) [5.64 - 5.76 s]",
-                "(d) [7.79 - 7.88 s]"
+                "(a) [4.30 - 4.57 s]",
+                "(b) [7.89 - 7.99 s]",
+                "(c) [8.09 - 8.30 s]",
+                "(d) [8.33 - 8.50 s]"
             ]
         },
         {

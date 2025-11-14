@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "20506",
+        "ecg_id": "16243",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -19,20 +19,20 @@
         },
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [3.16 - 3.34 s]",
+            "answer": 3,
+            "answer_str": "(d) [8.09 - 8.25 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.40 - 0.70 s]",
-                "(b) [3.00 - 3.11 s]",
-                "(c) [3.16 - 3.34 s]",
-                "(d) [6.65 - 6.86 s]"
+                "(a) [3.52 - 3.77 s]",
+                "(b) [4.84 - 5.04 s]",
+                "(c) [5.07 - 5.28 s]",
+                "(d) [8.09 - 8.25 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured QRS duration fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 4,
-            "answer_str": "(e) Above 160 ms",
+            "answer": 3,
+            "answer_str": "(d) [150 - 160 ms]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) [120 - 130 ms]",
@@ -55,13 +55,13 @@
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 3,
-            "answer_str": "(d) [7.65 - 7.82 s]",
+            "answer_str": "(d) [8.09 - 8.25 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [4.49 - 4.58 s]",
-                "(b) [5.81 - 5.98 s]",
-                "(c) [6.35 - 6.65 s]",
-                "(d) [7.65 - 7.82 s]"
+                "(a) [3.13 - 3.24 s]",
+                "(b) [4.58 - 4.81 s]",
+                "(c) [6.44 - 6.69 s]",
+                "(d) [8.09 - 8.25 s]"
             ]
         },
         {
@@ -78,10 +78,12 @@
             "question": "Which of the following leads show the monophasic positive QRS wave? Select all possible leads from the options below.",
             "answer": [
                 0,
+                1,
                 2
             ],
             "answer_str": [
                 "(a) Lead I",
+                "(b) Lead aVL",
                 "(c) Lead V6"
             ],
             "question_type": "lead_grounding",
@@ -93,14 +95,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the monophasic positive QRS wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [7.65 - 7.82 s]",
+            "answer": 2,
+            "answer_str": "(c) [8.09 - 8.25 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [4.86 - 5.15 s]",
-                "(b) [6.59 - 6.83 s]",
-                "(c) [7.48 - 7.59 s]",
-                "(d) [7.65 - 7.82 s]"
+                "(a) [2.57 - 2.79 s]",
+                "(b) [6.46 - 6.74 s]",
+                "(c) [8.09 - 8.25 s]",
+                "(d) [8.80 - 8.91 s]"
             ]
         },
         {
@@ -139,14 +141,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with broad monophasic R wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [4.66 - 4.84 s]",
+            "answer": 0,
+            "answer_str": "(a) [5.29 - 5.45 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.51 - 1.62 s]",
-                "(b) [3.38 - 3.65 s]",
-                "(c) [4.66 - 4.84 s]",
-                "(d) [5.15 - 5.36 s]"
+                "(a) [5.29 - 5.45 s]",
+                "(b) [5.69 - 5.96 s]",
+                "(c) [6.06 - 6.16 s]",
+                "(d) [8.31 - 8.54 s]"
             ]
         }
     ]

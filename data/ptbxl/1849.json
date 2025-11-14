@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "1391",
+        "ecg_id": "15423",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": "negative",
         "path_idx": 0
@@ -29,20 +29,20 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [0.18 - 0.31 s]",
+            "answer": 1,
+            "answer_str": "(b) [4.22 - 4.32 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.18 - 0.31 s]",
-                "(b) [4.13 - 4.40 s]",
-                "(c) [7.98 - 8.19 s]",
-                "(d) [9.16 - 9.27 s]"
+                "(a) [3.67 - 3.89 s]",
+                "(b) [4.22 - 4.32 s]",
+                "(c) [4.40 - 4.61 s]",
+                "(d) [8.05 - 8.17 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [-90 - -30 degrees]",
+            "answer": 2,
+            "answer_str": "(c) [-30 - 0 degrees]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) [-180 - -90 degrees]",
