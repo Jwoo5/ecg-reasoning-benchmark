@@ -1,14 +1,24 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "9098",
+        "ecg_id": "21326",
         "target_dx": "inferior_myocardial_infarction",
         "dx_label": "positive",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
             "question": "Does this ECG show ST elevation in at least two of the inferior leads, including leads II, III, and aVF?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show pathological Q waves in at least two of the inferior leads, including leads II, III, and aVF? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
             "answer": true,
             "answer_str": "(a) Yes",
             "question_type": "finding",
@@ -18,7 +28,7 @@
             ]
         },
         {
-            "question": "Which of the following leads show ST elevation? Select all possible leads from the options below.",
+            "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
             "answer": [
                 1,
                 2
@@ -35,15 +45,15 @@
             ]
         },
         {
-            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [3.93 - 4.08 s]",
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 2,
+            "answer_str": "(c) [5.78 - 5.92 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.93 - 4.08 s]",
-                "(b) [5.86 - 5.96 s]",
-                "(c) [6.39 - 6.63 s]",
-                "(d) [8.79 - 9.05 s]"
+                "(a) [2.98 - 3.12 s]",
+                "(b) [5.09 - 5.37 s]",
+                "(c) [5.78 - 5.92 s]",
+                "(d) [5.99 - 6.22 s]"
             ]
         }
     ]

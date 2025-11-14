@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "11585",
+        "ecg_id": "13200",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "negative",
-        "path_idx": 4
+        "path_idx": 0
     },
     "data": [
         {
@@ -19,15 +19,15 @@
         },
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [0.63 - 0.75 s]",
+            "answer": 1,
+            "answer_str": "(b) [1.82 - 1.94 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.63 - 0.75 s]",
-                "(b) [0.80 - 1.01 s]",
-                "(c) [6.45 - 6.66 s]",
-                "(d) [7.34 - 7.50 s]",
-                "(e) [7.83 - 8.12 s]"
+                "(a) [1.60 - 1.79 s]",
+                "(b) [1.82 - 1.94 s]",
+                "(c) [2.19 - 2.39 s]",
+                "(d) [9.16 - 9.35 s]",
+                "(e) [9.16 - 9.35 s]"
             ]
         },
         {
@@ -55,15 +55,15 @@
         },
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [4.45 - 4.57 s]",
+            "answer": 0,
+            "answer_str": "(a) [4.41 - 4.53 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.38 - 1.64 s]",
-                "(b) [2.91 - 3.09 s]",
-                "(c) [4.45 - 4.57 s]",
-                "(d) [4.62 - 4.82 s]",
-                "(e) [7.24 - 7.45 s]"
+                "(a) [4.41 - 4.53 s]",
+                "(b) [4.59 - 4.75 s]",
+                "(c) [4.68 - 4.94 s]",
+                "(d) [5.30 - 5.56 s]",
+                "(e) [8.03 - 8.21 s]"
             ]
         },
         {

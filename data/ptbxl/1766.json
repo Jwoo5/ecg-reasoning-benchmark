@@ -1,16 +1,16 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "21771",
+        "ecg_id": "13582",
         "target_dx": "right_ventricular_hypertrophy",
-        "dx_label": "positive",
-        "path_idx": 2
+        "dx_label": "negative",
+        "path_idx": 0
     },
     "data": [
         {
             "question": "Is right bundle branch block present on this ECG?, including incomplete and complete RBBB?",
-            "answer": true,
-            "answer_str": "(a) Yes",
+            "answer": false,
+            "answer_str": "(b) No",
             "question_type": "finding",
             "options": [
                 "(a) Yes",
@@ -18,7 +18,7 @@
             ]
         },
         {
-            "question": "Is the QRS axis greater than 60 degrees on this ECG?",
+            "question": "Does this ECG show right axis deviation, where the QRS axis is between 100 and 180 degrees?",
             "answer": true,
             "answer_str": "(a) Yes",
             "question_type": "finding",
@@ -30,26 +30,58 @@
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 1,
-            "answer_str": "(b) [3.76 - 3.91 s]",
+            "answer_str": "(b) [4.54 - 4.64 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.93 - 2.14 s]",
-                "(b) [3.76 - 3.91 s]",
-                "(c) [4.03 - 4.31 s]",
-                "(d) [5.33 - 5.53 s]",
-                "(e) [7.18 - 7.41 s]"
+                "(a) [2.26 - 2.38 s]",
+                "(b) [4.54 - 4.64 s]",
+                "(c) [5.79 - 6.02 s]",
+                "(d) [7.44 - 7.72 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [90 - 120 degrees]",
+            "answer": 0,
+            "answer_str": "(a) [90 - 120 degrees]",
             "question_type": "measurement_grounding",
             "options": [
-                "(a) [60 - 90 degrees]",
-                "(b) [90 - 120 degrees]",
-                "(c) [120 - 150 degrees]",
-                "(d) [150 - 180 degrees]"
+                "(a) [90 - 120 degrees]",
+                "(b) [120 - 150 degrees]",
+                "(c) [150 - 180 degrees]"
+            ]
+        },
+        {
+            "question": "Does lead V1 show a dominant R wave, where the amplitude of the positive deflection in the QRS complex is greater than the amplitude of the negative deflection?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [0.25 - 0.34 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [0.25 - 0.34 s]",
+                "(b) [5.08 - 5.30 s]",
+                "(c) [8.66 - 8.79 s]",
+                "(d) [9.01 - 9.23 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 1,
+            "answer_str": "(b) [0.1 - 0.2 mV]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) Below 0.1 mV",
+                "(b) [0.1 - 0.2 mV]",
+                "(c) [0.2 - 0.3 mV]",
+                "(d) Above 0.3 mV"
             ]
         }
     ]

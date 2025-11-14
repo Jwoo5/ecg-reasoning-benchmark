@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "13068",
+        "ecg_id": "19342",
         "target_dx": "anterior_ischemia",
         "dx_label": "positive",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
@@ -20,12 +20,10 @@
         {
             "question": "Which of the following leads show ST depression? Select all possible leads from the options below.",
             "answer": [
-                1,
                 2,
                 3
             ],
             "answer_str": [
-                "(b) Lead V3",
                 "(c) Lead V4",
                 "(d) Lead V5"
             ],
@@ -40,14 +38,13 @@
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST depression? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 2,
-            "answer_str": "(c) [6.56 - 6.65 s]",
+            "answer_str": "(c) [5.16 - 5.26 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.09 - 1.26 s]",
-                "(b) [2.06 - 2.27 s]",
-                "(c) [6.56 - 6.65 s]",
-                "(d) [6.75 - 6.93 s]",
-                "(e) [7.29 - 7.54 s]"
+                "(a) [3.03 - 3.25 s]",
+                "(b) [4.22 - 4.34 s]",
+                "(c) [5.16 - 5.26 s]",
+                "(d) [8.76 - 8.98 s]"
             ]
         }
     ]

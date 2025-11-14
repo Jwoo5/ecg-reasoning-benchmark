@@ -1,10 +1,10 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "9226",
+        "ecg_id": "12072",
         "target_dx": "left_ventricular_hypertrophy",
         "dx_label": "negative",
-        "path_idx": 8
+        "path_idx": 0
     },
     "data": [
         {
@@ -19,20 +19,20 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [5.71 - 5.81 s]",
+            "answer": 1,
+            "answer_str": "(b) [5.09 - 5.19 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.80 - 3.04 s]",
-                "(b) [3.87 - 3.98 s]",
-                "(c) [5.71 - 5.81 s]",
-                "(d) [9.15 - 9.38 s]"
+                "(a) [4.90 - 5.03 s]",
+                "(b) [5.09 - 5.19 s]",
+                "(c) [6.19 - 6.42 s]",
+                "(d) [7.32 - 7.59 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 0,
-            "answer_str": "(a) [1.1 - 1.2 mV]",
+            "answer": 3,
+            "answer_str": "(d) [1.4 - 1.5 mV]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) [1.1 - 1.2 mV]",
@@ -55,19 +55,19 @@
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 0,
-            "answer_str": "(a) [3.21 - 3.30 s]",
+            "answer_str": "(a) [1.49 - 1.58 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.21 - 3.30 s]",
-                "(b) [3.87 - 3.98 s]",
-                "(c) [8.56 - 8.83 s]",
-                "(d) [9.15 - 9.38 s]"
+                "(a) [1.49 - 1.58 s]",
+                "(b) [5.80 - 5.92 s]",
+                "(c) [7.10 - 7.32 s]",
+                "(d) [7.36 - 7.63 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured S amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [0.3 - 0.6 mV]",
+            "answer": 2,
+            "answer_str": "(c) [0.6 - 0.9 mV]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 0.3 mV",
@@ -92,20 +92,20 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in the selected lead? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [6.50 - 6.59 s]",
+            "answer": 1,
+            "answer_str": "(b) [5.99 - 6.09 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.40 - 1.50 s]",
-                "(b) [2.62 - 2.91 s]",
-                "(c) [6.50 - 6.59 s]",
-                "(d) [8.35 - 8.56 s]"
+                "(a) [2.19 - 2.32 s]",
+                "(b) [5.99 - 6.09 s]",
+                "(c) [6.19 - 6.42 s]",
+                "(d) [6.49 - 6.65 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [0.4 - 0.8 mV]",
+            "answer": 3,
+            "answer_str": "(d) Above 1.2 mV",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 0.4 mV",
@@ -127,19 +127,19 @@
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V3? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 2,
-            "answer_str": "(c) [4.89 - 4.98 s]",
+            "answer_str": "(c) [5.99 - 6.09 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.76 - 3.02 s]",
-                "(b) [4.71 - 4.81 s]",
-                "(c) [4.89 - 4.98 s]",
-                "(d) [5.07 - 5.30 s]"
+                "(a) [2.85 - 3.11 s]",
+                "(b) [4.90 - 5.03 s]",
+                "(c) [5.99 - 6.09 s]",
+                "(d) [6.19 - 6.42 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured S amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 1,
-            "answer_str": "(b) [0.3 - 0.6 mV]",
+            "answer": 0,
+            "answer_str": "(a) Below 0.3 mV",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 0.3 mV",
@@ -151,13 +151,13 @@
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 2,
-            "answer_str": "(c) [5.71 - 5.81 s]",
+            "answer_str": "(c) [5.09 - 5.19 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.04 - 1.31 s]",
-                "(b) [1.77 - 2.00 s]",
-                "(c) [5.71 - 5.81 s]",
-                "(d) [6.32 - 6.44 s]"
+                "(a) [0.39 - 0.51 s]",
+                "(b) [2.67 - 2.86 s]",
+                "(c) [5.09 - 5.19 s]",
+                "(d) [6.19 - 6.42 s]"
             ]
         },
         {
@@ -174,8 +174,8 @@
         },
         {
             "question": "For the selected segment, which range does the measured QRS duration fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 2,
-            "answer_str": "(c) [100 - 110 ms]",
+            "answer": 1,
+            "answer_str": "(b) [90 - 100 ms]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 90 ms",

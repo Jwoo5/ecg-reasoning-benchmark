@@ -1,9 +1,9 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "15846",
+        "ecg_id": "18402",
         "target_dx": "anterior_ischemia",
-        "dx_label": "positive",
+        "dx_label": "negative",
         "path_idx": 0
     },
     "data": [
@@ -19,47 +19,12 @@
         },
         {
             "question": "Does this ECG show inverted T waves in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
-            "answer": true,
-            "answer_str": "(a) Yes",
+            "answer": false,
+            "answer_str": "(b) No",
             "question_type": "finding",
             "options": [
                 "(a) Yes",
                 "(b) No"
-            ]
-        },
-        {
-            "question": "Which of the following leads show the inverted T waves? Select all possible leads from the options below.",
-            "answer": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "answer_str": [
-                "(a) Lead V2",
-                "(b) Lead V3",
-                "(c) Lead V4",
-                "(d) Lead V5"
-            ],
-            "question_type": "lead_grounding",
-            "options": [
-                "(a) Lead V2",
-                "(b) Lead V3",
-                "(c) Lead V4",
-                "(d) Lead V5"
-            ]
-        },
-        {
-            "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 4,
-            "answer_str": "(e) [6.49 - 6.69 s]",
-            "question_type": "wave_grounding",
-            "options": [
-                "(a) [2.13 - 2.24 s]",
-                "(b) [3.04 - 3.15 s]",
-                "(c) [6.05 - 6.32 s]",
-                "(d) [6.10 - 6.40 s]",
-                "(e) [6.49 - 6.69 s]"
             ]
         }
     ]

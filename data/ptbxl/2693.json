@@ -1,14 +1,24 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "16132",
+        "ecg_id": "15294",
         "target_dx": "inferior_ischemia",
         "dx_label": "positive",
-        "path_idx": 1
+        "path_idx": 0
     },
     "data": [
         {
             "question": "Does this ECG show ST depression in at least two of the inferior leads, including leads II, III, and aVF?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show inverted T waves in at least two of the inferior leads, including leads II, III, and aVF?",
             "answer": true,
             "answer_str": "(a) Yes",
             "question_type": "finding",
@@ -18,7 +28,7 @@
             ]
         },
         {
-            "question": "Which of the following leads show ST depression? Select all possible leads from the options below.",
+            "question": "Which of the following leads show the inverted T waves? Select all possible leads from the options below.",
             "answer": [
                 0,
                 1,
@@ -37,16 +47,15 @@
             ]
         },
         {
-            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST depression? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 4,
-            "answer_str": "(e) [6.98 - 7.11 s]",
+            "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 2,
+            "answer_str": "(c) [7.62 - 7.77 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.93 - 3.09 s]",
-                "(b) [5.19 - 5.35 s]",
-                "(c) [5.88 - 6.06 s]",
-                "(d) [6.47 - 6.64 s]",
-                "(e) [6.98 - 7.11 s]"
+                "(a) [3.87 - 3.97 s]",
+                "(b) [6.71 - 6.80 s]",
+                "(c) [7.62 - 7.77 s]",
+                "(d) [8.51 - 8.71 s]"
             ]
         }
     ]
