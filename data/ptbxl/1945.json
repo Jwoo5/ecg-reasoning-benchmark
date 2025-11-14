@@ -1,0 +1,63 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "14475",
+        "target_dx": "anterior_myocardial_infarction",
+        "dx_label": "positive",
+        "path_idx": 0
+    },
+    "data": [
+        {
+            "question": "Does this ECG show ST elevation in at least two of the anterior leads, including leads V1, V2, V3, and V4?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show pathological Q waves in at least two of the anterior leads, including leads V1, V2, V3, and V4? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than 0.075mV, or (2) a deep S wave with only a small R wave preceding it.",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1,
+                2
+            ],
+            "answer_str": [
+                "(a) Lead V1",
+                "(b) Lead V2",
+                "(c) Lead V3"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead V1",
+                "(b) Lead V2",
+                "(c) Lead V3",
+                "(d) Lead V4"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [1.50 - 1.67 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.50 - 1.67 s]",
+                "(b) [6.03 - 6.28 s]",
+                "(c) [7.24 - 7.49 s]",
+                "(d) [7.80 - 8.02 s]"
+            ]
+        }
+    ]
+}

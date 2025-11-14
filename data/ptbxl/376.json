@@ -1,0 +1,64 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "20636",
+        "target_dx": "third_degree_av_block",
+        "dx_label": "negative",
+        "path_idx": 2
+    },
+    "data": [
+        {
+            "question": "Is the ventricular rhythm (the RR interval) regular on this ECG?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show a slow heart rate? Note that a heart rate is considered to be slow if it is less than 70 beats per minute (bpm).",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which range does the measured heart rate fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 4,
+            "answer_str": "(e) [60 - 70 bpm]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) Below 30 bpm",
+                "(b) [30 - 40 bpm]",
+                "(c) [40 - 50 bpm]",
+                "(d) [50 - 60 bpm]",
+                "(e) [60 - 70 bpm]"
+            ]
+        },
+        {
+            "question": "Does this ECG show fibrillatory waves with no visible P waves, suggesting symptoms of atrial fibrillation?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Is a non-conducted P wave present on this ECG?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        }
+    ]
+}

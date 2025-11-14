@@ -1,0 +1,121 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "2724",
+        "target_dx": "left_anterior_fascicular_block",
+        "dx_label": "positive",
+        "path_idx": 0
+    },
+    "data": [
+        {
+            "question": "Does this ECG show left axis deviation, where the QRS axis is between -90 and -30 degrees?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [0.37 - 0.49 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [0.37 - 0.49 s]",
+                "(b) [3.31 - 3.43 s]",
+                "(c) [7.19 - 7.38 s]",
+                "(d) [9.30 - 9.51 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 1,
+            "answer_str": "(b) [-60 - -45 degrees]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [-90 - -60 degrees]",
+                "(b) [-60 - -45 degrees]",
+                "(c) [-45 - -30 degrees]"
+            ]
+        },
+        {
+            "question": "Does this ECG show a qR pattern in any of leads I and aVL?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the qR pattern? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1
+            ],
+            "answer_str": [
+                "(a) Lead I",
+                "(b) Lead aVL"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead I",
+                "(b) Lead aVL"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 1,
+            "answer_str": "(b) [6.36 - 6.50 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.08 - 1.26 s]",
+                "(b) [6.36 - 6.50 s]",
+                "(c) [6.55 - 6.77 s]",
+                "(d) [8.90 - 9.07 s]"
+            ]
+        },
+        {
+            "question": "Does this ECG show an rS pattern in at least one of leads II, III, and aVF?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the rS pattern? Select all possible leads from the options below.",
+            "answer": [
+                1,
+                2
+            ],
+            "answer_str": [
+                "(b) Lead III",
+                "(c) Lead aVF"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead II",
+                "(b) Lead III",
+                "(c) Lead aVF"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 3,
+            "answer_str": "(d) [9.10 - 9.24 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.02 - 1.19 s]",
+                "(b) [6.84 - 7.00 s]",
+                "(c) [7.93 - 8.10 s]",
+                "(d) [9.10 - 9.24 s]"
+            ]
+        }
+    ]
+}

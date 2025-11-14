@@ -1,0 +1,54 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "11260",
+        "target_dx": "left_anterior_fascicular_block",
+        "dx_label": "negative",
+        "path_idx": 3
+    },
+    "data": [
+        {
+            "question": "Does this ECG show left axis deviation, where the QRS axis is between -90 and -30 degrees?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 1,
+            "answer_str": "(b) [6.76 - 6.91 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [6.55 - 6.74 s]",
+                "(b) [6.76 - 6.91 s]",
+                "(c) [7.43 - 7.57 s]",
+                "(d) [8.73 - 8.96 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 2,
+            "answer_str": "(c) [-45 - -30 degrees]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [-90 - -60 degrees]",
+                "(b) [-60 - -45 degrees]",
+                "(c) [-45 - -30 degrees]"
+            ]
+        },
+        {
+            "question": "Does this ECG show a qR pattern in any of leads I and aVL?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        }
+    ]
+}

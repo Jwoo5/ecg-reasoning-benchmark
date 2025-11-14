@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "13990",
+        "target_dx": "left_posterior_fascicular_block",
+        "dx_label": "positive",
+        "path_idx": 0
+    },
+    "data": [
+        {
+            "question": "Does this ECG show right axis deviation, where the QRS axis is between 75 and 180 degrees?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 2,
+            "answer_str": "(c) [8.78 - 8.90 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.35 - 1.55 s]",
+                "(b) [7.96 - 8.08 s]",
+                "(c) [8.78 - 8.90 s]",
+                "(d) [9.64 - 9.88 s]"
+            ]
+        },
+        {
+            "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 1,
+            "answer_str": "(b) [90 - 120 degrees]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [75 - 90 degrees]",
+                "(b) [90 - 120 degrees]",
+                "(c) [120 - 150 degrees]",
+                "(d) [150 - 180 degrees]"
+            ]
+        },
+        {
+            "question": "Does this ECG show an rS pattern in any of leads I and aVL?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the rS pattern? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1
+            ],
+            "answer_str": [
+                "(a) Lead I",
+                "(b) Lead aVL"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead I",
+                "(b) Lead aVL"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 0,
+            "answer_str": "(a) [4.88 - 5.00 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [4.88 - 5.00 s]",
+                "(b) [6.05 - 6.15 s]",
+                "(c) [8.31 - 8.60 s]",
+                "(d) [8.98 - 9.19 s]"
+            ]
+        },
+        {
+            "question": "Does this ECG show a qR pattern in at least one of leads II, III, and aVF?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the qR pattern? Select all possible leads from the options below.",
+            "answer": [
+                0,
+                1,
+                2
+            ],
+            "answer_str": [
+                "(a) Lead II",
+                "(b) Lead III",
+                "(c) Lead aVF"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead II",
+                "(b) Lead III",
+                "(c) Lead aVF"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 1,
+            "answer_str": "(b) [5.53 - 5.65 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [3.43 - 3.53 s]",
+                "(b) [5.53 - 5.65 s]",
+                "(c) [6.50 - 6.73 s]",
+                "(d) [7.68 - 7.88 s]"
+            ]
+        }
+    ]
+}

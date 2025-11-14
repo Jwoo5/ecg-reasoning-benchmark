@@ -1,0 +1,53 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "2347",
+        "target_dx": "second_degree_av_block",
+        "dx_label": "negative",
+        "path_idx": 3
+    },
+    "data": [
+        {
+            "question": "Does this ECG show any possibility of dropped beats, where an RR interval is significantly longer than the preceding RR intervals?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following intervals between two consecutive QRS waves shows the significantly prolonged RR interval? To ensure clear indexing, the '1st QRS wave' refers to the QRS wave located at [0.64 - 0.74 s] on the ECG strip.",
+            "answer": 3,
+            "answer_str": "(d) [7th QRS wave - 8th QRS wave]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [2nd QRS wave - 3rd QRS wave]",
+                "(b) [4th QRS wave - 5th QRS wave]",
+                "(c) [6th QRS wave - 7th QRS wave]",
+                "(d) [7th QRS wave - 8th QRS wave]"
+            ]
+        },
+        {
+            "question": "Does this ECG show fibrillatory waves with no visible P waves, suggesting symptoms of atrial fibrillation?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Is a non-conducted P wave present in the prolonged RR interval that you identified earlier?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        }
+    ]
+}

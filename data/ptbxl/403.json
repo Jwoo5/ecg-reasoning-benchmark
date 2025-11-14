@@ -1,0 +1,44 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "21301",
+        "target_dx": "third_degree_av_block",
+        "dx_label": "negative",
+        "path_idx": 4
+    },
+    "data": [
+        {
+            "question": "Is the ventricular rhythm (the RR interval) regular on this ECG?",
+            "answer": true,
+            "answer_str": "(a) Yes",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Does this ECG show a slow heart rate? Note that a heart rate is considered to be slow if it is less than 70 beats per minute (bpm).",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
+            "options": [
+                "(a) Yes",
+                "(b) No"
+            ]
+        },
+        {
+            "question": "Which range does the measured heart rate fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
+            "answer": 2,
+            "answer_str": "(c) [90 - 100 bpm]",
+            "question_type": "measurement_grounding",
+            "options": [
+                "(a) [70 - 80 bpm]",
+                "(b) [80 - 90 bpm]",
+                "(c) [90 - 100 bpm]",
+                "(d) [100 - 110 bpm]",
+                "(e) Above 110 bpm"
+            ]
+        }
+    ]
+}
