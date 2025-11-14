@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "15703",
+        "ecg_id": "5920",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": "positive",
         "path_idx": 0
@@ -19,14 +19,14 @@
         },
         {
             "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [3.32 - 3.48 s]",
+            "answer": 2,
+            "answer_str": "(c) [4.22 - 4.38 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.02 - 0.13 s]",
-                "(b) [2.30 - 2.60 s]",
-                "(c) [2.90 - 3.11 s]",
-                "(d) [3.32 - 3.48 s]"
+                "(a) [1.70 - 1.87 s]",
+                "(b) [2.12 - 2.39 s]",
+                "(c) [4.22 - 4.38 s]",
+                "(d) [6.22 - 6.42 s]"
             ]
         },
         {
@@ -54,14 +54,14 @@
         },
         {
             "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [1.45 - 1.61 s]",
+            "answer": 1,
+            "answer_str": "(b) [2.67 - 2.83 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.45 - 1.61 s]",
-                "(b) [4.78 - 4.99 s]",
-                "(c) [6.71 - 6.99 s]",
-                "(d) [7.53 - 7.62 s]"
+                "(a) [0.60 - 0.87 s]",
+                "(b) [2.67 - 2.83 s]",
+                "(c) [3.69 - 3.88 s]",
+                "(d) [3.93 - 4.12 s]"
             ]
         },
         {
@@ -95,14 +95,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the monophasic positive QRS wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [5.19 - 5.35 s]",
+            "answer": 1,
+            "answer_str": "(b) [3.45 - 3.61 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.68 - 0.76 s]",
-                "(b) [1.16 - 1.39 s]",
-                "(c) [5.19 - 5.35 s]",
-                "(d) [6.02 - 6.23 s]"
+                "(a) [2.40 - 2.57 s]",
+                "(b) [3.45 - 3.61 s]",
+                "(c) [5.98 - 6.21 s]",
+                "(d) [7.75 - 8.03 s]"
             ]
         },
         {
@@ -119,13 +119,11 @@
             "question": "Which of the following leads show the notched QRS complex? Select all possible leads from the options below.",
             "answer": [
                 0,
-                1,
-                3
+                1
             ],
             "answer_str": [
                 "(a) Lead I",
-                "(b) Lead aVL",
-                "(d) Lead V6"
+                "(b) Lead aVL"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -137,14 +135,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the notched QRS complex? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [8.31 - 8.47 s]",
+            "answer": 0,
+            "answer_str": "(a) [1.14 - 1.30 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.16 - 3.26 s]",
-                "(b) [5.40 - 5.61 s]",
-                "(c) [8.31 - 8.47 s]",
-                "(d) [8.70 - 8.87 s]"
+                "(a) [1.14 - 1.30 s]",
+                "(b) [1.36 - 1.60 s]",
+                "(c) [3.86 - 4.16 s]",
+                "(d) [7.81 - 7.99 s]"
             ]
         }
     ]

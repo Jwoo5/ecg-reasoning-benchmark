@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "19062",
+        "ecg_id": "17076",
         "target_dx": "lateral_ischemia",
         "dx_label": "positive",
         "path_idx": 0
@@ -32,12 +32,14 @@
             "answer": [
                 0,
                 1,
-                2
+                2,
+                3
             ],
             "answer_str": [
                 "(a) Lead I",
                 "(b) Lead aVL",
-                "(c) Lead V5"
+                "(c) Lead V5",
+                "(d) Lead V6"
             ],
             "question_type": "lead_grounding",
             "options": [
@@ -50,13 +52,14 @@
         {
             "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 3,
-            "answer_str": "(d) [7.96 - 8.19 s]",
+            "answer_str": "(d) [5.79 - 5.95 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.07 - 1.20 s]",
-                "(b) [3.55 - 3.76 s]",
-                "(c) [6.80 - 6.90 s]",
-                "(d) [7.96 - 8.19 s]"
+                "(a) [0.07 - 0.16 s]",
+                "(b) [2.61 - 2.77 s]",
+                "(c) [5.56 - 5.73 s]",
+                "(d) [5.79 - 5.95 s]",
+                "(e) [6.81 - 6.92 s]"
             ]
         }
     ]

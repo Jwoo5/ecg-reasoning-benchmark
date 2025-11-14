@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "20570",
+        "ecg_id": "12149",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": "negative",
         "path_idx": 0
@@ -29,14 +29,15 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [5.68 - 5.78 s]",
+            "answer": 0,
+            "answer_str": "(a) [5.24 - 5.37 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.37 - 1.64 s]",
-                "(b) [4.00 - 4.18 s]",
-                "(c) [5.68 - 5.78 s]",
-                "(d) [9.03 - 9.14 s]"
+                "(a) [5.24 - 5.37 s]",
+                "(b) [5.44 - 5.71 s]",
+                "(c) [6.60 - 6.81 s]",
+                "(d) [8.41 - 8.69 s]",
+                "(e) [9.02 - 9.21 s]"
             ]
         },
         {
@@ -62,20 +63,21 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [2.09 - 2.20 s]",
+            "answer": 2,
+            "answer_str": "(c) [3.98 - 4.11 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.95 - 2.05 s]",
-                "(b) [2.09 - 2.20 s]",
-                "(c) [6.27 - 6.56 s]",
-                "(d) [6.75 - 7.03 s]"
+                "(a) [1.53 - 1.81 s]",
+                "(b) [3.33 - 3.59 s]",
+                "(c) [3.98 - 4.11 s]",
+                "(d) [6.60 - 6.81 s]",
+                "(e) [7.35 - 7.58 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 2,
-            "answer_str": "(c) [0.2 - 0.3 mV]",
+            "answer": 1,
+            "answer_str": "(b) [0.1 - 0.2 mV]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 0.1 mV",

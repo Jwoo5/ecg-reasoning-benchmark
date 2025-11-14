@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "19374",
+        "ecg_id": "14229",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": "negative",
         "path_idx": 0
@@ -29,14 +29,14 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [4.91 - 5.00 s]",
+            "answer": 0,
+            "answer_str": "(a) [5.62 - 5.71 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [1.48 - 1.70 s]",
-                "(b) [1.79 - 2.05 s]",
-                "(c) [4.91 - 5.00 s]",
-                "(d) [8.38 - 8.51 s]"
+                "(a) [5.62 - 5.71 s]",
+                "(b) [6.42 - 6.52 s]",
+                "(c) [8.10 - 8.30 s]",
+                "(d) [9.53 - 9.75 s]"
             ]
         },
         {
@@ -63,19 +63,19 @@
         {
             "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
             "answer": 0,
-            "answer_str": "(a) [0.30 - 0.39 s]",
+            "answer_str": "(a) [3.68 - 3.77 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [0.30 - 0.39 s]",
-                "(b) [0.53 - 0.75 s]",
-                "(c) [0.83 - 1.00 s]",
-                "(d) [1.94 - 2.07 s]"
+                "(a) [3.68 - 3.77 s]",
+                "(b) [6.42 - 6.52 s]",
+                "(c) [7.69 - 7.91 s]",
+                "(d) [8.23 - 8.47 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 0,
-            "answer_str": "(a) Below 0.1 mV",
+            "answer": 1,
+            "answer_str": "(b) [0.1 - 0.2 mV]",
             "question_type": "measurement_grounding",
             "options": [
                 "(a) Below 0.1 mV",

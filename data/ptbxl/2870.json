@@ -1,16 +1,16 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "16918",
-        "target_dx": "lateral_ischemia",
-        "dx_label": "positive",
+        "ecg_id": "11569",
+        "target_dx": "inferior_ischemia",
+        "dx_label": "negative",
         "path_idx": 0
     },
     "data": [
         {
-            "question": "Does this ECG show ST depression in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
-            "answer": true,
-            "answer_str": "(a) Yes",
+            "question": "Does this ECG show ST depression in at least two of the inferior leads, including leads II, III, and aVF?",
+            "answer": false,
+            "answer_str": "(b) No",
             "question_type": "finding",
             "options": [
                 "(a) Yes",
@@ -18,37 +18,13 @@
             ]
         },
         {
-            "question": "Which of the following leads show ST depression? Select all possible leads from the options below.",
-            "answer": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "answer_str": [
-                "(a) Lead I",
-                "(b) Lead aVL",
-                "(c) Lead V5",
-                "(d) Lead V6"
-            ],
-            "question_type": "lead_grounding",
+            "question": "Does this ECG show inverted T waves in at least two of the inferior leads, including leads II, III, and aVF?",
+            "answer": false,
+            "answer_str": "(b) No",
+            "question_type": "finding",
             "options": [
-                "(a) Lead I",
-                "(b) Lead aVL",
-                "(c) Lead V5",
-                "(d) Lead V6"
-            ]
-        },
-        {
-            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST depression? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [1.19 - 1.28 s]",
-            "question_type": "wave_grounding",
-            "options": [
-                "(a) [1.19 - 1.28 s]",
-                "(b) [1.36 - 1.56 s]",
-                "(c) [1.61 - 1.73 s]",
-                "(d) [8.92 - 9.20 s]"
+                "(a) Yes",
+                "(b) No"
             ]
         }
     ]

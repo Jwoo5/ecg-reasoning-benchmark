@@ -1,9 +1,9 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "18945",
+        "ecg_id": "11336",
         "target_dx": "lateral_myocardial_infarction",
-        "dx_label": "negative",
+        "dx_label": "positive",
         "path_idx": 0
     },
     "data": [
@@ -19,12 +19,42 @@
         },
         {
             "question": "Does this ECG show pathological Q waves in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that a pathological Q wave in these leads is defined as a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
-            "answer": false,
-            "answer_str": "(b) No",
+            "answer": true,
+            "answer_str": "(a) Yes",
             "question_type": "finding",
             "options": [
                 "(a) Yes",
                 "(b) No"
+            ]
+        },
+        {
+            "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
+            "answer": [
+                2,
+                3
+            ],
+            "answer_str": [
+                "(c) Lead V5",
+                "(d) Lead V6"
+            ],
+            "question_type": "lead_grounding",
+            "options": [
+                "(a) Lead I",
+                "(b) Lead aVL",
+                "(c) Lead V5",
+                "(d) Lead V6"
+            ]
+        },
+        {
+            "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q wave? The options below refer to time ranges on the ECG strip, provided in seconds.",
+            "answer": 2,
+            "answer_str": "(c) [6.61 - 6.73 s]",
+            "question_type": "wave_grounding",
+            "options": [
+                "(a) [1.26 - 1.36 s]",
+                "(b) [2.66 - 2.87 s]",
+                "(c) [6.61 - 6.73 s]",
+                "(d) [7.69 - 7.88 s]"
             ]
         }
     ]

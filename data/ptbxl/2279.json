@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "8792",
+        "ecg_id": "20830",
         "target_dx": "lateral_myocardial_infarction",
         "dx_label": "positive",
         "path_idx": 0
@@ -20,10 +20,12 @@
         {
             "question": "Which of the following leads show  ST elevation? Select all possible leads from the options below.",
             "answer": [
+                0,
                 2,
                 3
             ],
             "answer_str": [
+                "(a) Lead I",
                 "(c) Lead V5",
                 "(d) Lead V6"
             ],
@@ -37,14 +39,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 3,
-            "answer_str": "(d) [8.03 - 8.18 s]",
+            "answer": 2,
+            "answer_str": "(c) [2.35 - 2.45 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [3.99 - 4.26 s]",
-                "(b) [4.42 - 4.61 s]",
-                "(c) [5.73 - 5.94 s]",
-                "(d) [8.03 - 8.18 s]"
+                "(a) [0.50 - 0.67 s]",
+                "(b) [2.03 - 2.21 s]",
+                "(c) [2.35 - 2.45 s]",
+                "(d) [7.95 - 8.13 s]"
             ]
         }
     ]

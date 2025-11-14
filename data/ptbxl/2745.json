@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "5728",
+        "ecg_id": "12977",
         "target_dx": "inferior_ischemia",
         "dx_label": "positive",
         "path_idx": 0
@@ -30,12 +30,10 @@
         {
             "question": "Which of the following leads show the inverted T waves? Select all possible leads from the options below.",
             "answer": [
-                0,
                 1,
                 2
             ],
             "answer_str": [
-                "(a) Lead II",
                 "(b) Lead III",
                 "(c) Lead aVF"
             ],
@@ -48,14 +46,14 @@
         },
         {
             "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 2,
-            "answer_str": "(c) [6.02 - 6.20 s]",
+            "answer": 1,
+            "answer_str": "(b) [8.08 - 8.29 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.40 - 2.65 s]",
-                "(b) [4.38 - 4.48 s]",
-                "(c) [6.02 - 6.20 s]",
-                "(d) [8.55 - 8.65 s]"
+                "(a) [5.69 - 5.83 s]",
+                "(b) [8.08 - 8.29 s]",
+                "(c) [8.57 - 8.79 s]",
+                "(d) [8.89 - 9.00 s]"
             ]
         }
     ]

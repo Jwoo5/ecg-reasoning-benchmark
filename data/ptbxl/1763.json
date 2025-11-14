@@ -1,16 +1,16 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "9816",
+        "ecg_id": "18915",
         "target_dx": "right_ventricular_hypertrophy",
-        "dx_label": "negative",
+        "dx_label": "positive",
         "path_idx": 0
     },
     "data": [
         {
             "question": "Is right bundle branch block present on this ECG?, including incomplete and complete RBBB?",
-            "answer": false,
-            "answer_str": "(b) No",
+            "answer": true,
+            "answer_str": "(a) Yes",
             "question_type": "finding",
             "options": [
                 "(a) Yes",
@@ -18,7 +18,7 @@
             ]
         },
         {
-            "question": "Does this ECG show right axis deviation, where the QRS axis is between 100 and 180 degrees?",
+            "question": "Is the QRS axis greater than 60 degrees on this ECG?",
             "answer": true,
             "answer_str": "(a) Yes",
             "question_type": "finding",
@@ -29,59 +29,26 @@
         },
         {
             "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 1,
-            "answer_str": "(b) [5.87 - 5.98 s]",
+            "answer": 0,
+            "answer_str": "(a) [3.07 - 3.23 s]",
             "question_type": "wave_grounding",
             "options": [
-                "(a) [2.52 - 2.70 s]",
-                "(b) [5.87 - 5.98 s]",
-                "(c) [7.29 - 7.42 s]",
-                "(d) [9.19 - 9.37 s]"
+                "(a) [3.07 - 3.23 s]",
+                "(b) [6.19 - 6.39 s]",
+                "(c) [7.91 - 8.18 s]",
+                "(d) [8.74 - 8.81 s]"
             ]
         },
         {
             "question": "For the selected segment, which range does the measured QRS axis fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 0,
-            "answer_str": "(a) [90 - 120 degrees]",
+            "answer": 1,
+            "answer_str": "(b) [90 - 120 degrees]",
             "question_type": "measurement_grounding",
             "options": [
-                "(a) [90 - 120 degrees]",
-                "(b) [120 - 150 degrees]",
-                "(c) [150 - 180 degrees]"
-            ]
-        },
-        {
-            "question": "Does lead V1 show a dominant R wave, where the amplitude of the positive deflection in the QRS complex is greater than the amplitude of the negative deflection?",
-            "answer": false,
-            "answer_str": "(b) No",
-            "question_type": "finding",
-            "options": [
-                "(a) Yes",
-                "(b) No"
-            ]
-        },
-        {
-            "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG strip, provided in seconds.",
-            "answer": 0,
-            "answer_str": "(a) [3.27 - 3.38 s]",
-            "question_type": "wave_grounding",
-            "options": [
-                "(a) [3.27 - 3.38 s]",
-                "(b) [3.64 - 3.77 s]",
-                "(c) [3.97 - 4.15 s]",
-                "(d) [6.02 - 6.27 s]"
-            ]
-        },
-        {
-            "question": "For the selected segment, which range does the measured R amplitude fall into? The ranges are inclusive of the lower bound but exclusive of the upper bound.",
-            "answer": 2,
-            "answer_str": "(c) [0.2 - 0.3 mV]",
-            "question_type": "measurement_grounding",
-            "options": [
-                "(a) Below 0.1 mV",
-                "(b) [0.1 - 0.2 mV]",
-                "(c) [0.2 - 0.3 mV]",
-                "(d) Above 0.3 mV"
+                "(a) [60 - 90 degrees]",
+                "(b) [90 - 120 degrees]",
+                "(c) [120 - 150 degrees]",
+                "(d) [150 - 180 degrees]"
             ]
         }
     ]
