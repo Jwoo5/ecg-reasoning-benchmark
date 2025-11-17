@@ -4,26 +4,30 @@ from pathlib import Path
 from collections import defaultdict
 import pandas as pd 
 import argparse   
+from constants import *
 
 class Evaluator():
     def __init__(self, args):
-        self.dir = args.dir if args.dir is not None else "./"
-        self.save_dir = args.save_dir if args.save_dir is not None else dir
+        self.dir = args.dir if args.dir is not None else OUTPUT_DIRECTORY
+        self.save_dir = args.savedir if args.savedir is not None else "./"
         self.keys = args.keys if args.keys is not None else ["model"]
-        self.drop_keys = list(set(['id', 'dataset', 'target_dx', 'model', 'label', 'path']) - set(self.keys))
 
     def AnswerValidator(self, gt, model_answer):
-        #mcq
-        if gt[1] == model_answer.lower():
+        if type(gt) == list:
+            for option in gt:
+                if model_answer in option:
+                    return True
+            return False
+        
+        elif model_answer in gt :
             return True
         else:
             return False
         
-        #if can choose multiple option
         #binary question
     
     def make_csv(self):
-        paths = os.listdir(self.dir)
+        paths = [str(path) for path in list(Path(self.dir).rglob("*.json"))]
         rows = []
         for path in paths:
             row = defaultdict(int)
@@ -40,10 +44,10 @@ class Evaluator():
                 row["path_idx"] = result["metadata"]["path_idx"]
                 for question in result["data"]:
                     row[f"total_{question['question_type']}s"] += 1
-                    if self.AnswerValidatorPlaceHolder(question['answer_str'], question['response_raw']) & continue_flag:
+                    if self.AnswerValidator(question['answer_str'], question['response_raw']) & continue_flag:
                         row[f"total_correct_{question['question_type']}s"] += 1
                         row[f"consecutive_correct_{question['question_type']}s"] += 1
-                    elif self.AnswerValidatorPlaceHolder(question['answer_str'], question['response_raw']) :
+                    elif self.AnswerValidator(question['answer_str'], question['response_raw']) :
                         row[f"total_correct_{question['question_type']}s"] += 1
                     else:
                         continue_flag = False
@@ -53,7 +57,8 @@ class Evaluator():
         return df
 
     def aggregator(self, df, keys):
-        metric_df = df.groupby(keys).sum().drop(self.drop_keys, axis=1)
+        metric_df = df.groupby(keys).sum()
+        
         for metric in ['finding', 'wave_grounding', 'lead_grounding', 'measurement_grounding']:
             if f'total_{metric}s' in metric_df.columns:
                 metric_df[f'average_depth_{metric}']= metric_df[f'consecutive_correct_{metric}s'] / metric_df[f'total_{metric}s']
@@ -70,8 +75,8 @@ class Evaluator():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-d', '--dir', help = "load directory")
-    parser.add_argument('-s', '--save_dir', help = "saving directory")
-    parser.add_argument('-k', '--keys', nargs="+", help="keys for aggregation. (dataset, target_dx, model, label, path)")
+    parser.add_argument('-s', '--savedir', help = "saving directory")
+    parser.add_argument('-k', '--keys', nargs="+", help="keys for aggregation. (data_source, target_dx, model, label, path_idx)")
     args = parser.parse_args()
 
     evaluator = Evaluator(args)
