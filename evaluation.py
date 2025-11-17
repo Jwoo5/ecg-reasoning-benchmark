@@ -1,3 +1,4 @@
+import os
 import json 
 from pathlib import Path
 from collections import defaultdict
@@ -5,21 +6,24 @@ import pandas as pd
 import argparse   
 
 class Evaluator():
-    def __init__(self, dir, keys):
-        self.dir = dir if dir is not None else "./"
-        self.keys = keys if keys is not None else ["model"]
+    def __init__(self, args):
+        self.dir = args.dir if args.dir is not None else "./"
+        self.save_dir = args.save_dir if args.save_dir is not None else dir
+        self.keys = args.keys if args.keys is not None else ["model"]
         self.drop_keys = list(set(['id', 'dataset', 'target_dx', 'model', 'label', 'path']) - set(self.keys))
 
-    def AnswerValidatorPlaceHolder(self, gt, model_answer):
-        # parsing algorithm 
-        if model_answer in gt:
+    def AnswerValidator(self, gt, model_answer):
+        #mcq
+        if gt[1] == model_answer.lower():
             return True
         else:
             return False
+        
+        #if can choose multiple option
+        #binary question
     
     def make_csv(self):
-        paths = [str(path) for path in list(Path(self.dir).rglob("*.json"))]
-
+        paths = os.listdir(self.dir)
         rows = []
         for path in paths:
             row = defaultdict(int)
@@ -28,12 +32,12 @@ class Evaluator():
                 result = json.load(f)
                 
                 rel_parts = Path(path).relative_to(self.dir).parts 
-                row["id"] = rel_parts[-1].split(".")[0]
-                row["dataset"] = rel_parts[1]
-                row["target_dx"] = rel_parts[2]
-                row["model"] = rel_parts[0]
-                row["label"] = rel_parts[3]
-                row["path"] = rel_parts[4]
+                row["id"] = os.path.basename(path)
+                row["data_source"] = result["metadata"]["data_source"]
+                row["target_dx"] = result["metadata"]["target_dx"]
+                row["model"] = result["metadata"]["model"]
+                row["label"] = result["metadata"]["dx_label"]
+                row["path_idx"] = result["metadata"]["path_idx"]
                 for question in result["data"]:
                     row[f"total_{question['question_type']}s"] += 1
                     if self.AnswerValidatorPlaceHolder(question['answer_str'], question['response_raw']) & continue_flag:
@@ -59,15 +63,16 @@ class Evaluator():
     def main(self):
         df = self.make_csv()
         metric = self.aggregator(df, self.keys)
-        metric.to_csv("./temp_metric.csv")
+        metric.to_csv(os.path.join(self.save_dir, "metric.csv"))
         pass
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-d', '--dir', help = "load directory")
+    parser.add_argument('-s', '--save_dir', help = "saving directory")
     parser.add_argument('-k', '--keys', nargs="+", help="keys for aggregation. (dataset, target_dx, model, label, path)")
     args = parser.parse_args()
 
-    evaluator = Evaluator(args.dir, args.keys)
+    evaluator = Evaluator(args)
     evaluator.main()

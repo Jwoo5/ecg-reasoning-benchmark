@@ -4,29 +4,15 @@ import os
 import argparse
 
 class Inferencer():
-    def __init__(self, dir, save_dir, dataset_list, diagnosis_list, label_list, model_list):
-        self.dir = dir if dir is not None else DIRECTORY
-        self.save_dir = save_dir if save_dir is not None else dir
-        self.dataset_list = dataset_list if dataset_list is not None else DATASET_LIST
-        self.diagnosis_list = diagnosis_list if diagnosis_list is not None else DIAGNOSIS_LIST
-        self.label_list = label_list if label_list is not None else LABEL_LIST
-        self.model_list = model_list if model_list is not None else MODEL_LIST
+    def __init__(self, args):
+        self.dir = args.dir if args.dir is not None else DIRECTORY
+        self.save_dir = args.save_dir if args.save_dir is not None else dir
+        self.dataset_list = args.dataset_list if args.dataset_list is not None else DATASET_LIST
+        self.diagnosis_list = args.diagnosis_list if args.diagnosis_list is not None else DIAGNOSIS_LIST
+        self.label_list = args.label_list if args.label_list is not None else LABEL_LIST
+        self.model_list = args.model_list if args.model_list is not None else MODEL_LIST
         
 
-    def PathGatherer(self):
-        total_sample_path_list = []
-        for dataset in self.dataset_list:
-            for diagnosis in self.diagnosis_list:
-                for label in self.label_list:
-                    current_path = os.path.join(self.dir, dataset, diagnosis, label)
-                    path_list = os.listdir(current_path)
-                    for path in path_list:
-                        sample_list = os.listdir(os.path.join(current_path, path))
-                        for sample in sample_list:
-                            total_sample_path_list.append(os.path.join(current_path, path, sample))
-        
-        return total_sample_path_list
-    
     def QAplaceHolder(self, prompt, ecg_id, model):
         # ecg id to ecg
         # ecg to ecg image
@@ -53,12 +39,11 @@ class Inferencer():
         return sample
 
     def main(self):
-        sample_paths = self.PathGatherer()
+        sample_paths = os.listdir(self.dir)
         for model in self.model_list:
             for path in sample_paths:
                 answer_json = self.RetrieveAnswer(path, model)
-                save_path = os.path.join(self.save_dir, model, os.path.relpath(path, self.dir))
-                print(save_path)
+                save_path = os.path.join(self.save_dir, os.path.basename(path))
                 os.makedirs(os.path.dirname(save_path), exist_ok=True)
                 with open(save_path, "w") as f:
                     json.dump(answer_json, f, indent=4)
