@@ -1,0 +1,112 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "2493",
+        "target_dx": "right_ventricular_hypertrophy",
+        "dx_label": true,
+        "path_idx": 2
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To determine which set of diagnostic criteria for right ventricular hypertrohpy should be applied, which underlying conduction abnormality must be evaluated first?",
+                    "options": [
+                        "Presence of left anterior fascicular block",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of right bundle branch block",
+                        "Presence of left posterior fascicular block",
+                        "Presence of ventricular pre-excitation (Delta wave)"
+                    ],
+                    "answer": "Presence of right bundle branch block",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is right bundle branch block present on this ECG, including incomplete and complete RBBB?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have right ventricular hypertrophy?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "Given that right bundle branch block is present, which of the following diagnostic criterion should be evaluated to diagnose right ventricular hypertrophy?",
+                    "options": [
+                        "Presence of a normal QRS axis between -30 and 0 degrees",
+                        "Presence of extreme axis deviation",
+                        "Presence of a slurred S wave in lateral leads",
+                        "Presence of an indeterminate axis (no dominant vector)",
+                        "QRS axis > +60 degrees"
+                    ],
+                    "answer": "QRS axis > +60 degrees",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is the QRS axis greater than +60 degrees on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.85s - 2.11s]",
+                            "[2.60s - 2.84s]",
+                            "[3.01s - 3.16s]",
+                            "[7.02s - 7.15s]"
+                        ],
+                        "answer": "[3.01s - 3.16s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    },
+                    {
+                        "question": "For the selected segment, which range does the measured QRS axis fall into? ",
+                        "options": [
+                            "[60 degrees - 90 degrees]",
+                            "[90 degrees - 120 degrees]",
+                            "[120 degrees - 150 degrees]",
+                            "[150 degrees - 180 degrees]"
+                        ],
+                        "answer": "[90 degrees - 120 degrees]",
+                        "answer_idx": 1,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have right ventricular hypertrophy?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

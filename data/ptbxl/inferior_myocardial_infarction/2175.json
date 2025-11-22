@@ -1,0 +1,119 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "5050",
+        "target_dx": "inferior_myocardial_infarction",
+        "dx_label": true,
+        "path_idx": 1
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose inferior myocardial infarction, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of ST-segment elevation in inferior leads",
+                        "Presence of diffuse concave ST-segment elevation in limb leads",
+                        "Presence of PR-segment depression in inferior leads",
+                        "Presence of ST-segment elevation in leads V1 and V2"
+                    ],
+                    "answer": "Presence of ST-segment elevation in inferior leads",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the inferior leads, including leads II, III, and aVF?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have inferior myocardial infarction?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior myocardial infarction?",
+                    "options": [
+                        "Presence of QS complexes in leads V1 and V2",
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of fragmented QRS complexes in inferior leads",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a Delta wave (slurred upstroke) in inferior leads"
+                    ],
+                    "answer": "Presence of pathological Q waves in inferior leads",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the inferior leads, including leads II, III, and aVF? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVF"
+                        ],
+                        "answer": [
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVF"
+                        ],
+                        "answer_idx": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.13s - 1.32s]",
+                            "[3.52s - 3.62s]",
+                            "[3.74s - 3.98s]",
+                            "[4.25s - 4.36s]"
+                        ],
+                        "answer": "[3.52s - 3.62s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have inferior myocardial infarction?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

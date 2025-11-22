@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "41133151",
+        "target_dx": "anterior_ischemia",
+        "dx_label": true,
+        "path_idx": 1
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Presence of diffuse concave ST-segment elevation in anterior leads",
+                        "Presence of J-point elevation in anterior leads",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of ST-segment depression in anterior leads",
+                        "Presence of left axis deviation"
+                    ],
+                    "answer": "Presence of ST-segment depression in anterior leads",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Reagrding the criterion you selected, does this ECG show ST depression in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "based on the finding identified above, does this patient have anterior ischemia?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior ischemia?",
+                    "options": [
+                        "Presence of tall, peaked T waves in anterior leads",
+                        "Presence of flattened T waves in anterior leads",
+                        "Presence of Camel-hump T waves (P on T) in anterior leads",
+                        "Presence of inverted T waves in anterior leads",
+                        "Presence of left axis deviation"
+                    ],
+                    "answer": "Presence of inverted T waves in anterior leads",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show inverted T waves in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show the inverted T waves? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead V2",
+                            "Lead V3",
+                            "Lead V4",
+                            "Lead V5"
+                        ],
+                        "answer": [
+                            "Lead V4",
+                            "Lead V5"
+                        ],
+                        "answer_idx": [
+                            2,
+                            3
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.38s - 0.50s]",
+                            "[3.68s - 3.89s]",
+                            "[7.44s - 7.53s]",
+                            "[8.68s - 8.93s]"
+                        ],
+                        "answer": "[8.68s - 8.93s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have anterior ischemia?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

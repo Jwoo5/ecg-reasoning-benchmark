@@ -1,0 +1,115 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "41672514",
+        "target_dx": "premature_ventricular_complex",
+        "dx_label": true,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose premature ventricular complexes, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Presence of gradual accleration and deceleration of the heart rate",
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of a fixed, rigid heart rate without variability",
+                        "Presence of premature beats",
+                        "Presence of grouped beating patterns separated by pauses"
+                    ],
+                    "answer": "Presence of premature beats",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regading the criterion you selected, are there any premature beats on this ECG, where a QRS complex occurs earlier than expected time based on the preceding normal cycles?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.78s - 0.96s]",
+                            "[4.81s - 5.09s]",
+                            "[5.78s - 5.89s]",
+                            "[7.29s - 7.52s]",
+                            "[8.23s - 8.35s]"
+                        ],
+                        "answer": "[0.78s - 0.96s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have premature ventricular complex(es)?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature ventricular complexes?",
+                    "options": [
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of a Delta wave (slurred upstroke) on the premature beat",
+                        "Presence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Similarity of QRS morphology between the premature beat and normal beats",
+                        "Presence of ST elevation in the premature beat"
+                    ],
+                    "answer": "Presence of significant QRS prolongation in the premature beat compared to normal beats",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, for the QRS complex in the selected segment, is the QRS duration prolonged significantly compared to the normal beats on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which range does the measured QRS duration for the premature beat fall into?",
+                        "options": [
+                            "Below 130ms",
+                            "[130ms - 140ms]",
+                            "[140ms - 150ms]",
+                            "[150ms - 160ms]",
+                            "Above 160ms"
+                        ],
+                        "answer": "Above 160ms",
+                        "answer_idx": 4,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have premature ventricular complex(es)?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

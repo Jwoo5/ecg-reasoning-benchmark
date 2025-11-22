@@ -1,0 +1,113 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "19341",
+        "target_dx": "first_degree_av_block",
+        "dx_label": true,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose first degree AV block, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Absence of discernible P waves",
+                        "Presence of flattened T waves in inferior leads",
+                        "Presence of retrograde P waves following QRS complexes",
+                        "Presence of premature atrial complexes with compensatory pauses"
+                    ],
+                    "answer": "Evidence of consistent 1:1 atrioventricular conduction",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, looking at the overall rhythm, is every P wave consistently followed by a QRS complex on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have first degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose first degree AV block?",
+                    "options": [
+                        "Prolongation of the PR interval",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Progressive prolongation of the PR interval",
+                        "Shortening of the PR interval",
+                        "Alternating duration of the PR interval"
+                    ],
+                    "answer": "Prolongation of the PR interval",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is the PR interval prolonged on this ECG? Note that a PR interval is considered to be prolonged if it is greater than 200 milliseconds.",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you observe a P wave that demonstrates the prolonged PR interval? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.68s - 1.91s]",
+                            "[3.43s - 3.51s]",
+                            "[6.58s - 6.88s]",
+                            "[8.20s - 8.32s]"
+                        ],
+                        "answer": "[8.20s - 8.32s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    },
+                    {
+                        "question": "For the selected segment, which range does the measured PR interval fall into?",
+                        "options": [
+                            "[200ms - 210ms]",
+                            "[210ms - 220ms]",
+                            "[220ms - 230ms]",
+                            "[230ms - 240ms]",
+                            "Above 240ms"
+                        ],
+                        "answer": "[220ms - 230ms]",
+                        "answer_idx": 2,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have first degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

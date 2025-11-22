@@ -1,0 +1,50 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "45480269",
+        "target_dx": "second_degree_av_block",
+        "dx_label": false,
+        "path_idx": 1
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose second degree AV block, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Gradual cycle length variation coincident with respiration",
+                        "Presence of compensatory pauses following premature beats",
+                        "occurrence of intermittent dropped beats",
+                        "Presence of consistently regular RR intervals",
+                        "Rapid, regular ventricular response"
+                    ],
+                    "answer": "occurrence of intermittent dropped beats",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show any possibility of dropped beats, where an RR interval is significantly longer than the preceding RR intervals?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have second degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

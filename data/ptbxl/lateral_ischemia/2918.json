@@ -1,0 +1,82 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "3550",
+        "target_dx": "lateral_ischemia",
+        "dx_label": true,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Presence of diffuse concave ST-segment elevation in lateral leads",
+                        "Presence of J-point elevation in lateral leads",
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of ST-segment depression in lateral leads",
+                        "Presence of flattened T waves in inferior leads"
+                    ],
+                    "answer": "Presence of ST-segment depression in lateral leads",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Reagrding the criterion you selected, does this ECG show ST depression in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show ST depression? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead I",
+                            "Lead aVL",
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer": [
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer_idx": [
+                            2,
+                            3
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.42s - 1.56s]",
+                            "[2.79s - 2.98s]",
+                            "[3.58s - 3.75s]",
+                            "[4.04s - 4.21s]",
+                            "[5.39s - 5.48s]"
+                        ],
+                        "answer": "[5.39s - 5.48s]",
+                        "answer_idx": 4,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "based on the finding identified above, does this patient have lateral ischemia?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

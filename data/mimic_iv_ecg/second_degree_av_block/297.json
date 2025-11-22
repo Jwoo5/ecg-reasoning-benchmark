@@ -1,0 +1,100 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "43101887",
+        "target_dx": "second_degree_av_block",
+        "dx_label": false,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose second degree AV block, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "occurrence of intermittent dropped beats",
+                        "Chaotic and completely irregular ventricular rhythm",
+                        "Presence of compensatory pauses following premature beats",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Rapid, regular ventricular response"
+                    ],
+                    "answer": "occurrence of intermittent dropped beats",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show any possibility of dropped beats, where an RR interval is significantly longer than the preceding RR intervals?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following intervals between two consecutive QRS waves represents this significantly longer interval? To ensure clear indexing, the '1st QRS wave' refers to the QRS wave located at [0.24s - 0.36s] in the ECG signal.",
+                        "options": [
+                            "[2nd QRS wave - 3rd QRS wave]",
+                            "[3rd QRS wave - 4th QRS wave]",
+                            "[4th QRS wave - 5th QRS wave]",
+                            "[5th QRS wave - 6th QRS wave]"
+                        ],
+                        "answer": "[4th QRS wave - 5th QRS wave]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have second degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose second degree AV block?",
+                    "options": [
+                        "Presence of dissociated P waves marching through the pause",
+                        "Presence of a non-conducted P wave within the dropped interval",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of fibrillatory waves replacing P waves",
+                        "Presence of retrograde P waves"
+                    ],
+                    "answer": "Presence of a non-conducted P wave within the dropped interval",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is a non-conducted P wave visible within the prolonged RR interval that you identified?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have second degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

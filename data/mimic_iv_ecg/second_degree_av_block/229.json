@@ -1,0 +1,113 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "43318537",
+        "target_dx": "second_degree_av_block",
+        "dx_label": true,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose second degree AV block, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Gradual cycle length variation coincident with respiration",
+                        "occurrence of intermittent dropped beats",
+                        "Presence of left axis deviation",
+                        "Rapid, regular ventricular response",
+                        "Presence of compensatory pauses following premature beats"
+                    ],
+                    "answer": "occurrence of intermittent dropped beats",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show any possibility of dropped beats, where an RR interval is significantly longer than the preceding RR intervals?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following intervals between two consecutive QRS waves represents this significantly longer interval? To ensure clear indexing, the '1st QRS wave' refers to the QRS wave located at [0.91s - 1.02s] in the ECG signal.",
+                        "options": [
+                            "[1st QRS wave - 2nd QRS wave]",
+                            "[2nd QRS wave - 3rd QRS wave]",
+                            "[3rd QRS wave - 4th QRS wave]",
+                            "[5th QRS wave - 6th QRS wave]"
+                        ],
+                        "answer": "[2nd QRS wave - 3rd QRS wave]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have second degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose second degree AV block?",
+                    "options": [
+                        "Presence of fibrillatory waves replacing P waves",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of dissociated P waves marching through the pause",
+                        "Presence of a non-conducted P wave within the dropped interval",
+                        "Complete absence of atrial activity during the pause"
+                    ],
+                    "answer": "Presence of a non-conducted P wave within the dropped interval",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is a non-conducted P wave visible within the prolonged RR interval that you identified?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you observe the non-conducted P wave, specifically within the prolonged RR interval? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.69s - 0.77s]",
+                            "[2.68s - 2.78s]",
+                            "[5.12s - 5.23s]",
+                            "[8.48s - 8.74s]"
+                        ],
+                        "answer": "[2.68s - 2.78s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have second degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

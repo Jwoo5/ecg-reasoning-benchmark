@@ -1,0 +1,75 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "10860",
+        "target_dx": "left_posterior_fascicular_block",
+        "dx_label": false,
+        "path_idx": 2
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose left posterior fascicular block, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Presence of right axis deviation",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of left axis deviation",
+                        "Presence of a horizontal QRS axis",
+                        "Presence of an indeterminate axis"
+                    ],
+                    "answer": "Presence of right axis deviation",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show right axis deviation, where the QRS axis is between +90 and +180 degrees?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.57s - 2.69s]",
+                            "[5.34s - 5.50s]",
+                            "[7.30s - 7.41s]",
+                            "[7.53s - 7.75s]"
+                        ],
+                        "answer": "[7.30s - 7.41s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    },
+                    {
+                        "question": "For the selected segment, which range does the measured QRS axis fall into? ",
+                        "options": [
+                            "[-180 degrees - -90 degrees]",
+                            "[-90 degrees - -30 degrees]",
+                            "[-30 degrees - 0 degrees]",
+                            "[0 degrees - 75 degrees]"
+                        ],
+                        "answer": "[-90 degrees - -30 degrees]",
+                        "answer_idx": 1,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have left posterior fascicular block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

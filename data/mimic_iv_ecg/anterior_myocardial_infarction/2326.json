@@ -1,0 +1,87 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "48151317",
+        "target_dx": "anterior_myocardial_infarction",
+        "dx_label": false,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of scooped ST-segment depression in precordial leads",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of ST-segment depression in leads V2, V3, and V4",
+                        "Presence of spiked pacemaker artifacts preceding the QRS complex"
+                    ],
+                    "answer": "Presence of ST-segment elevation in anterior leads",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the anterior leads, including leads V1, V2, V3, and V4?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior myocardial infarction?",
+                    "options": [
+                        "Presence of a Delta wave (slurred upstroke) in anterior leads",
+                        "Prolongation of the PR interval",
+                        "Presence of pathological Q waves in anterior leads",
+                        "Presence of an RSR' pattern in lead V1",
+                        "Presence of low voltage QRS complexes in precordial leads"
+                    ],
+                    "answer": "Presence of pathological Q waves in anterior leads",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the anterior leads, including leads V1, V2, V3, and V4? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than 0.075mV, or (2) a deep S wave with only a small initial R wave preceding it.",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have anterior myocardial infarction?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

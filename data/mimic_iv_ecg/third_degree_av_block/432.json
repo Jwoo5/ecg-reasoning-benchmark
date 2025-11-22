@@ -1,0 +1,188 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "45814322",
+        "target_dx": "third_degree_av_block",
+        "dx_label": true,
+        "path_idx": 1
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose third degree AV block, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Repetitive grouped beating patterns",
+                        "Phasic variation in RR intervals",
+                        "Presence of left axis deviation",
+                        "Pattern of coupled beats",
+                        "Regularity of the RR intervals"
+                    ],
+                    "answer": "Regularity of the RR intervals",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is the ventricular rhythm (the RR intervals) regular on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Presence of tachycardia-bradycardia syndrome",
+                        "Presence of a slurred S wave in lateral leads",
+                        "Evidence of normal resting heart rate",
+                        "Presence of rapid ventricular response",
+                        "Presence of bradycardia (slow ventricular rate)"
+                    ],
+                    "answer": "Presence of bradycardia (slow ventricular rate)",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show a slow heart rate? Note that a heart rate is considered to be slow if it is less than 70 beats per minute (bpm).",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which range does the measured heart rate fall into?",
+                        "options": [
+                            "Below 30 bpm",
+                            "[30 bpm - 40 bpm]",
+                            "[40 bpm - 50 bpm]",
+                            "[50 bpm - 60 bpm]",
+                            "[60 bpm - 70 bpm]"
+                        ],
+                        "answer": "[30 bpm - 40 bpm]",
+                        "answer_idx": 1,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Presence of premature P waves with compensatory pauses",
+                        "Presence of atrial fibrillation",
+                        "Presence of inverted T waves in anterior leads",
+                        "Presence of distinct P waves with variable morphology",
+                        "Presence of consistent 1:1 P-QRS conduction"
+                    ],
+                    "answer": "Presence of atrial fibrillation",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show fibrillatory waves with no visible P waves, suggesting symptoms of atrial fibrillation?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Presence of non-conducted P waves indicating AV dissociation",
+                        "Progressive prolongation of the PR interval",
+                        "Evidence of consistent 1:1 P-QRS conduction",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of a Delta wave (Slurred upstroke)"
+                    ],
+                    "answer": "Presence of non-conducted P waves indicating AV dissociation",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Reagrding the criterion you selected, is a non-conducted P wave present on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you observe a non-conducted P wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.79s - 3.04s]",
+                            "[3.42s - 3.57s]",
+                            "[4.23s - 4.36s]",
+                            "[6.19s - 6.45s]"
+                        ],
+                        "answer": "[3.42s - 3.57s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this patient have third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

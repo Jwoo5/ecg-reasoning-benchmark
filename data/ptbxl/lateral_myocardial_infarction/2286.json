@@ -1,0 +1,81 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "8792",
+        "target_dx": "lateral_myocardial_infarction",
+        "dx_label": true,
+        "path_idx": 0
+    },
+    "data": {
+        "path_1": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose lateral myocardial infarction, which of the following diagnostic criterion should be evaluated?",
+                    "options": [
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of diffuse ST-segment elevation in all leads",
+                        "Presence of ST-segment elevation in leads II, III, and aVF",
+                        "Presence of ST-segment elevation in lead aVR"
+                    ],
+                    "answer": "Presence of ST-segment elevation in lateral leads",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show ST elevation? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead I",
+                            "Lead aVL",
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer": [
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer_idx": [
+                            2,
+                            3
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.87s - 1.02s]",
+                            "[3.79s - 3.94s]",
+                            "[6.60s - 6.86s]",
+                            "[8.30s - 8.56s]"
+                        ],
+                        "answer": "[3.79s - 3.94s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this patient have lateral myocardial infarction?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}
