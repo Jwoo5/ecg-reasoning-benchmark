@@ -18,8 +18,7 @@ class Evaluator():
                 if model_answer in option:
                     return True
             return False
-        
-        elif model_answer in gt :
+        elif model_answer == gt[1] :
             return True
         else:
             return False
@@ -34,8 +33,7 @@ class Evaluator():
             with open(path) as f:
                 continue_flag = True
                 result = json.load(f)
-                
-                rel_parts = Path(path).relative_to(self.dir).parts 
+
                 row["id"] = os.path.basename(path)
                 row["data_source"] = result["metadata"]["data_source"]
                 row["target_dx"] = result["metadata"]["target_dx"]

@@ -59,7 +59,15 @@ class Inferencer():
                 return None    
             
             answer_list = []
-            for data in sample["data"]:
+            initial_question = sample["data"]["initial_diagnosis"]["question"]
+            initial_diagnosis = self.QuestionAnswerer(initial_question, ecg, ecg_image, model_name, loaded_model_instance)
+            
+            if initial_diagnosis in ["yes", "no"]: #answer parcing logic required
+                path = 1
+            # elif initial_diagnosis == "idk":
+            #     path = 2
+
+            for data in sample["data"][f"path_{path}"]:
                 text = prompt.format(data["question"], data["options"])
                 model_response = self.QuestionAnswerer(text, ecg, ecg_image, model_name, loaded_model_instance)
                 if model_response:
