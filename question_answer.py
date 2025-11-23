@@ -67,6 +67,7 @@ class Inferencer():
             elif initial_diagnosis == "idk":
                 return None #path = 2
 
+            sample["data"]["initial_diagnosis"]["path"] = path
             for data in sample["data"][f"path_{path}"]:
                 text = prompt.format(data["question"], data["options"])
                 model_response = self.QuestionAnswerer(text, ecg, ecg_image, model_name, loaded_model_instance)
