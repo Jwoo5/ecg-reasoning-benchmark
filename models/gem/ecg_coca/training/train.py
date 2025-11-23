@@ -13,7 +13,7 @@ try:
 except ImportError:
     wandb = None
 
-from ecg_coca.open_clip import get_input_dtype
+from ..open_clip import get_input_dtype
 from .distributed import is_master
 from .evaluation.zero_shot import zero_shot_eval
 from .precision import get_autocast

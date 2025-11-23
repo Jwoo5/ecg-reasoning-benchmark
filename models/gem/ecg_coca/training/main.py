@@ -28,15 +28,15 @@ try:
 except ImportError:
     hvd = None
 
-from ecg_coca.open_clip import create_model_and_transforms, trace_model, get_tokenizer, create_loss, get_model_config
-from ecg_coca.training.data import get_data
-from ecg_coca.training.distributed import is_master, init_distributed_device, broadcast_object
-from ecg_coca.training.logger import setup_logging
-from ecg_coca.training.params import parse_args
-from ecg_coca.training.scheduler import cosine_lr, const_lr, const_lr_cooldown
-from ecg_coca.training.train import train_one_epoch, evaluate, test
-from ecg_coca.training.file_utils import pt_load, check_exists, start_sync_process, remote_sync
-from ecg_coca.training.evaluate import zero_shot_evaluatation, linear_probing_evaluation
+from ..open_clip import create_model_and_transforms, trace_model, get_tokenizer, create_loss, get_model_config
+from .data import get_data
+from .distributed import is_master, init_distributed_device, broadcast_object
+from .logger import setup_logging
+from .params import parse_args
+from .scheduler import cosine_lr, const_lr, const_lr_cooldown
+from .train import train_one_epoch, evaluate, test
+from .file_utils import pt_load, check_exists, start_sync_process, remote_sync
+from .evaluate import zero_shot_evaluatation, linear_probing_evaluation
 
 LATEST_CHECKPOINT_NAME = "epoch_latest.pt"
 

@@ -5,7 +5,7 @@ from transformers import CLIPVisionModel, CLIPImageProcessor, CLIPVisionConfig
 
 import sys
 sys.path.insert(0, "/home/jupyter/LLaVA")
-from ecg_coca.training import get_ecg_encoder
+from ....ecg_coca.training import get_ecg_encoder
 
 class CLIPECGTower(nn.Module):
     def __init__(self, ecg_tower, args, delay_load=False):
