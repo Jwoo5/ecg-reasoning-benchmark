@@ -38,12 +38,10 @@ class Inferencer():
     def QuestionAnswerer(self, prompt, ecg, ecg_image, model_name, loaded_model_instance):
         if loaded_model_instance:
             return loaded_model_instance.generate(prompt, ecg, ecg_image)
-            
-        elif model_name == "gpt":
-            
-            return "gpt_response" 
-        elif model_name == "gemini":
-            return "gemini_response" # Add API logic here
+        elif "gpt" in model_name  :
+            return get_model_loader(model_name).generate(prompt, ecg, ecg_image)
+        elif "gemini" in model_name:
+            return get_model_loader(model_name).generate(prompt, ecg, ecg_image)
         else:
             return f"Error: Model {model_name} not loaded."
     

@@ -5,6 +5,7 @@ from llava.mm_utils import process_images, tokenizer_image_token, get_model_name
 from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from utils import base64_image_encoder
 from openai import OpenAI
+from google import genai
 
 class BaseModel:
     def generate(self, prompt, ecg_signal, ecg_image):
@@ -90,15 +91,15 @@ class PulseModel(BaseModel):
         return self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
 
 class GPTRetriever(BaseModel):
-    def __init__(self):
-
+    def __init__(self, model):
         self.client = OpenAI()
+        self.model = model
 
     def generate(self, prompt, ecg_signal, ecg_image): 
         
         base64_image = base64_image_encoder(ecg_image)
         response = self.client.responses.create(
-            model="gpt-5",
+            model=self.model,
             input=[
                 {
                     "role": "user",
@@ -106,10 +107,30 @@ class GPTRetriever(BaseModel):
                         { "type": "input_text", "text": f"{prompt}, {ecg_signal}" },
                         {
                             "type": "input_image",
-                            "image_url": f"data:image/jpeg;base64,{base64_image}"
+                            "image_url": f"data:image/png;base64,{base64_image}"
                         }
                     ]
                 }
+            ]
+        )
+        return response.output[0].content[0]["text"]
+    
+class GeminiRetriever(BaseModel):
+    def __init__(self, model):
+        self.client = genai.Client()
+        self.model = model
+
+    def generate(self, prompt, ecg_signal, ecg_image): 
+        
+        base64_image = base64_image_encoder(ecg_image)
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=[
+                genai.types.Part.from_bytes(
+                    data=base64_image,
+                    mime_type='image/png',
+                ),
+            f'{prompt}, {ecg_signal}'
             ]
         )
         return response.output[0].content[0]["text"]
@@ -121,9 +142,9 @@ def get_model_loader(model_name):
     elif "pulse" in name:
         return PulseModel()
     elif "gpt" in name:
-        return GPTRetriever() 
+        return GPTRetriever(name) #maybe version of LLM might differ
     elif "gemini" in name:
-        pass
+        return GeminiRetriever(name)
     else:
         raise ValueError(f"Model {model_name} not implemented in model_loader.py")
 
