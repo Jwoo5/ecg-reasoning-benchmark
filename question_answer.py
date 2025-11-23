@@ -64,8 +64,8 @@ class Inferencer():
             
             if initial_diagnosis in ["yes", "no"]: #answer parcing logic required
                 path = 1
-            # elif initial_diagnosis == "idk":
-            #     path = 2
+            elif initial_diagnosis == "idk":
+                return None #path = 2
 
             for data in sample["data"][f"path_{path}"]:
                 text = prompt.format(data["question"], data["options"])
