@@ -2,9 +2,18 @@ name: ecg-reasoning-benchmark
 channels:
   - defaults
 dependencies:
-  - python=3.11
-  - pip
+  - python=3.10
   - pip:
-      - torch==2.5.1
-      - torchvision==0.20.1
-      - torchaudio==2.5.1
+      - accelerate==0.21.0
+      - torch==2.1.2
+      - torchvision==0.16.2
+      - ecg_plot==0.2.8
+      - matplotlib==3.10.7
+      - wfdb==4.3.0
+      - tqdm==4.67.1
+      - transformers==4.37.2
+      - ftfy==6.3.1
+      - scikit-learn==1.2.2
+      - numpy==1.26.4
+      - sentencepiece==0.1.99
+      - protobuf==6.33.1
