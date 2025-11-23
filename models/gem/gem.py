@@ -2,9 +2,9 @@ import re
 import logging
 import torch
 
-from llava.model.builder import load_pretrained_model
-from llava.mm_utils import process_images, tokenizer_image_token
-from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN
+from .llava.model.builder import load_pretrained_model
+from .llava.mm_utils import process_images, tokenizer_image_token
+from .llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN
 
 from .. import BaseModel
 from .. import register_model
@@ -14,8 +14,6 @@ logger = logging.getLogger(__name__)
 @register_model("gem")
 class GEMLlavaModel(BaseModel):
     def __init__(self, device_map="auto", torch_dtype=torch.float16):
-        self.model_cfg_name = "PULSE-ECG/PULSE-7B"
-
         self.tokenizer, self.model, self.image_processor, _ = load_pretrained_model(
             "LANSG/GEM",
             model_base=None,
@@ -25,7 +23,7 @@ class GEMLlavaModel(BaseModel):
         )
 
     @classmethod
-    def build_model(cls, device_map, torch_dtype, **kwargs):
+    def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
     def generate(self, prompt, ecg_signal, ecg_image):

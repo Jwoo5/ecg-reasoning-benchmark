@@ -2,10 +2,10 @@ import re
 import logging
 import torch
 
-from LLaVA.llava.model.builder import load_pretrained_model
-from LLaVA.llava.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path
-from LLaVA.llava.conversation import conv_templates
-from LLaVA.llava.constants import (
+from .LLaVA.llava.model.builder import load_pretrained_model
+from .LLaVA.llava.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path
+from .LLaVA.llava.conversation import conv_templates
+from .LLaVA.llava.constants import (
     IMAGE_TOKEN_INDEX,
     DEFAULT_IMAGE_TOKEN,
     DEFAULT_IM_START_TOKEN,
@@ -33,7 +33,7 @@ class PulseModel(BaseModel):
         )
     
     @classmethod
-    def build_model(cls, device_map, torch_dtype, **kwargs):
+    def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
     def generate(self, prompt, ecg_signal, ecg_image):
