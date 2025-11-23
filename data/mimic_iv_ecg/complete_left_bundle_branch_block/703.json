@@ -7,6 +7,15 @@
         "path_idx": 2
     },
     "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of complete left bundle branch block?",
+            "options": [
+                "Yes",
+                "No",
+                "I don't know"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
         "path_1": [
             {
                 "criterion_selection": {
@@ -86,7 +95,7 @@
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, Does this ECG show dominant S waves in leads V1 and V2, where the amplitude of the negative deflection in the QRS complex is greater than the amplitude of the positive deflection?",
+                    "question": "Regarding the criterion you selected, does this ECG show dominant S waves in leads V1 and V2, where the amplitude of the negative deflection in the QRS complex is greater than the amplitude of the positive deflection?",
                     "options": [
                         "Yes",
                         "No"
@@ -248,7 +257,7 @@
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regrading the criterion you selected, does this ECG show broad monophasic R waves in any of leads V5 and V6?",
+                    "question": "Regarding the criterion you selected, does this ECG show broad monophasic R waves in any of leads V5 and V6?",
                     "options": [
                         "Yes",
                         "No"
