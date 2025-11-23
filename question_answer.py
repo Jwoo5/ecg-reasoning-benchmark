@@ -40,6 +40,7 @@ class Inferencer():
             return loaded_model_instance.generate(prompt, ecg, ecg_image)
             
         elif model_name == "gpt":
+            
             return "gpt_response" 
         elif model_name == "gemini":
             return "gemini_response" # Add API logic here

@@ -3,6 +3,8 @@ import torch
 from llava.model.builder import load_pretrained_model
 from llava.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path
 from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
+from utils import base64_image_encoder
+from openai import OpenAI
 
 class BaseModel:
     def generate(self, prompt, ecg_signal, ecg_image):
@@ -87,14 +89,41 @@ class PulseModel(BaseModel):
         # 6. Decode
         return self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
 
+class GPTRetriever(BaseModel):
+    def __init__(self):
+
+        self.client = OpenAI()
+
+    def generate(self, prompt, ecg_signal, ecg_image): 
+        
+        base64_image = base64_image_encoder(ecg_image)
+        response = self.client.responses.create(
+            model="gpt-5",
+            input=[
+                {
+                    "role": "user",
+                    "content": [
+                        { "type": "input_text", "text": f"{prompt}, {ecg_signal}" },
+                        {
+                            "type": "input_image",
+                            "image_url": f"data:image/jpeg;base64,{base64_image}"
+                        }
+                    ]
+                }
+            ]
+        )
+        return response.output[0].content[0]["text"]
+
 def get_model_loader(model_name):
     name = model_name.lower()
     if "gem" in name and "gemini" not in name: 
         return GEMLlavaModel()
     elif "pulse" in name:
         return PulseModel()
-
     elif "gpt" in name:
-        return None 
+        return GPTRetriever() 
+    elif "gemini" in name:
+        pass
     else:
         raise ValueError(f"Model {model_name} not implemented in model_loader.py")
+
