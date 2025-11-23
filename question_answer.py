@@ -9,6 +9,7 @@ import torch
 from PIL import Image
 import io
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 from model_loader import get_model_loader
 from data_utils import get_dataset_loader
@@ -21,6 +22,7 @@ class Inferencer():
         self.model_list = args.model if args.model is not None else MODEL_LIST
         
         self.ecg_base_dir = args.ecg_base_dir 
+        self.target_model = self.model_list[0]
     
             
     def ECGVisualizer(self, ecg, sampling_rate):
@@ -75,62 +77,55 @@ class Inferencer():
 
     def main(self):
         path_map = {
-                    "ptbxl": "/nfs_edlab/hschung/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3",
-                    "mimic_iv_ecg": "path/to/mimic_iv_ecg" 
-                }
+            "ptbxl": "/nfs_edlab/hschung/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3",
+            "mimic_iv_ecg": "path/to/mimic_iv_ecg" 
+        }
 
-        # OUTER LOOP: Models (Load one, run all datasets, unload)
-        for model_name in self.model_list:
-            print(f"\n{'='*30}")
-            print(f"Loading Model: {model_name}")
-            print(f"{'='*30}")
+        model_name = self.target_model
+        
+        
+        # 1. Load Model (Once per process execution)
+        current_model_instance = None
+        # Add any other local model names to this list
+        if model_name in ["gem", "pulse"]:
+            try:
+                current_model_instance = get_model_loader(model_name)
+            except Exception as e:
+                print(f"CRITICAL ERROR: Failed to load {model_name}. Exiting process.\nError: {e}")
+                return
+
+        # 2. Iterate over Datasets
+        for dataset in self.dataset_list:
+            print(f"\n--- Processing Dataset: {dataset} ---")
+
+            target_dir = path_map.get(dataset, self.ecg_base_dir)
+            print(f"Looking for ECG files in: {target_dir}")
+
+            try:
+                current_loader = get_dataset_loader(dataset, target_dir)
+            except ValueError as e:
+                print(f"Skipping dataset {dataset}: {e}")
+                continue
+
+            dataset_path = os.path.join(self.dir, dataset)
+            if not os.path.exists(dataset_path):
+                print(f"JSON Input directory not found: {dataset_path}")
+                continue
+
+            # List all JSON files
+            total_path = [os.path.join(dataset_path, p) for p in os.listdir(dataset_path) if p.endswith('.json')]
             
-            # 1. Load Model into VRAM
-            current_model_instance = None
-            if model_name in ["gem", "pulse", "medgemma"]:
-                try:
-                    current_model_instance = get_model_loader(model_name)
-                except Exception as e:
-                    print(f"CRITICAL ERROR: Failed to load {model_name}. Skipping.\nError: {e}")
-                    continue
-
-            # INNER LOOP: Datasets
-            for dataset in self.dataset_list:
-                print(f"\n--- Processing Dataset: {dataset} ---")
-
-                # 2. Resolve Dataset Path
-                target_dir = path_map.get(dataset, self.ecg_base_dir)
-                print(f"Looking for files in: {target_dir}")
-
-                try:
-                    current_loader = get_dataset_loader(dataset, target_dir)
-                except ValueError as e:
-                    print(f"Skipping dataset {dataset}: {e}")
-                    continue
-
-                dataset_path = os.path.join(self.dir, dataset)
-                if not os.path.exists(dataset_path):
-                    print(f"JSON Input directory not found: {dataset_path}")
-                    continue
-
-                total_path = [os.path.join(dataset_path, p) for p in os.listdir(dataset_path) if p.endswith('.json')]
+            # 3. Run Inference on Files
+            for path in tqdm(total_path, desc=f"Inferencing {dataset} with {model_name}"):
+                answer_json = self.RetrieveAnswer(path, model_name, current_loader, current_model_instance)
                 
-                # 3. Inference
-                from tqdm import tqdm
-                for path in tqdm(total_path, desc=f"Inferencing {dataset}"):
-                    answer_json = self.RetrieveAnswer(path, model_name, current_loader, current_model_instance)
-                    
-                    if answer_json:
-                        save_path = os.path.join(self.save_dir, model_name, dataset, os.path.basename(path))
-                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                        with open(save_path, "w") as f:
-                            json.dump(answer_json, f, indent=4)
+                if answer_json:
+                    save_path = os.path.join(self.save_dir, model_name, dataset, os.path.basename(path))
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                    with open(save_path, "w") as f:
+                        json.dump(answer_json, f, indent=4)
 
-            # 4. Unload Model to free VRAM
-            if current_model_instance:
-                print(f"Unloading {model_name}...")
-                del current_model_instance
-                torch.cuda.empty_cache()
+        print(f"\nFinished inference for {model_name}.")
 
         
 
