@@ -11,7 +11,7 @@ import io
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-from model_loader import get_model_loader
+from models import build_model
 from data_utils import get_dataset_loader
 
 class Inferencer():
@@ -23,8 +23,7 @@ class Inferencer():
         
         self.ecg_base_dir = args.ecg_base_dir 
         self.target_model = self.model_list[0]
-    
-            
+
     def ECGVisualizer(self, ecg, sampling_rate):
         ecg = ecg.numpy()
         ecg_plot.plot(ecg, sample_rate=sampling_rate)   
@@ -85,14 +84,7 @@ class Inferencer():
         
         
         # 1. Load Model (Once per process execution)
-        current_model_instance = None
-        # Add any other local model names to this list
-        if model_name in ["gem", "pulse"]:
-            try:
-                current_model_instance = get_model_loader(model_name)
-            except Exception as e:
-                print(f"CRITICAL ERROR: Failed to load {model_name}. Exiting process.\nError: {e}")
-                return
+        current_model_instance = build_model(model_name)
 
         # 2. Iterate over Datasets
         for dataset in self.dataset_list:
