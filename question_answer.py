@@ -26,7 +26,11 @@ class Inferencer():
 
     def ECGVisualizer(self, ecg, sampling_rate):
         ecg = ecg.numpy()
-        ecg_plot.plot(ecg, sample_rate=sampling_rate)   
+        ecg_plot.plot(
+            ecg,
+            sample_rate=sampling_rate,
+            row_height=8,
+        )
 
         fig = plt.gcf()
         buf = io.BytesIO()
@@ -81,8 +85,7 @@ class Inferencer():
         }
 
         model_name = self.target_model
-        
-        
+
         # 1. Load Model (Once per process execution)
         current_model_instance = build_model(model_name)
 
