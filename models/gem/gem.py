@@ -26,7 +26,7 @@ class GEMLlavaModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def generate(self, prompt, ecg_signal, ecg_image):
+    def generate(self, prompt, ecg_signal, ecg_image, **kwargs):
         image_tensor = process_images(
             [ecg_image], self.image_processor, self.model.config
         ).to(self.model.device, dtype=torch.float16)
