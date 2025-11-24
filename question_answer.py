@@ -16,6 +16,7 @@ from data_utils import get_dataset_loader
 from constants import *
 
 logger = logging.getLogger(__name__)
+from utils import MultiTurnGenerator
 
 class Inferencer():
     def __init__(self, args):
@@ -47,11 +48,10 @@ class Inferencer():
     def QuestionAnswerer(self, prompt, ecg, ecg_image, model_name, loaded_model_instance):
         if loaded_model_instance:
             return loaded_model_instance.generate(prompt, ecg, ecg_image)
-            
-        elif model_name == "gpt":
-            return "gpt_response" 
-        elif model_name == "gemini":
-            return "gemini_response" # Add API logic here
+        elif "gpt" in model_name  :
+            return get_model_loader(model_name).generate(prompt, ecg, ecg_image)
+        elif "gemini" in model_name:
+            return get_model_loader(model_name).generate(prompt, ecg, ecg_image)
         else:
             return f"Error: Model {model_name} not loaded."
     
@@ -67,10 +67,28 @@ class Inferencer():
                 print(f"Skipping {ecg_id}: {e}")
                 return None    
             
+            conversation = MultiTurnGenerator(model_name)
+
             answer_list = []
-            for data in sample["data"]:
-                text = prompt.format(data["question"], data["options"])
-                model_response = self.QuestionAnswerer(text, ecg, ecg_image, model_name, loaded_model_instance)
+            initial_question = prompt.format(sample["data"]["initial_diagnosis"]["question"], sample["data"]["initial_diagnosis"]["options"])
+            initial_diagnosis = self.QuestionAnswerer(initial_question, ecg, ecg_image, model_name, loaded_model_instance)
+            
+            conversation.init_chat(ecg, ecg_image, initial_question, initial_diagnosis)
+            if initial_diagnosis in ["yes", "no"]: #answer parcing logic required
+                path = 1
+            elif initial_diagnosis == "idk":
+                return None #path = 2
+            
+            sample["data"]["initial_diagnosis"]["path"] = path
+
+            for data in sample["data"][f"path_{path}"]:
+                
+                question = data["question"]
+                options = data["options"]
+                answer_idx = data["answer_idx"]
+                model_response = self.QuestionAnswerer(question, ecg, ecg_image, model_name, loaded_model_instance)
+
+                conversation.add_chat(question, options, answer_idx)
                 if model_response:
                     data["response_raw"] = model_response.strip()
                 else:
