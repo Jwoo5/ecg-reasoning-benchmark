@@ -21,6 +21,7 @@ from utils import Conversation
 
 logger = logging.getLogger(__name__)
 
+# number of samples in each source-dataset
 N_MIMIC_IV_ECG = 3355
 N_PTBXL = 3076
 
