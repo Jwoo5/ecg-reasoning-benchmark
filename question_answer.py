@@ -1,168 +1,327 @@
-import logging
-import json 
-import os
 import argparse
-import ecg_plot
-import wfdb
-import numpy as np 
-import torch 
-from PIL import Image
+import glob
 import io
+import json
+import logging
+import os
+import re
+from typing import Dict, List, Optional, Tuple, Union
+
+import ecg_plot
 import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import wfdb
+from PIL import Image
 from tqdm import tqdm
 
-from models import build_model
-from data_utils import get_dataset_loader
 from constants import *
+from models import BaseModel, build_model, get_model_name
+from utils import Conversation
 
 logger = logging.getLogger(__name__)
-from utils import MultiTurnGenerator
 
-class Inferencer():
-    def __init__(self, args):
-        self.dir = args.dir if args.dir is not None else DIRECTORY
-        self.save_dir = args.savedir if args.savedir is not None else OUTPUT_DIRECTORY
-        self.dataset_list = args.dataset if args.dataset else DATASET_LIST
+N_MIMIC_IV_ECG = 3355
+N_PTBXL = 3076
 
-        self.target_model = args.model
-        self.hf_model_variant = args.hf_model_variant
-    
-        self.ecg_base_dir = args.ecg_base_dir 
+# TODO
+system_prompt = """**Instructions:**
+1. Read the question and the provided options.
+2. Analyze the ECG systematically to answer the question.
+3. Select the answer(s) from the given options that best address the question.
+4. **Constraint:** Your response must contain **ONLY** the full text of the selected option \
+(including the letter index). Do not include any explanation, reasoning, or extra words.
+"""
 
-    def ECGVisualizer(self, ecg, sampling_rate):
-        ecg = ecg.numpy()
-        ecg_plot.plot(
-            ecg,
-            sample_rate=sampling_rate,
-            row_height=8,
-        )
+prompt = """**Question:**
+{}
 
-        fig = plt.gcf()
-        buf = io.BytesIO()
-        fig.savefig(buf, format='png', bbox_inches='tight')
-        buf.seek(0)
-        image = Image.open(buf).convert('RGB')
-        plt.close(fig) 
-        return image
-        
-    def QuestionAnswerer(self, prompt, ecg, ecg_image, model_name, loaded_model_instance):
-        if loaded_model_instance:
-            return loaded_model_instance.generate(prompt, ecg, ecg_image)
-        elif "gpt" in model_name  :
-            return get_model_loader(model_name).generate(prompt, ecg, ecg_image)
-        elif "gemini" in model_name:
-            return get_model_loader(model_name).generate(prompt, ecg, ecg_image)
-        else:
-            return f"Error: Model {model_name} not loaded."
-    
-    def RetrieveAnswer(self, path, model_name, dataset_loader, loaded_model_instance):
-        with open(path) as f:
-            sample = json.load(f)
-            ecg_id = sample["metadata"]["ecg_id"]
-            
-            try:
-                ecg, sampling_rate = dataset_loader.load_signal(ecg_id)
-                ecg_image = self.ECGVisualizer(ecg, sampling_rate)
-            except Exception as e:
-                print(f"Skipping {ecg_id}: {e}")
-                return None    
-            
-            conversation = MultiTurnGenerator(model_name)
+**Options:**
+{}
 
-            answer_list = []
-            initial_question = prompt.format(sample["data"]["initial_diagnosis"]["question"], sample["data"]["initial_diagnosis"]["options"])
-            initial_diagnosis = self.QuestionAnswerer(initial_question, ecg, ecg_image, model_name, loaded_model_instance)
-            
-            conversation.init_chat(ecg, ecg_image, initial_question, initial_diagnosis)
-            if initial_diagnosis in ["yes", "no"]: #answer parcing logic required
-                path = 1
-            elif initial_diagnosis == "idk":
-                return None #path = 2
-            
-            sample["data"]["initial_diagnosis"]["path"] = path
+**Answer:**
+"""
 
-            for data in sample["data"][f"path_{path}"]:
-                
-                question = data["question"]
-                options = data["options"]
-                answer_idx = data["answer_idx"]
-                model_response = self.QuestionAnswerer(question, ecg, ecg_image, model_name, loaded_model_instance)
 
-                conversation.add_chat(question, options, answer_idx)
-                if model_response:
-                    data["response_raw"] = model_response.strip()
-                else:
-                    data["response_raw"] = "Error"
-                    
-                answer_list.append(data)
-
-            sample["metadata"]["model"] = model_name
-        
-        return sample
-
-    def main(self):
-        path_map = {
-            "ptbxl": "/nfs_edlab/hschung/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3",
-            "mimic_iv_ecg": "path/to/mimic_iv_ecg" 
-        }
-
-        model_name = self.target_model
-
-        # 1. Load Model (Once per process execution)
-        current_model_instance = build_model(model_name, model_variant=self.hf_model_variant)
-
-        # 2. Iterate over Datasets
-        for dataset in self.dataset_list:
-            print(f"\n--- Processing Dataset: {dataset} ---")
-
-            target_dir = path_map.get(dataset, self.ecg_base_dir)
-            print(f"Looking for ECG files in: {target_dir}")
-
-            try:
-                current_loader = get_dataset_loader(dataset, target_dir)
-            except ValueError as e:
-                print(f"Skipping dataset {dataset}: {e}")
-                continue
-
-            dataset_path = os.path.join(self.dir, dataset)
-            if not os.path.exists(dataset_path):
-                print(f"JSON Input directory not found: {dataset_path}")
-                continue
-
-            # List all JSON files
-            total_path = [os.path.join(dataset_path, p) for p in os.listdir(dataset_path) if p.endswith('.json')]
-            
-            # 3. Run Inference on Files
-            for path in tqdm(total_path, desc=f"Inferencing {dataset} with {model_name}"):
-                answer_json = self.RetrieveAnswer(path, model_name, current_loader, current_model_instance)
-                
-                if answer_json:
-                    save_path = os.path.join(self.save_dir, model_name, dataset, os.path.basename(path))
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                    with open(save_path, "w") as f:
-                        json.dump(answer_json, f, indent=4)
-
-        print(f"\nFinished inference for {model_name}.")
-
-        
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='')
-    parser.add_argument('-d', '--dir', help = "load directory")
-    parser.add_argument('-s', '--savedir', help = "directory for saving result file")
-    parser.add_argument('-ds', '--dataset', nargs='*', help = 'mimic_iv_ecg, ptbxl')
-    # parser.add_argument('-dx', '--diagnosis', nargs='*', help = '"lateral_myocardial_infarction", "complete_right_bundle_branch_block", "left_posterior_fascicular_block", "premature_atrial_complex", "left_anterior_fascicular_block", "complete_left_bundle_branch_block", "third_degree_av_block", "first_degree_av_block", "inferior_ischemia", "lateral_ischemia", "left_ventricular_hypertrophy", "premature_ventricular_complex", "inferior_myocardial_infarction", "anterior_myocardial_infarction", "second_degree_av_block", "anterior_ischemia", "right_ventricular_hypertrophy"]')
-    # parser.add_argument('-l', '--label', nargs='*', help = 'positive, negative')
-    parser.add_argument('-m', '--model', help = '"gpt", "gemini", "qwen", "llama", "gem", "pulse", "opentslm", "llava-med", "medgemma","hulu-med"')
+def get_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "root",
+        type=str,
+        metavar="DIR",
+        default="data",
+        help=(
+            "path to the root directory containing ecg-reasoning-benchmark data samples for each "
+            "of mimic_iv_ecg and ptbxl datasets (e.g., ecg-reasoning-benchmark/data)"
+        ),
+    )
+    parser.add_argument(
+        "--dataset", type=str, help="name of the dataset to run inference on (e.g., mimic_iv_ecg, ptbxl)"
+    )
+    parser.add_argument(
+        "--model", type=str, help="name of the model to run inference on (e.g., gem, pulse, etc.)"
+    )
     parser.add_argument(
         "--hf-model-variant",
         type=str,
-        default="4b-it",
-        help="Model variant for HuggingFace models (e.g., '4b-it', '27b-it')"
+        default=None,
+        help="model variant for any huggingface models (e.g., '4b-it', '27b-it' for medgemma_hf)",
+    )
+    parser.add_argument(
+        "--ecg-base-dir",
+        type=str,
+        metavar="DIR",
+        help=(
+            "base directory to load raw ECG signal files from (e.g., for ptbxl, directory that "
+            "contains 'records500' subdirectory)"
+        ),
+    )
+    parser.add_argument(
+        "--output-dir", type=str, default="results", help="output directory to save the results"
     )
 
-    parser.add_argument("--ecg-base-dir", type=str, default="/nfs_edlab/hschung/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3", help="Base directory for ECG signal files")
-    args = parser.parse_args()
+    return parser
 
-    inferencer = Inferencer(args)
-    inferencer.main()
+
+class Inferencer:
+    def __init__(self, model: BaseModel):
+        self.model = model
+        self.model_name = get_model_name(model)
+
+    def get_ecg_signal(
+        self,
+        source_dataset: str,
+        ecg_id: str,
+        base_dir: str,
+        subject_id: Optional[str] = None,  # for mimic iv ecg
+    ) -> Tuple[torch.Tensor, int]:
+        if source_dataset.lower() == "ptbxl":
+            assert os.path.exists(os.path.join(base_dir, "records500")), (
+                f"PTB-XL dataset directory structure not found in {base_dir}. "
+                "Expected to find 'records500' subdirectory."
+            )
+
+            dir_num = int(ecg_id) // 1000 * 1000
+            path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
+
+            ecg_record, header = wfdb.rdsamp(path)
+            sampling_rate = header["fs"]
+
+            ecg_tensor = torch.tensor(ecg_record.T.astype(np.float32))
+        elif source_dataset.lower() == "mimic_iv_ecg":
+            assert os.path.exists(os.path.join(base_dir, "files")), (
+                f"MIMIC-IV-ECG dataset directory structure not found in {base_dir}. "
+                "Expected to find 'files' subdirectory."
+            )
+
+            path = os.path.join(
+                base_dir, "files", f"p{subject_id:.4s}", f"p{subject_id}", f"s{ecg_id}", f"{ecg_id}"
+            )
+
+            ecg_record, header = wfdb.rdsamp(path)
+            sampling_rate = header["fs"]
+
+            ecg_record = ecg_record.T
+
+            # adjust lead order to standard 12-lead ECG
+            lead_order = header["sig_name"]
+            adjusted_lead_order = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"]
+            if lead_order != adjusted_lead_order:
+                lead_indices = [lead_order.index(lead) for lead in adjusted_lead_order]
+                ecg_record = ecg_record[lead_indices, :]
+
+            ecg_tensor = torch.tensor(ecg_record.astype(np.float32))
+        else:
+            raise ValueError(f"Unsupported dataset: {source_dataset}")
+
+        return ecg_tensor, sampling_rate
+
+    def visualize_ecg(self, ecg_signal: Union[torch.Tensor, np.ndarray], sampling_rate: int) -> Image.Image:
+        if isinstance(ecg_signal, torch.Tensor):
+            ecg_signal = ecg_signal.numpy()
+        ecg_plot.plot(ecg_signal, sample_rate=sampling_rate, row_height=8)
+
+        fig = plt.gcf()
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png", bbox_inches="tight")
+        buf.seek(0)
+        image = Image.open(buf).convert("RGB")
+        plt.close(fig)
+
+        return image
+
+    def make_step_message(self, step: Dict) -> str:
+        question = step["question"]
+        options = step["options"]
+        options_str = ""
+        for i, option in enumerate(options):
+            options_str += f"({chr(ord('a') + i)}) {option}, "
+        # remove trailing comma and space
+        options_str = options_str.rstrip(", ")
+
+        message = prompt.format(question, options_str)
+        return message
+
+    def get_response(self, conversation: Conversation) -> str:
+        return self.model.get_response(conversation)
+
+    def proceed_step(
+        self,
+        step: Dict,
+        conversation: Conversation,
+        ecg_signal: Optional[torch.Tensor] = None,
+        ecg_image: Optional[Image.Image] = None,
+        return_response: bool = False,
+    ) -> Optional[str]:
+        message = self.make_step_message(step)
+        conversation.add_user_turn(message, ecg_signal=ecg_signal, ecg_image=ecg_image)
+        response = self.get_response(conversation)
+        step["model_response"] = response
+
+        # add model turn to conversation with the ground truth answer
+        if "answer" in step:
+            if isinstance(step["answer"], list):
+                answer_str = ""
+                for ans_idx, ans in zip(step["answer_idx"], step["answer"]):
+                    answer_str += f"({chr(ord('a') + ans_idx)}) {ans}, "
+                answer_str = answer_str.rstrip(", ")
+            else:
+                ans_idx = step["answer_idx"]
+                ans = step["answer"]
+                answer_str = f"({chr(ord('a') + ans_idx)}) {ans}"
+
+            conversation.add_model_turn(answer_str)
+        else:
+            conversation.add_model_turn(response)
+
+        if return_response:
+            return response
+
+    def parse_response(self, response: str) -> Union[int, List[int]]:
+        # parse the response to get the selected option index, where the response is expected to be
+        # (a) ..., (b) ..., etc.
+        # if the response is comma separated options, return all selected options as a list of indices
+        # TODO we can parse the answer by exact match including the text to make it more concrete
+        # e.g., match with "(a) left anterior fascicular block", not just "(a)"
+
+        pattern = r"\(([a-z])\)"
+        matches = re.findall(pattern, response)
+        if matches:
+            indices = [ord(match) - ord("a") for match in matches]
+            if len(indices) == 1:
+                return indices[0]
+            else:
+                return indices
+        else:
+            raise ValueError(f"Could not parse response: {response}")
+
+    def inference(self, sample: Dict, ecg_base_dir: str) -> Dict:
+        sample_result = sample.copy()
+        sample_result["metadata"]["model"] = self.model_name
+
+        ecg_tensor, sampling_rate = self.get_ecg_signal(
+            source_dataset=sample["metadata"]["data_source"],
+            ecg_id=sample["metadata"]["ecg_id"],
+            base_dir=ecg_base_dir,
+            subject_id=sample["metadata"].get("subject_id", None),
+        )
+        ecg_image = self.visualize_ecg(ecg_tensor, sampling_rate)
+
+        # TODO add system prompt?
+        # TODO pass ecg_image to system prompt, instead of initial user prompt?
+        conversation = Conversation(system_prompt)
+
+        sample["data"]["initial_diagnostic_question"]["question"] += (
+            " If you choose 'I don't know', you will receive guidance on how to systematically "
+            "analyze the ECG to improve your decision-making skills."
+        )
+
+        response = self.proceed_step(
+            step=sample["data"]["initial_diagnostic_question"],
+            conversation=conversation,
+            ecg_signal=ecg_tensor,
+            ecg_image=ecg_image,
+            return_response=True,
+        )
+        parsed_response_idx = self.parse_response(response)
+        if parsed_response_idx in [0, 1]:  # 0 stands for "Yes", 1 stands for "No"
+            eval_path = 1
+            # del sample_result["data"]["path_2"] # TODO
+        else:
+            eval_path = 2
+            del sample_result["data"]["path_1"]
+
+        sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
+        sample_result["data"]["initial_diagnostic_question"]["eval_path"] = eval_path
+
+        if eval_path == 2:
+            logger.info(
+                "Model responded with 'I don't know' for initial diagnosis question. "
+                "Stop further questioning for this sample as the path 2 (guided reasoning) "
+                "is not implemented yet."
+            )
+            return sample_result
+
+        for stage in sample_result["data"][f"path_{eval_path}"]:
+            for step in stage.values():
+                # TODO should parse response to check if the model's answer is correct at each step
+                if isinstance(step, list):
+                    # it is hit for grounding steps
+                    for g_step in step:
+                        response = self.proceed_step(g_step, conversation, return_response=True)
+                else:
+                    response = self.proceed_step(step, conversation, return_response=False)
+
+        return sample_result
+
+
+def main(args):
+    model = build_model(args.model, hf_model_variant=args.hf_model_variant)
+    inferencer = Inferencer(model)
+
+    root_dir = args.root
+    source_dataset = args.dataset
+    ecg_base_dir = args.ecg_base_dir
+    output_dir = args.output_dir
+
+    model_name = args.model
+    if args.hf_model_variant:
+        model_name += f"_{args.hf_model_variant}"
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+
+    assert os.path.exists(
+        os.path.join(root_dir, source_dataset)
+    ), f"Dataset directory not found: {os.path.join(root_dir, source_dataset)}"
+
+    n = N_MIMIC_IV_ECG if source_dataset.lower() == "mimic_iv_ecg" else N_PTBXL
+    n_path1 = 0
+    with tqdm(total=n) as pbar:
+        for dx in os.listdir(os.path.join(root_dir, source_dataset)):
+            for fname in glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json")):
+                with open(fname, "r") as f:
+                    sample = json.load(f)
+
+                result = inferencer.inference(sample, ecg_base_dir)
+                if result["data"]["initial_diagnostic_question"]["eval_path"] == 1:
+                    n_path1 += 1
+
+                pbar.set_description(
+                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{pbar.n+1}"
+                )
+
+                save_path = os.path.join(output_dir, model_name, source_dataset, dx, os.path.basename(fname))
+                if not os.path.exists(os.path.dirname(save_path)):
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+                with open(save_path, "w") as f:
+                    json.dump(result, f, indent=4)
+
+                pbar.update(1)
+
+
+if __name__ == "__main__":
+    parser = get_parser()
+    args = parser.parse_args()
+    main(args)
