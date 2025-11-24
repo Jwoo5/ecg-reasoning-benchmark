@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 from model_loader import get_model_loader
 from data_utils import get_dataset_loader
+from utils import MultiTurnGenerator
 
 class Inferencer():
     def __init__(self, args):
@@ -57,19 +58,25 @@ class Inferencer():
                 print(f"Skipping {ecg_id}: {e}")
                 return None    
             
+            conversation = MultiTurnGenerator(model_name)
+
             answer_list = []
+
             initial_question = sample["data"]["initial_diagnosis"]["question"]
             initial_diagnosis = self.QuestionAnswerer(initial_question, ecg, ecg_image, model_name, loaded_model_instance)
             
+            conversation.init_chat(ecg, ecg_image, initial_question, initial_diagnosis)
             if initial_diagnosis in ["yes", "no"]: #answer parcing logic required
                 path = 1
             elif initial_diagnosis == "idk":
                 return None #path = 2
-
+            
             sample["data"]["initial_diagnosis"]["path"] = path
+
             for data in sample["data"][f"path_{path}"]:
-                text = prompt.format(data["question"], data["options"])
-                model_response = self.QuestionAnswerer(text, ecg, ecg_image, model_name, loaded_model_instance)
+                #text = prompt.format(data["question"], data["options"])
+
+                model_response = self.QuestionAnswerer(conversation.content, ecg, ecg_image, model_name, loaded_model_instance)
                 if model_response:
                     data["response_raw"] = model_response.strip()
                 else:

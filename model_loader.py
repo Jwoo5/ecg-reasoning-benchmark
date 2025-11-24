@@ -95,24 +95,13 @@ class GPTRetriever(BaseModel):
         self.client = OpenAI()
         self.model = model
 
-    def generate(self, prompt, ecg_signal, ecg_image): 
+    def generate(self, content): 
         
-        base64_image = base64_image_encoder(ecg_image)
         response = self.client.responses.create(
             model=self.model,
-            input=[
-                {
-                    "role": "user",
-                    "content": [
-                        { "type": "input_text", "text": f"{prompt}, {ecg_signal}" },
-                        {
-                            "type": "input_image",
-                            "image_url": f"data:image/png;base64,{base64_image}"
-                        }
-                    ]
-                }
-            ]
+            input=content
         )
+        
         return response.output[0].content[0]["text"]
     
 class GeminiRetriever(BaseModel):
