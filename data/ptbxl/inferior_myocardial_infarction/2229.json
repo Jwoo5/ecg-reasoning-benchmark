@@ -22,10 +22,10 @@
                     "question": "To accurately diagnose inferior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of atrial fibrillation",
-                        "Presence of PR-segment depression in inferior leads",
-                        "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of ST-segment elevation in leads V1 and V2",
+                        "Presence of diffuse concave ST-segment elevation in limb leads",
                         "Presence of ST-segment elevation in inferior leads",
-                        "Presence of diffuse concave ST-segment elevation in limb leads"
+                        "Presence of ST-segment depression in leads II, III, and aVF"
                     ],
                     "answer": "Presence of ST-segment elevation in inferior leads",
                     "answer_idx": 3,
@@ -41,7 +41,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.78s - 0.99s]",
+                            "[4.81s - 5.01s]",
+                            "[5.06s - 5.25s]",
+                            "[6.86s - 6.94s]",
+                            "[8.07s - 8.30s]"
+                        ],
+                        "answer": "[6.86s - 6.94s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior myocardial infarction?",
                     "options": [
@@ -58,14 +72,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior myocardial infarction?",
                     "options": [
-                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of atrial fibrillation",
+                        "Presence of a Delta wave (slurred upstroke) in inferior leads",
                         "Presence of fragmented QRS complexes in inferior leads",
                         "Presence of QS complexes in leads V1 and V2",
-                        "Presence of atrial fibrillation",
-                        "Presence of a Delta wave (slurred upstroke) in inferior leads"
+                        "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of pathological Q waves in inferior leads",
-                    "answer_idx": 0,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -78,7 +92,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show pathological Q waves, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.46s - 1.73s]",
+                            "[4.17s - 4.36s]",
+                            "[5.45s - 5.64s]",
+                            "[7.74s - 7.82s]",
+                            "[7.95s - 8.24s]"
+                        ],
+                        "answer": "[7.74s - 7.82s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have inferior myocardial infarction?",
                     "options": [

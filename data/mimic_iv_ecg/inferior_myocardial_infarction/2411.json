@@ -21,10 +21,10 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose inferior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
+                        "Presence of diffuse concave ST-segment elevation in limb leads",
                         "Presence of ST-segment elevation in leads V1 and V2",
                         "Presence of PR-segment depression in inferior leads",
-                        "Presence of diffuse concave ST-segment elevation in limb leads",
-                        "Presence of flattened T waves in lateral leads",
+                        "Prolongation of the QRS duration",
                         "Presence of ST-segment elevation in inferior leads"
                     ],
                     "answer": "Presence of ST-segment elevation in inferior leads",
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.81s - 2.93s]",
+                            "[5.74s - 5.94s]",
+                            "[6.13s - 6.32s]",
+                            "[7.23s - 7.37s]"
+                        ],
+                        "answer": "[7.23s - 7.37s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior myocardial infarction?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior myocardial infarction?",
                     "options": [
-                        "Presence of fragmented QRS complexes in inferior leads",
-                        "Presence of pathological Q waves in leads V1, V2, V3, and V4",
-                        "Presence of flattened T waves in anterior leads",
+                        "Presence of pathological Q waves in inferior leads",
                         "Presence of QS complexes in leads V1 and V2",
-                        "Presence of pathological Q waves in inferior leads"
+                        "Presence of a Delta wave (slurred upstroke) in inferior leads",
+                        "Presence of pathological Q waves in leads V1, V2, V3, and V4",
+                        "Presence of flattened T waves in lateral leads"
                     ],
                     "answer": "Presence of pathological Q waves in inferior leads",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -99,15 +112,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.72s - 0.98s]",
-                            "[5.52s - 5.65s]",
+                            "[1.08s - 1.21s]",
+                            "[2.47s - 2.73s]",
                             "[5.74s - 5.94s]",
-                            "[7.95s - 8.08s]"
+                            "[8.11s - 8.24s]"
                         ],
-                        "answer": "[5.52s - 5.65s]",
-                        "answer_idx": 1,
+                        "answer": "[8.11s - 8.24s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],

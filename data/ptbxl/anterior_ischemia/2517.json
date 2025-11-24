@@ -22,8 +22,8 @@
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of J-point elevation in anterior leads",
+                        "Presence of ST-segment elevation in anterior leads",
                         "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Presence of diffuse concave ST-segment elevation in anterior leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of ST-segment depression in anterior leads"
                     ],
@@ -61,15 +61,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following waves can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.74s - 4.83s]",
-                            "[5.30s - 5.42s]",
-                            "[8.01s - 8.30s]",
-                            "[8.62s - 8.81s]"
+                            "[0.86s - 0.97s]",
+                            "[1.97s - 2.18s]",
+                            "[3.26s - 3.35s]",
+                            "[5.05s - 5.27s]"
                         ],
-                        "answer": "[4.74s - 4.83s]",
-                        "answer_idx": 0,
+                        "answer": "[3.26s - 3.35s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],

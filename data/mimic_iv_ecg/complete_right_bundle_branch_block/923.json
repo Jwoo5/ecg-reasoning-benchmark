@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete right bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of low voltage QRS complexes in precordial leads",
-                        "Presence of ST elevation in leads V1 and V2",
-                        "Presence of a Delta wave (slurred upstroke) in precordial leads",
+                        "Presence of pathological Q waves in leads V1 and V2",
                         "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of flattened T waves in lateral leads"
+                        "Presence of a Delta wave (slurred upstroke) in precordial leads",
+                        "Presence of a dominant S wave (QS complex) in lead V1",
+                        "Presence of flattened T waves in inferior leads"
                     ],
                     "answer": "Presence of an RSR' pattern in leads V1 and V2",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads V1 and V2 do not show an RSR' pattern, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.84s - 0.93s]",
+                            "[5.92s - 6.12s]",
+                            "[6.57s - 6.75s]",
+                            "[8.10s - 8.21s]"
+                        ],
+                        "answer": "[0.84s - 0.93s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have complete right bundle branch block?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "Since the typical RSR' pattern was not observed, which alternative diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
-                        "Presence of significant ST depression in lead V1",
-                        "Presence of a QRS pattern in leads V1 and V2",
-                        "Presence of negative concordance in precordial leads",
+                        "Presence of a deep, wide S wave in lead V1",
                         "Presence of a broad monophasic R wave in lead V1",
-                        "Presence of flattened T waves in lateral leads"
+                        "Presence of negative concordance in precordial leads",
+                        "Presence of flattened T waves in lateral leads",
+                        "Presence of a QRS pattern in leads V1 and V2"
                     ],
                     "answer": "Presence of a broad monophasic R wave in lead V1",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that lead V1 does not show a broad monophasic R wave, in which of the following segments can you locate the QRS complex in this lead? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.70s - 0.81s]",
+                            "[0.84s - 0.93s]",
+                            "[1.59s - 1.82s]",
+                            "[2.83s - 2.99s]"
+                        ],
+                        "answer": "[0.84s - 0.93s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete right bundle branch block?",
                     "options": [

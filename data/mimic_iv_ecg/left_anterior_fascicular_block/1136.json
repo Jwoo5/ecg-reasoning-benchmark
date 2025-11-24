@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of an indeterminate axis",
                         "Presence of a normal QRS axis",
-                        "Presence of left axis deviation",
-                        "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of right axis deviation"
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of an indeterminate axis",
+                        "Presence of right axis deviation",
+                        "Presence of left axis deviation"
                     ],
                     "answer": "Presence of left axis deviation",
-                    "answer_idx": 2,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,9 +45,9 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.92s - 1.99s]",
+                            "[0.53s - 0.61s]",
+                            "[1.26s - 1.50s]",
                             "[2.61s - 2.80s]",
-                            "[6.29s - 6.53s]",
                             "[8.89s - 8.99s]"
                         ],
                         "answer": "[8.89s - 8.99s]",

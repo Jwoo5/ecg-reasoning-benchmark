@@ -22,13 +22,13 @@
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of diffuse concave ST-segment elevation in anterior leads",
-                        "Presence of ST-segment depression in anterior leads",
-                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of left axis deviation",
                         "Presence of J-point elevation in anterior leads",
-                        "Presence of ST-segment depression in lateral leads"
+                        "Presence of ST-segment depression in anterior leads"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
-                    "answer_idx": 1,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -61,16 +61,16 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following waves can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.99s - 1.16s]",
-                            "[2.72s - 2.85s]",
-                            "[4.57s - 4.77s]",
-                            "[5.86s - 6.14s]",
-                            "[9.26s - 9.43s]"
+                            "[2.30s - 2.48s]",
+                            "[3.71s - 3.89s]",
+                            "[4.63s - 4.82s]",
+                            "[5.78s - 5.95s]",
+                            "[8.34s - 8.48s]"
                         ],
-                        "answer": "[2.72s - 2.85s]",
-                        "answer_idx": 1,
+                        "answer": "[8.34s - 8.48s]",
+                        "answer_idx": 4,
                         "question_type": "wave_grounding"
                     }
                 ],

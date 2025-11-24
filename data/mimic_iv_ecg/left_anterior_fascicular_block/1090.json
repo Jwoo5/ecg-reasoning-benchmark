@@ -22,10 +22,10 @@
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of an indeterminate axis",
-                        "Presence of extreme axis deviation",
-                        "Presence of left axis deviation",
                         "Presence of flattened T waves in inferior leads",
-                        "Presence of a vertical QRS axis"
+                        "Presence of left axis deviation",
+                        "Presence of a normal QRS axis",
+                        "Presence of extreme axis deviation"
                     ],
                     "answer": "Presence of left axis deviation",
                     "answer_idx": 2,
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.49s - 2.75s]",
-                            "[4.05s - 4.21s]",
-                            "[5.65s - 5.78s]",
-                            "[7.20s - 7.38s]"
+                            "[3.20s - 3.47s]",
+                            "[4.71s - 4.88s]",
+                            "[5.18s - 5.39s]",
+                            "[5.65s - 5.78s]"
                         ],
                         "answer": "[5.65s - 5.78s]",
-                        "answer_idx": 2,
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -82,14 +82,14 @@
                 "criterion_selection": {
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of a qR pattern in leads I and aVL",
                         "Presence of prominent U waves in leads I and aVL",
-                        "Prolongation of the QRS duration",
-                        "Presence of an rS pattern in leads I and aVL"
+                        "Presence of a qR pattern in leads II, III, and aVF",
+                        "Presence of flattened T waves in lateral leads",
+                        "Presence of inverted T waves in leads I and aVL",
+                        "Presence of a qR pattern in leads I and aVL"
                     ],
                     "answer": "Presence of a qR pattern in leads I and aVL",
-                    "answer_idx": 1,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,7 +102,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads I and aVL do not show a qR pattern, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.72s - 2.86s]",
+                            "[5.65s - 5.78s]",
+                            "[8.57s - 8.85s]",
+                            "[9.20s - 9.41s]"
+                        ],
+                        "answer": "[5.65s - 5.78s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have left anterior fascicular block?",
                     "options": [

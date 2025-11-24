@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left ventricular hypertrophy, which of the following voltage criteria should be evaluated?",
                     "options": [
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Sum of R wave in lead I and S wave in lead III > 2.5mV",
-                        "R wave amplitude in lead aVF > 2.0mV",
                         "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
-                        "R wave amplitude in lead aVL > 1.1mV"
+                        "S wave amplitude in lead aVL > 1.1mV",
+                        "R wave amplitude in lead aVF > 2.0mV",
+                        "R wave amplitude in lead aVL > 1.1mV",
+                        "Presence of inverted T waves in inferior leads"
                     ],
                     "answer": "R wave amplitude in lead aVL > 1.1mV",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -47,8 +47,8 @@
                         "options": [
                             "[0.18s - 0.31s]",
                             "[2.01s - 2.12s]",
-                            "[8.75s - 8.97s]",
-                            "[9.05s - 9.30s]"
+                            "[2.22s - 2.44s]",
+                            "[4.14s - 4.33s]"
                         ],
                         "answer": "[2.01s - 2.12s]",
                         "answer_idx": 1,
@@ -85,13 +85,13 @@
                     "question": "In addition to the voltage criterion you just evaluated, which other voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
                         "Sum of R amplitude in V2 and S amplitude in V4 > 4.0mV",
-                        "Presence of inverted T waves in inferior leads",
                         "Sum of S amplitude in V1 and R amplitude in V5/V6 > 3.5mV",
                         "R wave amplitude in V5/V6 < 2.6mV",
-                        "Presence of low voltage QRS (< 1.0mV) across precordial leads"
+                        "Presence of inverted T waves in inferior leads",
+                        "Sum of R wave in V1 and S wave in V5/V6 > 1.1 mV"
                     ],
                     "answer": "Sum of S amplitude in V1 and R amplitude in V5/V6 > 3.5mV",
-                    "answer_idx": 2,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -108,10 +108,10 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V1? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.01s - 1.13s]",
+                            "[1.39s - 1.61s]",
                             "[2.01s - 2.12s]",
-                            "[5.72s - 5.92s]",
-                            "[7.13s - 7.35s]"
+                            "[2.64s - 2.76s]",
+                            "[3.04s - 3.27s]"
                         ],
                         "answer": "[2.01s - 2.12s]",
                         "answer_idx": 1,
@@ -147,12 +147,12 @@
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in the selected lead? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[1.39s - 1.61s]",
-                            "[2.64s - 2.76s]",
                             "[2.81s - 2.92s]",
-                            "[8.19s - 8.38s]"
+                            "[3.45s - 3.52s]",
+                            "[3.74s - 4.02s]"
                         ],
                         "answer": "[2.81s - 2.92s]",
-                        "answer_idx": 2,
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -184,18 +184,18 @@
                 "criterion_selection": {
                     "question": "In addition to the voltage criteria you have evaluated so far, which other voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
+                        "R wave amplitude in lead V1 > 0.7mV",
+                        "P wave terminal force in lead V1 > 4mV\u00b7ms",
                         [
                             "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                        ],
-                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
-                        "Presence of inverted T waves in inferior leads",
-                        "Ratio of R wave to S wave amplitude in lead V1 > 1.0",
-                        "R wave amplitude in lead V1 > 0.7mV"
+                        ]
                     ],
                     "answer": [
                         "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
                     ],
-                    "answer_idx": 0,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -212,13 +212,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V3? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.81s - 1.00s]",
                             "[2.01s - 2.12s]",
-                            "[3.74s - 3.94s]",
-                            "[5.91s - 6.04s]"
+                            "[2.22s - 2.44s]",
+                            "[8.71s - 8.92s]",
+                            "[9.18s - 9.31s]"
                         ],
                         "answer": "[2.01s - 2.12s]",
-                        "answer_idx": 1,
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -236,13 +236,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.84s - 1.95s]",
+                            "[0.18s - 0.31s]",
+                            "[1.39s - 1.61s]",
                             "[2.81s - 2.92s]",
-                            "[4.73s - 4.98s]",
-                            "[8.75s - 8.97s]"
+                            "[6.49s - 6.68s]"
                         ],
                         "answer": "[2.81s - 2.92s]",
-                        "answer_idx": 1,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {

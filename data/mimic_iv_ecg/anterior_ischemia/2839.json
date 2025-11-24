@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of diffuse concave ST-segment elevation in anterior leads",
-                        "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Presence of J-point elevation in anterior leads",
                         "Presence of ST-segment depression in anterior leads",
-                        "Presence of pathological Q waves in inferior leads"
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of diffuse concave ST-segment elevation in anterior leads",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of J-point elevation in anterior leads"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.11s - 2.35s]",
+                            "[2.70s - 2.82s]",
+                            "[3.36s - 3.45s]",
+                            "[6.15s - 6.38s]"
+                        ],
+                        "answer": "[2.70s - 2.82s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior ischemia?",
                     "options": [
-                        "Presence of pathological Q waves in anterior leads",
-                        "Presence of inverted T waves in anterior leads",
-                        "Presence of tall, peaked T waves in anterior leads",
                         "Presence of inverted T waves in leads II, III, and aVF",
-                        "Presence of flattened T waves in anterior leads"
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of inverted T waves in anterior leads",
+                        "Presence of flattened T waves in anterior leads",
+                        "Presence of tall, peaked T waves in anterior leads"
                     ],
                     "answer": "Presence of inverted T waves in anterior leads",
-                    "answer_idx": 1,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,14 +115,14 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.33s - 0.46s]",
-                            "[4.99s - 5.08s]",
-                            "[5.12s - 5.29s]",
-                            "[6.13s - 6.35s]"
+                            "[0.98s - 1.08s]",
+                            "[2.70s - 2.82s]",
+                            "[6.59s - 6.84s]",
+                            "[8.58s - 8.81s]"
                         ],
-                        "answer": "[6.13s - 6.35s]",
+                        "answer": "[8.58s - 8.81s]",
                         "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }

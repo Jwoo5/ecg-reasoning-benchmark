@@ -22,10 +22,10 @@
                     "question": "To accurately diagnose premature atrial complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of a consistently regular RR interval",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of grouped beating patterns separated by pauses",
                         "Presence of premature beats",
-                        "Presence of a fixed, rigid heart rate without variability",
-                        "Presence of gradual acceleration and deceleration of the heart rate"
+                        "Presence of flattened T waves in anterior leads",
+                        "Presence of an irregularly irregular ventricular rhythm"
                     ],
                     "answer": "Presence of premature beats",
                     "answer_idx": 2,
@@ -45,10 +45,10 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.48s - 1.61s]",
-                            "[1.89s - 2.12s]",
+                            "[2.70s - 2.92s]",
+                            "[3.31s - 3.41s]",
                             "[3.88s - 3.97s]",
-                            "[7.58s - 7.68s]"
+                            "[9.21s - 9.33s]"
                         ],
                         "answer": "[3.88s - 3.97s]",
                         "answer_idx": 2,
@@ -71,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature atrial complexes?",
                     "options": [
-                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats",
-                        "Presence of ST-segment depression in lateral leads",
+                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
                         "Presence of a Delta wave (slurred upstroke) on the premature beat",
-                        "Presence of a different QRS axis in the premature beat compared to normal beats",
-                        "Absence of significant QRS prolongation in the premature beat compared to normal beats"
+                        "Presence of ST elevation in the premature beat",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats"
                     ],
                     "answer": "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {

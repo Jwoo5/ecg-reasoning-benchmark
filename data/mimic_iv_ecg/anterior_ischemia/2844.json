@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of J-point elevation in anterior leads",
-                        "Presence of ST-segment elevation in anterior leads",
                         "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of diffuse concave ST-segment elevation in anterior leads",
                         "Presence of ST-segment depression in anterior leads",
-                        "Presence of inverted T waves in lateral leads"
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.87s - 3.11s]",
+                            "[6.79s - 6.91s]",
+                            "[8.05s - 8.13s]",
+                            "[8.34s - 8.64s]"
+                        ],
+                        "answer": "[8.05s - 8.13s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior ischemia?",
                     "options": [
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of inverted T waves in anterior leads",
+                        "Presence of flattened T waves in anterior leads",
                         "Presence of tall, peaked T waves in anterior leads",
                         "Presence of camel hump T waves (P on T) in anterior leads",
-                        "Presence of inverted T waves in anterior leads",
-                        "Presence of inverted T waves in leads II, III, and aVF"
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of inverted T waves in anterior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,15 +115,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.75s - 0.99s]",
-                            "[1.56s - 1.65s]",
-                            "[3.54s - 3.65s]",
-                            "[4.72s - 4.90s]"
+                            "[3.70s - 3.79s]",
+                            "[5.03s - 5.31s]",
+                            "[5.75s - 5.86s]",
+                            "[7.55s - 7.78s]"
                         ],
-                        "answer": "[0.75s - 0.99s]",
-                        "answer_idx": 0,
+                        "answer": "[5.03s - 5.31s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],

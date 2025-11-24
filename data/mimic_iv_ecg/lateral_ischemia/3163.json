@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Prolongation of the QRS duration",
+                        "Presence of diffuse concave ST-segment elevation in lateral leads",
                         "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of ST-segment depression in lateral leads",
                         "Presence of J-point elevation in lateral leads",
-                        "Presence of ST-segment depression in lateral leads"
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -65,12 +65,12 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.63s - 0.76s]",
-                            "[1.25s - 1.50s]",
                             "[5.04s - 5.14s]",
-                            "[6.69s - 6.87s]"
+                            "[5.78s - 6.01s]",
+                            "[7.59s - 7.77s]"
                         ],
                         "answer": "[0.63s - 0.76s]",
                         "answer_idx": 0,

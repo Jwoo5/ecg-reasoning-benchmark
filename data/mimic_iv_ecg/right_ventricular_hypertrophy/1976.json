@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
+                        "Evidence of atrioventricular dissociation",
                         "Presence of left bundle branch block",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of left anterior fascicular block",
                         "Presence of right bundle branch block",
-                        "Presence of left posterior fascicular block",
-                        "Evidence of atrioventricular dissociation"
+                        "Presence of flattened T waves in lateral leads"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 2,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -58,11 +58,11 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Prolongation of the QRS duration",
-                        "Presence of an indeterminate axis (no dominant vector)",
-                        "QRS axis > +60 degrees",
                         "Presence of left axis deviation",
-                        "Presence of extreme axis deviation"
+                        "Presence of a normal QRS axis between -30 and 0 degrees",
+                        "QRS axis > +60 degrees",
+                        "Presence of extreme axis deviation",
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "QRS axis > +60 degrees",
                     "answer_idx": 2,
@@ -82,13 +82,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[5.21s - 5.42s]",
-                            "[5.65s - 5.76s]",
-                            "[6.16s - 6.40s]",
-                            "[7.41s - 7.55s]"
+                            "[1.77s - 1.88s]",
+                            "[6.04s - 6.23s]",
+                            "[7.41s - 7.55s]",
+                            "[7.91s - 8.13s]"
                         ],
                         "answer": "[7.41s - 7.55s]",
-                        "answer_idx": 3,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -120,14 +120,14 @@
                 "criterion_selection": {
                     "question": "Since the axis criterion was not met, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Sum of S amplitude in V1 and R amplitude in V5 > 3.5mV",
-                        "R wave amplitude in V1 > 1.5mV",
-                        "R amplitude in V6 < 0.5mV",
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        "R amplitude in lead aVL > 1.1mV"
+                        "R amplitude in lead aVL > 1.1mV",
+                        "R wave amplitude in V1 > 1.5mV",
+                        "Sum of S amplitude in V1 and R amplitude in V5 > 3.5mV",
+                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads"
                     ],
                     "answer": "R wave amplitude in V1 > 1.5mV",
-                    "answer_idx": 1,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -144,13 +144,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.64s - 1.89s]",
-                            "[3.99s - 4.10s]",
-                            "[8.22s - 8.37s]",
-                            "[8.45s - 8.66s]"
+                            "[0.29s - 0.43s]",
+                            "[1.52s - 1.70s]",
+                            "[4.81s - 4.93s]",
+                            "[9.26s - 9.47s]"
                         ],
-                        "answer": "[8.22s - 8.37s]",
-                        "answer_idx": 2,
+                        "answer": "[0.29s - 0.43s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     },
                     {

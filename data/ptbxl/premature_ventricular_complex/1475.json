@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose premature ventricular complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
+                        "Presence of a fixed, rigid heart rate without variability",
                         "Presence of premature beats",
+                        "Presence of intermittent ventricular pauses (dropped beats)",
                         "Presence of inverted T waves in lateral leads",
-                        "Presence of grouped beating patterns separated by pauses",
-                        "Presence of an irregularly irregular ventricular rhythm",
-                        "Presence of a consistently regular RR interval"
+                        "Presence of grouped beating patterns separated by pauses"
                     ],
                     "answer": "Presence of premature beats",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -46,9 +46,9 @@
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.89s - 0.98s]",
+                            "[2.36s - 2.49s]",
                             "[2.57s - 2.66s]",
-                            "[5.37s - 5.60s]",
-                            "[6.69s - 6.81s]"
+                            "[5.37s - 5.60s]"
                         ],
                         "answer": "[0.89s - 0.98s]",
                         "answer_idx": 0,
@@ -71,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature ventricular complexes?",
                     "options": [
-                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Similarity of QRS morphology between the premature beat and normal beats",
                         "Presence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Presence of inverted T waves in lateral leads",
                         "Presence of ST elevation in the premature beat",
-                        "Presence of ST-segment depression in anterior leads"
+                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Similarity of QRS morphology between the premature beat and normal beats"
                     ],
                     "answer": "Presence of significant QRS prolongation in the premature beat compared to normal beats",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {

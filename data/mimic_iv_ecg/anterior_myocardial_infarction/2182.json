@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment depression in leads V2, V3, and V4",
-                        "Presence of flattened T waves in inferior leads",
-                        "Presence of spiked pacemaker artifacts preceding the QRS complex",
                         "Presence of PR-segment depression in anterior leads",
-                        "Presence of ST-segment elevation in anterior leads"
+                        "Presence of diffuse concave ST-segment elevation across precordial leads",
+                        "Presence of ST-segment depression in leads V2, V3, and V4",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of flattened T waves in inferior leads"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -63,15 +63,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.21s - 4.34s]",
-                            "[4.39s - 4.51s]",
-                            "[6.99s - 7.24s]",
-                            "[7.89s - 8.16s]"
+                            "[2.14s - 2.39s]",
+                            "[5.63s - 5.89s]",
+                            "[7.44s - 7.56s]",
+                            "[7.62s - 7.74s]"
                         ],
-                        "answer": "[4.39s - 4.51s]",
-                        "answer_idx": 1,
+                        "answer": "[7.62s - 7.74s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],

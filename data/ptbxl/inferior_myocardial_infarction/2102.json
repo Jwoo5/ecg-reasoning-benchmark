@@ -23,9 +23,9 @@
                     "options": [
                         "Presence of ST-segment elevation in leads V1 and V2",
                         "Presence of ST-segment elevation in inferior leads",
-                        "Presence of diffuse concave ST-segment elevation in limb leads",
+                        "Presence of PR-segment depression in inferior leads",
                         "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Presence of pathological Q waves in anterior leads"
                     ],
                     "answer": "Presence of ST-segment elevation in inferior leads",
                     "answer_idx": 1,
@@ -60,15 +60,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.81s - 2.88s]",
-                            "[5.92s - 6.15s]",
-                            "[7.44s - 7.58s]",
-                            "[7.66s - 7.93s]"
+                            "[0.77s - 0.98s]",
+                            "[4.86s - 5.01s]",
+                            "[7.04s - 7.28s]",
+                            "[8.16s - 8.25s]"
                         ],
-                        "answer": "[7.44s - 7.58s]",
-                        "answer_idx": 2,
+                        "answer": "[4.86s - 5.01s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],

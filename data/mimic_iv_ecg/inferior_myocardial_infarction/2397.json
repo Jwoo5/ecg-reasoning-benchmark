@@ -22,13 +22,13 @@
                     "question": "To accurately diagnose inferior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of PR-segment depression in inferior leads",
-                        "Presence of diffuse concave ST-segment elevation in limb leads",
                         "Presence of ST-segment elevation in inferior leads",
                         "Presence of ST-segment elevation in leads V1 and V2",
-                        "Presence of an RSR' pattern in leads V1 and V2"
+                        "Presence of inverted T waves in lateral leads",
+                        "Presence of diffuse concave ST-segment elevation in limb leads"
                     ],
                     "answer": "Presence of ST-segment elevation in inferior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -62,15 +62,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.39s - 1.61s]",
+                            "[2.18s - 2.44s]",
+                            "[2.88s - 2.98s]",
                             "[4.38s - 4.48s]",
-                            "[8.43s - 8.63s]",
-                            "[9.12s - 9.21s]"
+                            "[9.68s - 9.88s]"
                         ],
                         "answer": "[4.38s - 4.48s]",
-                        "answer_idx": 1,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],

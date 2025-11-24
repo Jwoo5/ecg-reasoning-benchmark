@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose inferior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of pathological Q waves in lateral leads",
-                        "Presence of diffuse concave ST-segment elevation in limb leads",
+                        "Presence of PR-segment depression in inferior leads",
                         "Presence of ST-segment elevation in leads V1 and V2",
                         "Presence of ST-segment elevation in inferior leads",
+                        "Presence of pathological Q waves in lateral leads",
                         "Presence of ST-segment depression in leads II, III, and aVF"
                     ],
                     "answer": "Presence of ST-segment elevation in inferior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.39s - 1.50s]",
+                            "[7.22s - 7.45s]",
+                            "[7.51s - 7.61s]",
+                            "[9.74s - 9.90s]"
+                        ],
+                        "answer": "[1.39s - 1.50s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior myocardial infarction?",
                     "options": [
@@ -58,10 +71,10 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior myocardial infarction?",
                     "options": [
-                        "Presence of a Delta wave (slurred upstroke) in inferior leads",
+                        "Presence of fragmented QRS complexes in inferior leads",
                         "Presence of QS complexes in leads V1 and V2",
-                        "Presence of flattened T waves in lateral leads",
                         "Presence of pathological Q waves in leads V1, V2, V3, and V4",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of pathological Q waves in inferior leads",
@@ -99,12 +112,12 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.77s - 0.88s]",
-                            "[1.22s - 1.38s]",
-                            "[1.64s - 1.82s]",
-                            "[4.71s - 4.89s]"
+                            "[2.35s - 2.55s]",
+                            "[3.45s - 3.63s]",
+                            "[4.99s - 5.06s]"
                         ],
                         "answer": "[0.77s - 0.88s]",
                         "answer_idx": 0,

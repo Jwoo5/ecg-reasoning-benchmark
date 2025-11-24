@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of scooped ST-segment depression in precordial leads",
-                        "Presence of pathological Q waves in inferior leads",
-                        "Presence of ST-segment depression in leads V2, V3, and V4",
+                        "Presence of spiked pacemaker artifacts preceding the QRS complex",
+                        "Presence of PR-segment depression in anterior leads",
                         "Presence of ST-segment elevation in anterior leads",
-                        "Presence of PR-segment depression in anterior leads"
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of ST-segment depression in leads V2, V3, and V4"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.95s - 2.05s]",
+                            "[3.86s - 4.05s]",
+                            "[4.09s - 4.39s]",
+                            "[5.95s - 6.04s]"
+                        ],
+                        "answer": "[5.95s - 6.04s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior myocardial infarction?",
                     "options": [
-                        "Presence of tall, broad R waves in leads V1 and V2",
+                        "Presence of low voltage QRS complexes in precordial leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of pathological Q waves in anterior leads",
                         "Presence of a Delta wave (slurred upstroke) in anterior leads",
-                        "Presence of an RSR' pattern in lead V1"
+                        "Presence of an RSR' pattern in lead V1",
+                        "Presence of pathological Q waves in anterior leads"
                     ],
                     "answer": "Presence of pathological Q waves in anterior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -100,11 +113,11 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.25s - 4.35s]",
-                            "[5.46s - 5.63s]",
-                            "[6.14s - 6.34s]",
+                            "[2.71s - 2.83s]",
+                            "[6.31s - 6.48s]",
+                            "[6.90s - 7.09s]",
                             "[8.21s - 8.29s]"
                         ],
                         "answer": "[8.21s - 8.29s]",

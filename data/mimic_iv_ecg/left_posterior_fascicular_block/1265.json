@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left posterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of an indeterminate axis",
-                        "Presence of right axis deviation",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of extreme axis deviation",
-                        "Presence of left axis deviation"
+                        "Presence of left axis deviation",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of right axis deviation",
+                        "Presence of a horizontal QRS axis"
                     ],
                     "answer": "Presence of right axis deviation",
-                    "answer_idx": 1,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -46,9 +46,9 @@
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[2.41s - 2.49s]",
-                            "[3.14s - 3.32s]",
-                            "[4.75s - 5.04s]",
-                            "[5.57s - 5.69s]"
+                            "[4.25s - 4.43s]",
+                            "[7.24s - 7.36s]",
+                            "[7.58s - 7.77s]"
                         ],
                         "answer": "[2.41s - 2.49s]",
                         "answer_idx": 0,
@@ -83,14 +83,14 @@
                 "criterion_selection": {
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left posterior fascicular block?",
                     "options": [
-                        "Presence of inverted T waves in leads I and aVL",
-                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of pathological Q waves in leads I and aVL",
+                        "Presence of a broad monophasic R wave in lead I and aVL",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of an rS pattern in leads I and aVL",
-                        "Presence of an rS pattern in leads II, III, and aVF",
                         "Presence of tall R waves without S waves in leads I and aVL"
                     ],
                     "answer": "Presence of an rS pattern in leads I and aVL",
-                    "answer_idx": 2,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -103,7 +103,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads I and aVL do not show an rS pattern, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.96s - 3.04s]",
+                            "[3.10s - 3.32s]",
+                            "[5.91s - 6.09s]",
+                            "[7.80s - 7.92s]"
+                        ],
+                        "answer": "[2.96s - 3.04s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have left posterior fascicular block?",
                     "options": [

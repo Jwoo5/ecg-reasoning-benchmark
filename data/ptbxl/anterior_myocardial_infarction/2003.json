@@ -21,11 +21,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of scooped ST-segment depression in precordial leads",
                         "Presence of PR-segment depression in anterior leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of ST-segment depression in leads V2, V3, and V4",
                         "Presence of ST-segment elevation in anterior leads",
-                        "Presence of ST-segment depression in leads V2, V3, and V4"
+                        "Presence of scooped ST-segment depression in precordial leads"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
                     "answer_idx": 3,
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.94s - 2.22s]",
+                            "[3.60s - 3.72s]",
+                            "[4.87s - 4.98s]",
+                            "[5.10s - 5.32s]"
+                        ],
+                        "answer": "[4.87s - 4.98s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
                     "options": [
@@ -60,8 +73,8 @@
                     "options": [
                         "Presence of low voltage QRS complexes in precordial leads",
                         "Presence of pathological Q waves in anterior leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of tall, broad R waves in leads V1 and V2",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of a Delta wave (slurred upstroke) in anterior leads"
                     ],
                     "answer": "Presence of pathological Q waves in anterior leads",
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show pathological Q waves, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.47s - 2.59s]",
+                            "[3.99s - 4.19s]",
+                            "[4.42s - 4.66s]",
+                            "[8.03s - 8.13s]"
+                        ],
+                        "answer": "[8.03s - 8.13s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have anterior myocardial infarction?",
                     "options": [

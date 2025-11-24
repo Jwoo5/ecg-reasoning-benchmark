@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of a normal QRS axis",
                         "Presence of left axis deviation",
-                        "Presence of right axis deviation",
-                        "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of extreme axis deviation"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of extreme axis deviation",
+                        "Presence of a normal QRS axis",
+                        "Presence of a vertical QRS axis"
                     ],
                     "answer": "Presence of left axis deviation",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -46,9 +46,9 @@
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[1.30s - 1.46s]",
-                            "[3.69s - 3.89s]",
-                            "[4.68s - 4.85s]",
-                            "[6.03s - 6.25s]"
+                            "[2.98s - 3.19s]",
+                            "[6.13s - 6.30s]",
+                            "[8.16s - 8.43s]"
                         ],
                         "answer": "[1.30s - 1.46s]",
                         "answer_idx": 0,
@@ -82,14 +82,14 @@
                 "criterion_selection": {
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
+                        "Presence of a qR pattern in leads I and aVL",
                         "Presence of pathological Q waves in leads I and aVL",
-                        "Presence of an rS pattern in leads I and aVL",
                         "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of inverted T waves in leads I and aVL",
-                        "Presence of a qR pattern in leads I and aVL"
+                        "Presence of a qR pattern in leads II, III, and aVF",
+                        "Presence of inverted T waves in leads I and aVL"
                     ],
                     "answer": "Presence of a qR pattern in leads I and aVL",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,7 +102,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads I and aVL do not show a qR pattern, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[3.78s - 4.06s]",
+                            "[4.18s - 4.33s]",
+                            "[4.42s - 4.59s]",
+                            "[8.29s - 8.47s]"
+                        ],
+                        "answer": "[4.18s - 4.33s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have left anterior fascicular block?",
                     "options": [

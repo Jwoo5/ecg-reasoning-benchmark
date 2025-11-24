@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left ventricular hypertrophy, which of the following voltage criteria should be evaluated?",
                     "options": [
-                        "Presence of flattened T waves in anterior leads",
+                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
                         "Sum of R wave in lead I and S wave in lead III > 2.5mV",
-                        "R wave amplitude in lead aVF > 2.0mV",
-                        "R wave amplitude in lead aVL > 1.1mV",
-                        "R wave amplitude in aVR > 0.5mV"
+                        "S wave amplitude in lead aVL > 1.1mV",
+                        "Presence of inverted T waves in inferior leads",
+                        "R wave amplitude in lead aVL > 1.1mV"
                     ],
                     "answer": "R wave amplitude in lead aVL > 1.1mV",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,9 +45,9 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.86s - 1.07s]",
-                            "[4.60s - 4.70s]",
-                            "[7.90s - 8.06s]",
+                            "[1.18s - 1.35s]",
+                            "[1.62s - 1.88s]",
+                            "[4.27s - 4.48s]",
                             "[8.18s - 8.27s]"
                         ],
                         "answer": "[8.18s - 8.27s]",
@@ -84,14 +84,14 @@
                 "criterion_selection": {
                     "question": "In addition to the voltage criterion you just evaluated, which other voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
-                        "Sum of R wave in V1 and S wave in V5/V6 > 1.1 mV",
-                        "Sum of S amplitude in V1 and S amplitude in V5 > 3.0mV",
-                        "Presence of flattened T waves in anterior leads",
+                        "Presence of low voltage QRS (< 1.0mV) across precordial leads",
                         "Sum of S amplitude in V1 and R amplitude in V5/V6 > 3.5mV",
-                        "R wave amplitude in V5/V6 < 2.6mV"
+                        "Presence of inverted T waves in inferior leads",
+                        "R wave amplitude in V5/V6 < 2.6mV",
+                        "Sum of R wave in V1 and S wave in V5/V6 > 1.1 mV"
                     ],
                     "answer": "Sum of S amplitude in V1 and R amplitude in V5/V6 > 3.5mV",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -108,10 +108,10 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V1? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.70s - 1.87s]",
+                            "[0.86s - 1.07s]",
                             "[2.73s - 2.82s]",
-                            "[7.00s - 7.19s]",
-                            "[9.34s - 9.46s]"
+                            "[2.95s - 3.21s]",
+                            "[7.31s - 7.40s]"
                         ],
                         "answer": "[2.73s - 2.82s]",
                         "answer_idx": 1,
@@ -146,10 +146,10 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in the selected lead? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.17s - 2.38s]",
+                            "[0.51s - 0.61s]",
                             "[4.78s - 4.87s]",
-                            "[5.03s - 5.20s]",
-                            "[7.99s - 8.09s]"
+                            "[8.42s - 8.59s]",
+                            "[9.04s - 9.25s]"
                         ],
                         "answer": "[4.78s - 4.87s]",
                         "answer_idx": 1,
@@ -184,18 +184,18 @@
                 "criterion_selection": {
                     "question": "In addition to the voltage criteria you have evaluated so far, which other voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
-                        "R wave amplitude in lead V1 > 0.7mV",
-                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
-                        "Ratio of R wave to S wave amplitude in lead V1 > 1.0",
                         [
                             "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
                         ],
-                        "Presence of flattened T waves in anterior leads"
+                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
+                        "R wave amplitude in lead V1 > 0.7mV",
+                        "Presence of flattened T waves in anterior leads",
+                        "Ratio of R wave to S wave amplitude in lead V1 > 1.0"
                     ],
                     "answer": [
                         "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
                     ],
-                    "answer_idx": 3,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -212,13 +212,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the S amplitude in lead V3? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
+                            "[0.40s - 0.58s]",
+                            "[1.55s - 1.72s]",
                             "[2.73s - 2.82s]",
-                            "[4.34s - 4.52s]",
-                            "[4.60s - 4.70s]",
-                            "[4.95s - 5.15s]"
+                            "[7.31s - 7.40s]"
                         ],
                         "answer": "[2.73s - 2.82s]",
-                        "answer_idx": 0,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -236,13 +236,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead aVL? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.58s - 1.85s]",
-                            "[4.27s - 4.48s]",
+                            "[1.18s - 1.35s]",
                             "[4.78s - 4.87s]",
-                            "[7.99s - 8.09s]"
+                            "[7.01s - 7.18s]",
+                            "[8.35s - 8.55s]"
                         ],
                         "answer": "[4.78s - 4.87s]",
-                        "answer_idx": 2,
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -286,14 +286,14 @@
                 "criterion_selection": {
                     "question": "Since only one voltage criterion was met, which specific non-voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
-                        "Presence of hyperacute T waves in leads V5 and V6",
-                        "Presence of biphasic T waves in leads V2 and V3",
+                        "Presence of diffuse ST elevation in lateral leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of an LV strain pattern in lateral leads",
-                        "Presence of tall, peaked T waves in lateral leads"
+                        "Presence of biphasic T waves in leads V2 and V3",
+                        "Presence of an RV strain pattern in leads V1, V2, and V3"
                     ],
                     "answer": "Presence of an LV strain pattern in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -306,7 +306,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show an LV strain pattern, in which of the following segments can you locate the ST segment and T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.00s - 0.10s]",
+                            "[4.19s - 4.48s]",
+                            "[6.66s - 6.85s]",
+                            "[7.99s - 8.09s]"
+                        ],
+                        "answer": "[4.19s - 4.48s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have left ventricular hypertrophy?",
                     "options": [

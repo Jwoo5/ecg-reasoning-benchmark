@@ -22,10 +22,10 @@
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
                         "Presence of ventricular pre-excitation (Delta wave)",
-                        "Presence of a qR pattern in leads I and aVL",
+                        "Evidence of atrioventricular dissociation",
                         "Presence of left anterior fascicular block",
                         "Presence of right bundle branch block",
-                        "Presence of left bundle branch block"
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of right bundle branch block",
                     "answer_idx": 3,
@@ -58,14 +58,14 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of a normal QRS axis",
-                        "Presence of left axis deviation",
                         "Presence of an indeterminate axis",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of right axis deviation",
                         "Presence of a superior axis deviation",
-                        "Presence of right axis deviation"
+                        "Presence of a normal QRS axis"
                     ],
                     "answer": "Presence of right axis deviation",
-                    "answer_idx": 4,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -84,7 +84,7 @@
                         "options": [
                             "[1.34s - 1.46s]",
                             "[1.60s - 1.80s]",
-                            "[6.37s - 6.63s]",
+                            "[1.96s - 2.23s]",
                             "[8.62s - 8.74s]"
                         ],
                         "answer": "[1.34s - 1.46s]",

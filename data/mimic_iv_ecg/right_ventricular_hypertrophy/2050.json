@@ -24,8 +24,8 @@
                         "Presence of right bundle branch block",
                         "Presence of ventricular pre-excitation (Delta wave)",
                         "Evidence of atrioventricular dissociation",
-                        "Presence of a slurred S wave in lateral leads",
-                        "Presence of left posterior fascicular block"
+                        "Presence of left anterior fascicular block",
+                        "Presence of an RSR' pattern in leads V1 and V2"
                     ],
                     "answer": "Presence of right bundle branch block",
                     "answer_idx": 0,
@@ -59,10 +59,10 @@
                     "question": "Given that right bundle branch block is present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
                         "QRS axis > +60 degrees",
-                        "Presence of an indeterminate axis (no dominant vector)",
+                        "Presence of left axis deviation",
                         "Presence of a normal QRS axis between -30 and 0 degrees",
-                        "Presence of extreme axis deviation",
-                        "Presence of a slurred S wave in lateral leads"
+                        "Presence of a slurred S wave in lateral leads",
+                        "Presence of extreme axis deviation"
                     ],
                     "answer": "QRS axis > +60 degrees",
                     "answer_idx": 0,
@@ -82,14 +82,14 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
+                            "[0.45s - 0.69s]",
                             "[0.87s - 0.97s]",
-                            "[3.35s - 3.52s]",
-                            "[5.35s - 5.63s]",
-                            "[5.40s - 5.60s]",
-                            "[8.65s - 8.84s]"
+                            "[6.01s - 6.18s]",
+                            "[6.58s - 6.75s]",
+                            "[7.50s - 7.69s]"
                         ],
                         "answer": "[0.87s - 0.97s]",
-                        "answer_idx": 0,
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },
                     {

@@ -22,8 +22,8 @@
                     "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of diffuse concave ST-segment elevation in inferior leads",
-                        "Presence of left axis deviation",
-                        "Presence of J-point elevation in inferior leads",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of ST-segment depression in leads I and aVL",
                         "Presence of ST-segment elevation in inferior leads",
                         "Presence of ST-segment depression in inferior leads"
                     ],
@@ -62,12 +62,12 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.54s - 2.71s]",
+                            "[1.39s - 1.67s]",
                             "[3.21s - 3.32s]",
-                            "[3.52s - 3.82s]",
-                            "[7.95s - 8.04s]"
+                            "[5.05s - 5.28s]",
+                            "[7.00s - 7.12s]"
                         ],
                         "answer": "[3.21s - 3.32s]",
                         "answer_idx": 1,

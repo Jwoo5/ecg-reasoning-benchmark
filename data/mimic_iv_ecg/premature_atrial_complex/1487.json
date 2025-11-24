@@ -22,9 +22,9 @@
                     "question": "To accurately diagnose premature atrial complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of intermittent ventricular pauses (dropped beats)",
-                        "Presence of an irregularly irregular ventricular rhythm",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of a consistently regular RR interval",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a fixed, rigid heart rate without variability",
                         "Presence of premature beats"
                     ],
                     "answer": "Presence of premature beats",
@@ -45,10 +45,10 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[5.30s - 5.49s]",
-                            "[6.93s - 7.03s]",
+                            "[4.04s - 4.23s]",
+                            "[6.16s - 6.28s]",
                             "[7.43s - 7.58s]",
-                            "[9.41s - 9.53s]"
+                            "[8.29s - 8.38s]"
                         ],
                         "answer": "[7.43s - 7.58s]",
                         "answer_idx": 2,
@@ -73,12 +73,12 @@
                     "options": [
                         "Presence of ST elevation in the premature beat",
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats",
                         "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Presence of a different QRS axis in the premature beat compared to normal beats"
+                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats",
+                        "Presence of a Delta wave (slurred upstroke) on the premature beat"
                     ],
                     "answer": "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {

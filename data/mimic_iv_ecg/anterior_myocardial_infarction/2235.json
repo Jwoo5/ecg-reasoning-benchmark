@@ -23,12 +23,12 @@
                     "options": [
                         "Presence of spiked pacemaker artifacts preceding the QRS complex",
                         "Presence of ST-segment depression in leads V2, V3, and V4",
-                        "Presence of PR-segment depression in anterior leads",
-                        "Presence of pathological Q waves in inferior leads",
-                        "Presence of ST-segment elevation in anterior leads"
+                        "Presence of diffuse concave ST-segment elevation across precordial leads",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of inverted T waves in inferior leads"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.74s - 0.96s]",
+                            "[1.65s - 1.76s]",
+                            "[2.90s - 3.14s]",
+                            "[3.31s - 3.51s]",
+                            "[9.60s - 9.86s]"
+                        ],
+                        "answer": "[1.65s - 1.76s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
                     "options": [
@@ -58,11 +72,11 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior myocardial infarction?",
                     "options": [
-                        "Presence of inverted T waves in inferior leads",
-                        "Presence of a Delta wave (slurred upstroke) in anterior leads",
+                        "Presence of an RSR' pattern in lead V1",
+                        "Presence of tall, broad R waves in leads V1 and V2",
                         "Presence of low voltage QRS complexes in precordial leads",
                         "Presence of pathological Q waves in anterior leads",
-                        "Presence of tall, broad R waves in leads V1 and V2"
+                        "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of pathological Q waves in anterior leads",
                     "answer_idx": 3,
@@ -102,16 +116,16 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.62s - 0.84s]",
-                            "[3.07s - 3.24s]",
                             "[5.22s - 5.41s]",
-                            "[5.64s - 5.92s]",
-                            "[7.26s - 7.37s]"
+                            "[6.55s - 6.79s]",
+                            "[7.26s - 7.37s]",
+                            "[7.56s - 7.79s]"
                         ],
                         "answer": "[7.26s - 7.37s]",
-                        "answer_idx": 4,
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],

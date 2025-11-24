@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of scooped ST-segment depression in precordial leads",
-                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of diffuse concave ST-segment elevation across precordial leads",
                         "Presence of PR-segment depression in anterior leads",
-                        "Presence of pathological Q waves in inferior leads",
-                        "Presence of diffuse concave ST-segment elevation across precordial leads"
+                        "Presence of ST-segment depression in leads V2, V3, and V4",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
-                    "answer_idx": 1,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.35s - 0.46s]",
+                            "[2.31s - 2.56s]",
+                            "[2.81s - 2.95s]",
+                            "[7.52s - 7.82s]"
+                        ],
+                        "answer": "[2.81s - 2.95s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior myocardial infarction?",
                     "options": [
+                        "Presence of pathological Q waves in anterior leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of a Delta wave (slurred upstroke) in anterior leads",
-                        "Presence of pathological Q waves in anterior leads",
-                        "Presence of tall, broad R waves in leads V1 and V2",
-                        "Presence of an RSR' pattern in lead V1"
+                        "Presence of an RSR' pattern in lead V1",
+                        "Presence of tall, broad R waves in leads V1 and V2"
                     ],
                     "answer": "Presence of pathological Q waves in anterior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show pathological Q waves, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.45s - 1.66s]",
+                            "[3.36s - 3.53s]",
+                            "[6.59s - 6.72s]",
+                            "[7.17s - 7.28s]"
+                        ],
+                        "answer": "[6.59s - 6.72s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have anterior myocardial infarction?",
                     "options": [

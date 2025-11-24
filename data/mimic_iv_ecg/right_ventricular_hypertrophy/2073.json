@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
-                        "Presence of right bundle branch block",
-                        "Presence of left bundle branch block",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Evidence of atrioventricular dissociation",
                         "Presence of left posterior fascicular block",
-                        "Evidence of atrioventricular dissociation"
+                        "Presence of right bundle branch block",
+                        "Presence of left anterior fascicular block",
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 0,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -58,14 +58,14 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of a superior axis deviation",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of right axis deviation",
                         "Presence of an indeterminate axis",
-                        "Presence of a normal QRS axis"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a normal QRS axis",
+                        "Presence of left axis deviation"
                     ],
                     "answer": "Presence of right axis deviation",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -82,13 +82,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[5.14s - 5.36s]",
-                            "[5.62s - 5.72s]",
+                            "[3.65s - 3.84s]",
                             "[5.78s - 5.88s]",
-                            "[6.97s - 7.22s]"
+                            "[5.94s - 6.15s]",
+                            "[8.07s - 8.18s]"
                         ],
                         "answer": "[5.78s - 5.88s]",
-                        "answer_idx": 2,
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -119,14 +119,14 @@
                 "criterion_selection": {
                     "question": "Since the axis criterion was not met, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
+                        "Presence of a dominant S wave in lead V1",
+                        "Presence of an Epsilon wave in lead V1",
                         "Presence of a wide, notched R wave in lead V1",
                         "Presence of a dominant R wave in V1",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of an Epsilon wave in lead V1",
-                        "Presence of a negative P wave terminal force in lead V1 > 4mV\u00b7ms"
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of a dominant R wave in V1",
-                    "answer_idx": 1,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -143,13 +143,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.78s - 0.96s]",
-                            "[4.36s - 4.56s]",
-                            "[5.62s - 5.72s]",
-                            "[5.78s - 5.88s]"
+                            "[0.17s - 0.27s]",
+                            "[1.74s - 1.85s]",
+                            "[5.37s - 5.67s]",
+                            "[9.19s - 9.38s]"
                         ],
-                        "answer": "[5.78s - 5.88s]",
-                        "answer_idx": 3,
+                        "answer": "[1.74s - 1.85s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },
                     {

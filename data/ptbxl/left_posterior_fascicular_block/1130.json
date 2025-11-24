@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left posterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of an indeterminate axis",
                         "Presence of a horizontal QRS axis",
-                        "Presence of right axis deviation",
-                        "Presence of a normal QRS axis"
+                        "Presence of extreme axis deviation",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of left axis deviation",
+                        "Presence of right axis deviation"
                     ],
                     "answer": "Presence of right axis deviation",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.53s - 0.64s]",
                             "[3.24s - 3.36s]",
-                            "[5.99s - 6.24s]",
-                            "[8.29s - 8.49s]"
+                            "[4.37s - 4.48s]",
+                            "[5.88s - 6.11s]",
+                            "[6.71s - 6.90s]"
                         ],
                         "answer": "[3.24s - 3.36s]",
-                        "answer_idx": 1,
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     },
                     {

@@ -23,12 +23,12 @@
                     "options": [
                         "Presence of ST-segment depression in leads II, III, and aVF",
                         "Presence of J-point elevation in anterior leads",
-                        "Presence of ST-segment depression in anterior leads",
-                        "Presence of ST-segment elevation in anterior leads",
-                        "Presence of pathological Q waves in inferior leads"
+                        "Presence of diffuse concave ST-segment elevation in anterior leads",
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of ST-segment depression in anterior leads"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.58s - 1.69s]",
+                            "[1.80s - 2.00s]",
+                            "[5.11s - 5.39s]",
+                            "[5.44s - 5.57s]"
+                        ],
+                        "answer": "[1.58s - 1.69s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior ischemia?",
                     "options": [
@@ -58,9 +71,9 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior ischemia?",
                     "options": [
-                        "Presence of inverted T waves in leads II, III, and aVF",
                         "Presence of tall, peaked T waves in anterior leads",
-                        "Presence of pathological Q waves in inferior leads",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of inverted T waves in leads II, III, and aVF",
                         "Presence of flattened T waves in anterior leads",
                         "Presence of inverted T waves in anterior leads"
                     ],
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.80s - 2.00s]",
+                            "[2.42s - 2.52s]",
+                            "[2.56s - 2.68s]",
+                            "[3.18s - 3.45s]"
+                        ],
+                        "answer": "[1.80s - 2.00s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have anterior ischemia?",
                     "options": [

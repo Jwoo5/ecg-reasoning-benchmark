@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment depression in lateral leads",
-                        "Presence of J-point elevation in lateral leads",
-                        "Presence of flattened T waves in anterior leads",
                         "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Presence of ST-segment elevation in lateral leads"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of J-point elevation in lateral leads",
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of ST-segment depression in lateral leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
-                    "answer_idx": 0,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.74s - 1.97s]",
+                            "[3.30s - 3.40s]",
+                            "[5.27s - 5.51s]",
+                            "[8.45s - 8.55s]"
+                        ],
+                        "answer": "[3.30s - 3.40s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral ischemia?",
                     "options": [
@@ -58,11 +71,11 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral ischemia?",
                     "options": [
-                        "Presence of inverted T waves in leads V1 - V4",
-                        "Presence of inverted T waves in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of flattened T waves in lateral leads",
-                        "Presence of camel hump T waves (P on T) in lateral leads"
+                        "Presence of inverted T waves in lateral leads",
+                        "Presence of camel hump T waves (P on T) in lateral leads",
+                        "Presence of inverted T waves in leads V1 - V4",
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of inverted T waves in lateral leads",
                     "answer_idx": 1,
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.26s - 1.50s]",
+                            "[1.56s - 1.66s]",
+                            "[1.74s - 1.97s]",
+                            "[2.25s - 2.39s]"
+                        ],
+                        "answer": "[1.74s - 1.97s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have lateral ischemia?",
                     "options": [

@@ -21,11 +21,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment depression in leads I and aVL",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of diffuse concave ST-segment elevation in inferior leads",
+                        "Presence of inverted T waves in lateral leads",
+                        "Presence of ST-segment elevation in inferior leads",
+                        "Presence of J-point elevation in inferior leads",
                         "Presence of ST-segment depression in inferior leads",
-                        "Presence of ST-segment elevation in inferior leads"
+                        "Presence of ST-segment depression in leads I and aVL"
                     ],
                     "answer": "Presence of ST-segment depression in inferior leads",
                     "answer_idx": 3,
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[4.31s - 4.40s]",
+                            "[4.52s - 4.81s]",
+                            "[7.50s - 7.70s]",
+                            "[8.41s - 8.51s]"
+                        ],
+                        "answer": "[4.31s - 4.40s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior ischemia?",
                     "options": [
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of inverted T waves in leads I and aVL",
                         "Presence of inverted T waves in inferior leads",
+                        "Presence of tall, peaked T waves in inferior leads",
                         "Presence of Camel-hump T waves (P on T) in inferior leads",
-                        "Presence of flattened T waves in inferior leads"
+                        "Presence of ST-segment depression in anterior leads",
+                        "Presence of inverted T waves in leads I and aVL"
                     ],
                     "answer": "Presence of inverted T waves in inferior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -101,9 +114,9 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.51s - 2.60s]",
-                            "[4.75s - 5.03s]",
-                            "[6.59s - 6.70s]",
+                            "[2.97s - 3.08s]",
+                            "[4.31s - 4.40s]",
+                            "[5.31s - 5.48s]",
                             "[7.50s - 7.70s]"
                         ],
                         "answer": "[7.50s - 7.70s]",

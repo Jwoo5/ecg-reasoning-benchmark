@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
+                        "Presence of pathological Q waves in anterior leads",
                         "Presence of ST-segment depression in lateral leads",
+                        "Presence of diffuse concave ST-segment elevation in lateral leads",
                         "Presence of ST-segment elevation in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Presence of J-point elevation in lateral leads"
+                        "Presence of ST-segment depression in leads II, III, and aVF"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -65,11 +65,11 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[4.52s - 4.67s]",
-                            "[6.77s - 7.07s]",
-                            "[7.93s - 8.14s]",
+                            "[4.74s - 5.02s]",
+                            "[5.88s - 6.08s]",
                             "[8.21s - 8.44s]"
                         ],
                         "answer": "[4.52s - 4.67s]",

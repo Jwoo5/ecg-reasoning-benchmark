@@ -23,9 +23,9 @@
                     "options": [
                         "Presence of ST-segment depression in lateral leads",
                         "Presence of diffuse concave ST-segment elevation in lateral leads",
-                        "Presence of J-point elevation in lateral leads",
-                        "Presence of a qR pattern in leads I and aVL",
-                        "Presence of ST-segment depression in leads II, III, and aVF"
+                        "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Prolongation of the QRS duration",
+                        "Presence of J-point elevation in lateral leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
                     "answer_idx": 0,
@@ -65,15 +65,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.18s - 0.29s]",
-                            "[2.10s - 2.31s]",
-                            "[6.87s - 7.15s]",
-                            "[8.08s - 8.22s]"
+                            "[3.70s - 3.94s]",
+                            "[4.79s - 4.90s]",
+                            "[4.95s - 5.09s]",
+                            "[5.94s - 6.18s]"
                         ],
-                        "answer": "[8.08s - 8.22s]",
-                        "answer_idx": 3,
+                        "answer": "[4.95s - 5.09s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],

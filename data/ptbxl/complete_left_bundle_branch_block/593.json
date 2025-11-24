@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of a normal QRS duration",
                         "Shortening of the PR interval",
-                        "Beat-to-beat variation in QRS amplitude",
                         "Prolongation of the QRS duration",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Prolongation of the QT interval",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a normal QRS duration"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates a non-prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.54s - 2.73s]",
                             "[3.05s - 3.17s]",
-                            "[6.09s - 6.34s]",
-                            "[6.72s - 6.80s]"
+                            "[6.33s - 6.53s]",
+                            "[8.44s - 8.52s]",
+                            "[9.50s - 9.70s]"
                         ],
-                        "answer": "[6.72s - 6.80s]",
-                        "answer_idx": 3,
+                        "answer": "[8.44s - 8.52s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {

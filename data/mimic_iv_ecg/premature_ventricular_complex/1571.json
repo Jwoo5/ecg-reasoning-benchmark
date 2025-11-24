@@ -21,10 +21,10 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose premature ventricular complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of inverted T waves in anterior leads",
-                        "Presence of gradual acceleration and deceleration of the heart rate",
+                        "Presence of a fixed, rigid heart rate without variability",
                         "Presence of grouped beating patterns separated by pauses",
-                        "Presence of a consistently regular RR interval",
+                        "Presence of intermittent ventricular pauses (dropped beats)",
+                        "Presence of flattened T waves in lateral leads",
                         "Presence of premature beats"
                     ],
                     "answer": "Presence of premature beats",
@@ -45,14 +45,14 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.84s - 1.05s]",
                             "[1.19s - 1.33s]",
-                            "[4.78s - 4.88s]",
-                            "[5.70s - 5.87s]",
-                            "[6.33s - 6.43s]"
+                            "[1.42s - 1.62s]",
+                            "[3.22s - 3.31s]",
+                            "[5.47s - 5.58s]",
+                            "[5.70s - 5.87s]"
                         ],
                         "answer": "[1.19s - 1.33s]",
-                        "answer_idx": 1,
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -72,14 +72,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature ventricular complexes?",
                     "options": [
-                        "Presence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Presence of inverted T waves in anterior leads",
-                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Presence of a Delta wave (slurred upstroke) on the premature beat",
+                        "Presence of flattened T waves in inferior leads",
+                        "Presence of ST elevation in the premature beat",
                         "Similarity of QRS morphology between the premature beat and normal beats",
-                        "Presence of a Delta wave (slurred upstroke) on the premature beat"
+                        "Presence of significant QRS prolongation in the premature beat compared to normal beats"
                     ],
                     "answer": "Presence of significant QRS prolongation in the premature beat compared to normal beats",
-                    "answer_idx": 0,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {

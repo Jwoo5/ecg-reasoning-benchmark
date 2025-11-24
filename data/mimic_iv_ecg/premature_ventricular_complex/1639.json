@@ -22,9 +22,9 @@
                     "question": "To accurately diagnose premature ventricular complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of premature beats",
-                        "Presence of a fixed, rigid heart rate without variability",
+                        "Presence of gradual acceleration and deceleration of the heart rate",
                         "Presence of intermittent ventricular pauses (dropped beats)",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of inverted T waves in lateral leads",
                         "Presence of grouped beating patterns separated by pauses"
                     ],
                     "answer": "Presence of premature beats",
@@ -45,10 +45,10 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.22s - 1.44s]",
-                            "[3.76s - 3.89s]",
+                            "[0.81s - 0.93s]",
+                            "[1.70s - 1.81s]",
                             "[5.66s - 5.81s]",
-                            "[6.37s - 6.48s]"
+                            "[7.28s - 7.53s]"
                         ],
                         "answer": "[5.66s - 5.81s]",
                         "answer_idx": 2,
@@ -71,10 +71,10 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature ventricular complexes?",
                     "options": [
+                        "Presence of pathological Q waves in anterior leads",
+                        "Similarity of QRS morphology between the premature beat and normal beats",
                         "Presence of ST elevation in the premature beat",
                         "Presence of a Delta wave (slurred upstroke) on the premature beat",
-                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Presence of left axis deviation",
                         "Presence of significant QRS prolongation in the premature beat compared to normal beats"
                     ],
                     "answer": "Presence of significant QRS prolongation in the premature beat compared to normal beats",

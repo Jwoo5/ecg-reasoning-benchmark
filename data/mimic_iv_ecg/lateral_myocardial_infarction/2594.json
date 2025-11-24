@@ -23,12 +23,12 @@
                     "options": [
                         "Presence of ST-segment depression in lateral leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of ST-segment elevation in leads II, III, and aVF",
-                        "Presence of diffuse ST-segment elevation in all leads",
-                        "Presence of ST-segment elevation in lateral leads"
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of ST-segment elevation in lead aVR",
+                        "Presence of diffuse ST-segment elevation in all leads"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -63,14 +63,14 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.53s - 2.62s]",
-                            "[2.85s - 3.08s]",
-                            "[3.17s - 3.38s]",
-                            "[4.99s - 5.07s]"
+                            "[0.22s - 0.30s]",
+                            "[0.49s - 0.73s]",
+                            "[5.17s - 5.42s]",
+                            "[6.54s - 6.62s]"
                         ],
-                        "answer": "[4.99s - 5.07s]",
+                        "answer": "[6.54s - 6.62s]",
                         "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }

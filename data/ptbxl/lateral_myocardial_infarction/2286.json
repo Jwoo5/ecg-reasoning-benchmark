@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of a qR pattern in leads I and aVL",
-                        "Presence of ST-segment elevation in lateral leads",
                         "Presence of diffuse ST-segment elevation in all leads",
+                        "Prolongation of the PR interval",
+                        "Presence of ST-segment elevation in lateral leads",
                         "Presence of ST-segment elevation in leads II, III, and aVF",
-                        "Presence of ST-segment elevation in lead aVR"
+                        "Presence of ST-segment depression in lateral leads"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
-                    "answer_idx": 1,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -61,12 +61,12 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.87s - 1.02s]",
+                            "[2.36s - 2.59s]",
                             "[3.79s - 3.94s]",
                             "[6.60s - 6.86s]",
-                            "[8.30s - 8.56s]"
+                            "[7.81s - 7.94s]"
                         ],
                         "answer": "[3.79s - 3.94s]",
                         "answer_idx": 1,

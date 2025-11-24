@@ -23,8 +23,8 @@
                     "options": [
                         "Prolongation of the QRS duration",
                         "Presence of a normal QRS duration",
-                        "Variable QRS duration",
                         "Beat-to-beat variation in QRS amplitude",
+                        "Variable QRS duration",
                         "Presence of atrial fibrillation"
                     ],
                     "answer": "Prolongation of the QRS duration",
@@ -45,14 +45,14 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.92s - 1.08s]",
-                            "[1.17s - 1.32s]",
-                            "[3.89s - 4.11s]",
-                            "[5.00s - 5.26s]",
-                            "[8.73s - 8.95s]"
+                            "[2.25s - 2.48s]",
+                            "[3.08s - 3.26s]",
+                            "[8.26s - 8.42s]",
+                            "[8.68s - 8.93s]",
+                            "[9.25s - 9.49s]"
                         ],
-                        "answer": "[1.17s - 1.32s]",
-                        "answer_idx": 1,
+                        "answer": "[8.26s - 8.42s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -85,14 +85,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
                     "options": [
+                        "Presence of atrial fibrillation",
                         "Presence of a dominant R wave in leads V1 and V2",
-                        "Presence of pathological Q waves in leads V1 and V2",
-                        "Presence of a Delta wave (Slurred upstroke)",
                         "Presence of a dominant S wave in leads V1 and V2",
-                        "Presence of atrial fibrillation"
+                        "Presence of pathological Q waves in leads V1 and V2",
+                        "Presence of a tall, broad R wave in leads V1 and V2"
                     ],
                     "answer": "Presence of a dominant S wave in leads V1 and V2",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -105,7 +105,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads V1 and V2 do not show a QRS complex with dominant S wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.38s - 1.59s]",
+                            "[1.97s - 2.13s]",
+                            "[2.25s - 2.48s]",
+                            "[3.89s - 4.11s]",
+                            "[7.90s - 8.13s]"
+                        ],
+                        "answer": "[1.97s - 2.13s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete left bundle branch block?",
                     "options": [

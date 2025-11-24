@@ -21,10 +21,10 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of J-point elevation in lateral leads",
                         "Presence of ST-segment elevation in lateral leads",
-                        "Presence of left axis deviation",
                         "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of J-point elevation in lateral leads",
+                        "Prolongation of the QRS duration",
                         "Presence of ST-segment depression in lateral leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.83s - 1.95s]",
+                            "[3.18s - 3.42s]",
+                            "[7.87s - 8.04s]",
+                            "[9.33s - 9.46s]"
+                        ],
+                        "answer": "[1.83s - 1.95s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral ischemia?",
                     "options": [
-                        "Presence of tall, peaked T waves in lateral leads",
+                        "Presence of inverted T waves in lateral leads",
                         "Presence of flattened T waves in lateral leads",
-                        "Presence of inverted T waves in leads V1 - V4",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of inverted T waves in lateral leads"
+                        "Presence of tall, peaked T waves in lateral leads",
+                        "Presence of left axis deviation",
+                        "Presence of camel hump T waves (P on T) in lateral leads"
                     ],
                     "answer": "Presence of inverted T waves in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,15 +115,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.75s - 0.88s]",
-                            "[2.07s - 2.28s]",
-                            "[2.36s - 2.62s]",
-                            "[9.33s - 9.46s]"
+                            "[1.75s - 2.00s]",
+                            "[7.07s - 7.20s]",
+                            "[8.39s - 8.51s]",
+                            "[8.63s - 8.85s]"
                         ],
-                        "answer": "[2.07s - 2.28s]",
-                        "answer_idx": 1,
+                        "answer": "[8.63s - 8.85s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],

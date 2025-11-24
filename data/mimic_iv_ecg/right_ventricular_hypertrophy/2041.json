@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
-                        "Presence of ventricular pre-excitation (Delta wave)",
+                        "Presence of right bundle branch block",
+                        "Presence of left posterior fascicular block",
+                        "Evidence of atrioventricular dissociation",
                         "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of left anterior fascicular block",
-                        "Presence of left bundle branch block",
-                        "Presence of right bundle branch block"
+                        "Presence of left bundle branch block"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -58,14 +58,14 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of extreme axis deviation",
-                        "QRS axis > +60 degrees",
                         "Presence of a normal QRS axis between -30 and 0 degrees",
-                        "Presence of a slurred S wave in lateral leads",
-                        "Presence of an indeterminate axis (no dominant vector)"
+                        "Presence of extreme axis deviation",
+                        "Prolongation of the QRS duration",
+                        "Presence of an indeterminate axis (no dominant vector)",
+                        "QRS axis > +60 degrees"
                     ],
                     "answer": "QRS axis > +60 degrees",
-                    "answer_idx": 1,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -83,10 +83,10 @@
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.25s - 0.38s]",
-                            "[0.91s - 1.10s]",
                             "[2.35s - 2.50s]",
-                            "[8.32s - 8.54s]",
-                            "[9.26s - 9.47s]"
+                            "[3.82s - 4.12s]",
+                            "[7.07s - 7.28s]",
+                            "[8.75s - 8.91s]"
                         ],
                         "answer": "[0.25s - 0.38s]",
                         "answer_idx": 0,

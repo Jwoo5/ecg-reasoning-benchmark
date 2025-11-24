@@ -21,11 +21,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of diffuse ST-segment elevation in all leads",
+                        "Presence of ST-segment elevation in lead aVR",
+                        "Presence of an RSR' pattern in leads V1 and V2",
                         "Presence of ST-segment depression in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of ST-segment elevation in lateral leads",
-                        "Presence of ST-segment elevation in lead aVR"
+                        "Presence of ST-segment elevation in leads II, III, and aVF"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
                     "answer_idx": 3,
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.52s - 1.76s]",
+                            "[5.35s - 5.52s]",
+                            "[6.72s - 6.81s]",
+                            "[6.84s - 6.94s]"
+                        ],
+                        "answer": "[6.84s - 6.94s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral myocardial infarction?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral myocardial infarction?",
                     "options": [
-                        "Presence of a broad monophasic R wave in lateral leads",
+                        "Presence of pathological Q waves in lateral leads",
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of deep QS complexes in leads V1 and V2",
+                        "Presence of a slurred S wave in lateral leads",
                         "Presence of inverted T waves in lateral leads",
-                        "Presence of pathological Q waves in lateral leads"
+                        "Presence of deep QS complexes in leads V1 and V2"
                     ],
                     "answer": "Presence of pathological Q waves in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,14 +115,14 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.77s - 0.88s]",
-                            "[1.75s - 1.83s]",
-                            "[2.12s - 2.28s]",
-                            "[6.46s - 6.63s]"
+                            "[1.87s - 1.98s]",
+                            "[3.68s - 3.96s]",
+                            "[4.25s - 4.43s]",
+                            "[6.17s - 6.25s]"
                         ],
-                        "answer": "[0.77s - 0.88s]",
+                        "answer": "[1.87s - 1.98s]",
                         "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }

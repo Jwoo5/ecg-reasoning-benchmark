@@ -23,12 +23,12 @@
                     "options": [
                         "Presence of PR-segment depression in anterior leads",
                         "Presence of ST-segment depression in leads V2, V3, and V4",
-                        "Presence of diffuse concave ST-segment elevation across precordial leads",
                         "Prolongation of the QRS duration",
-                        "Presence of ST-segment elevation in anterior leads"
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of scooped ST-segment depression in precordial leads"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -63,14 +63,14 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.98s - 1.24s]",
-                            "[2.39s - 2.64s]",
-                            "[2.77s - 2.88s]",
-                            "[6.89s - 7.04s]"
+                            "[1.19s - 1.32s]",
+                            "[1.60s - 1.83s]",
+                            "[6.40s - 6.65s]",
+                            "[8.46s - 8.61s]"
                         ],
-                        "answer": "[6.89s - 7.04s]",
+                        "answer": "[8.46s - 8.61s]",
                         "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }

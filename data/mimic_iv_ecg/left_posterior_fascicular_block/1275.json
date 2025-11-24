@@ -22,10 +22,10 @@
                     "question": "To accurately diagnose left posterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of right axis deviation",
+                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of extreme axis deviation",
                         "Presence of an indeterminate axis",
-                        "Presence of a horizontal QRS axis",
-                        "Presence of flattened T waves in anterior leads",
-                        "Presence of a normal QRS axis"
+                        "Presence of a horizontal QRS axis"
                     ],
                     "answer": "Presence of right axis deviation",
                     "answer_idx": 0,
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.75s - 2.87s]",
+                            "[0.91s - 1.09s]",
+                            "[1.67s - 1.79s]",
                             "[3.99s - 4.08s]",
-                            "[4.22s - 4.46s]",
-                            "[8.44s - 8.65s]"
+                            "[4.12s - 4.35s]"
                         ],
                         "answer": "[3.99s - 4.08s]",
-                        "answer_idx": 1,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -83,14 +83,14 @@
                 "criterion_selection": {
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left posterior fascicular block?",
                     "options": [
+                        "Presence of pathological Q waves in leads I and aVL",
+                        "Presence of an rS pattern in leads II, III, and aVF",
                         "Presence of a broad monophasic R wave in lead I and aVL",
-                        "Presence of pathological Q waves in lateral leads",
-                        "Presence of tall R waves without S waves in leads I and aVL",
-                        "Presence of inverted T waves in leads I and aVL",
-                        "Presence of an rS pattern in leads I and aVL"
+                        "Presence of an rS pattern in leads I and aVL",
+                        "Presence of flattened T waves in anterior leads"
                     ],
                     "answer": "Presence of an rS pattern in leads I and aVL",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -103,7 +103,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads I and aVL do not show an rS pattern, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.67s - 1.79s]",
+                            "[5.60s - 5.70s]",
+                            "[5.82s - 6.09s]",
+                            "[8.44s - 8.65s]"
+                        ],
+                        "answer": "[5.60s - 5.70s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have left posterior fascicular block?",
                     "options": [

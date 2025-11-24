@@ -106,7 +106,7 @@
                 },
                 "grounding": [
                     {
-                        "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG strip, provided in seconds. The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[4.11s - 4.27s]",
                             "[4.34s - 4.46s]",
@@ -231,7 +231,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show a notched QRS complex, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.67s - 2.82s]",
+                            "[4.34s - 4.46s]",
+                            "[5.24s - 5.52s]",
+                            "[6.66s - 6.85s]"
+                        ],
+                        "answer": "[4.34s - 4.46s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete left bundle branch block?",
                     "options": [
@@ -248,14 +261,14 @@
                 "criterion_selection": {
                     "question": "Since a notched QRS complex was not observed in any of the lateral leads, which alternative diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
                     "options": [
-                        "Presence of flattened T waves in anterior leads",
-                        "Presence of horizontal ST depression in leads V5 and V6",
                         "Presence of a broad monophasic R wave in leads V5 and V6",
-                        "Presence of pathological Q waves in leads V5 and V6",
+                        "Presence of tall, peaked T waves in leads V5 and V6",
+                        "Presence of horizontal ST depression in leads V5 and V6",
+                        "Prolongation of the PR interval",
                         "Presence of a deep S wave in leads V5 and V6"
                     ],
                     "answer": "Presence of a broad monophasic R wave in leads V5 and V6",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -286,15 +299,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with broad monophasic R waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with broad monophasic R waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.07s - 1.25s]",
-                            "[5.45s - 5.57s]",
-                            "[7.12s - 7.25s]",
-                            "[9.22s - 9.46s]"
+                            "[1.05s - 1.27s]",
+                            "[1.53s - 1.66s]",
+                            "[1.73s - 2.03s]",
+                            "[8.24s - 8.38s]"
                         ],
-                        "answer": "[7.12s - 7.25s]",
-                        "answer_idx": 2,
+                        "answer": "[1.53s - 1.66s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],

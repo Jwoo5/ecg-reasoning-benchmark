@@ -21,11 +21,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of J-point elevation in lateral leads",
+                        "Presence of ST-segment elevation in lateral leads",
                         "Presence of ST-segment depression in lateral leads",
-                        "Presence of ST-segment depression in anterior leads",
+                        "Presence of ST-segment depression in leads II, III, and aVF",
                         "Presence of diffuse concave ST-segment elevation in lateral leads",
-                        "Presence of ST-segment elevation in lateral leads"
+                        "Presence of flattened T waves in anterior leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
                     "answer_idx": 1,
@@ -61,15 +61,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.26s - 2.43s]",
-                            "[5.14s - 5.26s]",
-                            "[7.01s - 7.12s]",
-                            "[7.39s - 7.60s]"
+                            "[3.13s - 3.25s]",
+                            "[5.64s - 5.77s]",
+                            "[6.69s - 6.90s]",
+                            "[7.38s - 7.58s]"
                         ],
-                        "answer": "[5.14s - 5.26s]",
-                        "answer_idx": 1,
+                        "answer": "[3.13s - 3.25s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],

@@ -23,9 +23,9 @@
                     "options": [
                         "Presence of ST-segment depression in leads II, III, and aVF",
                         "Presence of ST-segment depression in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of ST-segment elevation in lateral leads",
-                        "Presence of diffuse concave ST-segment elevation in lateral leads"
+                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of J-point elevation in lateral leads",
+                        "Presence of ST-segment elevation in lateral leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
                     "answer_idx": 1,
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.05s - 1.24s]",
+                            "[3.43s - 3.52s]",
+                            "[6.42s - 6.53s]",
+                            "[7.48s - 7.66s]"
+                        ],
+                        "answer": "[3.43s - 3.52s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral ischemia?",
                     "options": [
-                        "Presence of flattened T waves in lateral leads",
-                        "Presence of pathological Q waves in lateral leads",
                         "Presence of tall, peaked T waves in lateral leads",
+                        "Presence of camel hump T waves (P on T) in lateral leads",
                         "Presence of inverted T waves in lateral leads",
+                        "Presence of pathological Q waves in lateral leads",
                         "Presence of inverted T waves in leads V1 - V4"
                     ],
                     "answer": "Presence of inverted T waves in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.41s - 0.61s]",
+                            "[0.71s - 0.83s]",
+                            "[6.44s - 6.66s]",
+                            "[9.14s - 9.23s]"
+                        ],
+                        "answer": "[0.41s - 0.61s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have lateral ischemia?",
                     "options": [

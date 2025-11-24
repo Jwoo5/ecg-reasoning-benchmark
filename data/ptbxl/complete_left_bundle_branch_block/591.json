@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of atrial fibrillation",
-                        "Prolongation of the QT interval",
                         "Variable QRS duration",
+                        "Reduction in QRS amplitude (Low voltage)",
                         "Prolongation of the QRS duration",
-                        "Presence of a normal QRS duration"
+                        "Presence of flattened T waves in inferior leads",
+                        "Prolongation of the QT interval"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,14 +45,14 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates a non-prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.63s - 1.73s]",
-                            "[3.83s - 4.03s]",
-                            "[4.17s - 4.42s]",
-                            "[5.07s - 5.31s]",
+                            "[0.64s - 0.84s]",
+                            "[2.21s - 2.39s]",
+                            "[3.57s - 3.68s]",
+                            "[5.75s - 5.96s]",
                             "[9.51s - 9.71s]"
                         ],
-                        "answer": "[1.63s - 1.73s]",
-                        "answer_idx": 0,
+                        "answer": "[3.57s - 3.68s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {

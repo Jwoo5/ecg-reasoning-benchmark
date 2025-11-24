@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of left axis deviation",
                         "Evidence of atrioventricular dissociation",
-                        "Presence of left anterior fascicular block",
+                        "Presence of right bundle branch block",
                         "Presence of ventricular pre-excitation (Delta wave)",
-                        "Presence of right bundle branch block"
+                        "Presence of left anterior fascicular block"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 4,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -58,14 +58,14 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of left axis deviation",
                         "Presence of right axis deviation",
-                        "Presence of an indeterminate axis",
-                        "Presence of a superior axis deviation",
-                        "Presence of a normal QRS axis"
+                        "Presence of left axis deviation",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a normal QRS axis",
+                        "Presence of a superior axis deviation"
                     ],
                     "answer": "Presence of right axis deviation",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -82,13 +82,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
+                            "[1.47s - 1.66s]",
                             "[2.84s - 2.94s]",
-                            "[3.51s - 3.61s]",
-                            "[3.85s - 4.05s]",
-                            "[4.14s - 4.38s]"
+                            "[3.92s - 4.13s]",
+                            "[5.95s - 6.06s]"
                         ],
                         "answer": "[2.84s - 2.94s]",
-                        "answer_idx": 0,
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },
                     {

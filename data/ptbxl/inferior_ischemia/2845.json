@@ -22,13 +22,13 @@
                     "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of ST-segment depression in leads I and aVL",
-                        "Presence of diffuse concave ST-segment elevation in inferior leads",
-                        "Presence of flattened T waves in lateral leads",
-                        "Presence of ST-segment elevation in inferior leads",
-                        "Presence of ST-segment depression in inferior leads"
+                        "Presence of ST-segment depression in inferior leads",
+                        "Presence of J-point elevation in inferior leads",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of diffuse concave ST-segment elevation in inferior leads"
                     ],
                     "answer": "Presence of ST-segment depression in inferior leads",
-                    "answer_idx": 4,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.72s - 2.84s]",
+                            "[5.71s - 5.81s]",
+                            "[6.22s - 6.38s]",
+                            "[9.68s - 9.91s]"
+                        ],
+                        "answer": "[5.71s - 5.81s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior ischemia?",
                     "options": [
@@ -58,10 +71,10 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior ischemia?",
                     "options": [
-                        "Presence of Camel-hump T waves (P on T) in inferior leads",
-                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of ST-segment elevation in anterior leads",
                         "Presence of flattened T waves in inferior leads",
-                        "Presence of tall, peaked T waves in inferior leads",
+                        "Presence of Camel-hump T waves (P on T) in inferior leads",
+                        "Presence of inverted T waves in leads I and aVL",
                         "Presence of inverted T waves in inferior leads"
                     ],
                     "answer": "Presence of inverted T waves in inferior leads",
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.05s - 0.15s]",
+                            "[0.87s - 1.05s]",
+                            "[1.78s - 1.90s]",
+                            "[7.80s - 8.00s]"
+                        ],
+                        "answer": "[7.80s - 8.00s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have inferior ischemia?",
                     "options": [

@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
+                        "Prolongation of the QT interval",
                         "Prolongation of the QRS duration",
+                        "Reduction in QRS amplitude (Low voltage)",
                         "Beat-to-beat variation in QRS amplitude",
-                        "Presence of flattened T waves in inferior leads",
-                        "Shortening of the PR interval",
-                        "Prolongation of the QT interval"
+                        "Presence of flattened T waves in inferior leads"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,14 +45,14 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates a non-prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.07s - 1.36s]",
-                            "[2.82s - 3.04s]",
-                            "[3.11s - 3.32s]",
-                            "[5.05s - 5.24s]",
-                            "[7.90s - 8.01s]"
+                            "[0.57s - 0.77s]",
+                            "[1.98s - 2.22s]",
+                            "[3.87s - 4.09s]",
+                            "[5.77s - 5.89s]",
+                            "[7.64s - 7.84s]"
                         ],
-                        "answer": "[7.90s - 8.01s]",
-                        "answer_idx": 4,
+                        "answer": "[5.77s - 5.89s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     },
                     {

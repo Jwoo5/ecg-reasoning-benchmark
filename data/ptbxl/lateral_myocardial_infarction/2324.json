@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
+                        "Presence of ST-segment elevation in lead aVR",
                         "Presence of ST-segment depression in lateral leads",
-                        "Presence of flattened T waves in inferior leads",
-                        "Presence of diffuse ST-segment elevation in all leads",
-                        "Presence of ST-segment elevation in lateral leads",
-                        "Presence of ST-segment elevation in lead aVR"
+                        "Presence of ST-segment elevation in leads II, III, and aVF",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of ST-segment elevation in lateral leads"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.80s - 3.05s]",
+                            "[3.50s - 3.74s]",
+                            "[4.17s - 4.27s]",
+                            "[5.25s - 5.37s]"
+                        ],
+                        "answer": "[5.25s - 5.37s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral myocardial infarction?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral myocardial infarction?",
                     "options": [
-                        "Presence of a slurred S wave in lateral leads",
                         "Presence of a broad monophasic R wave in lateral leads",
-                        "Presence of inverted T waves in lateral leads",
                         "Presence of pathological Q waves in lateral leads",
-                        "Presence of pathological Q waves in inferior leads"
+                        "Presence of deep QS complexes in leads V1 and V2",
+                        "Presence of a slurred S wave in lateral leads",
+                        "Presence of flattened T waves in inferior leads"
                     ],
                     "answer": "Presence of pathological Q waves in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,15 +115,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.30s - 4.42s]",
-                            "[5.56s - 5.72s]",
-                            "[6.39s - 6.64s]",
-                            "[7.05s - 7.16s]"
+                            "[1.52s - 1.75s]",
+                            "[5.25s - 5.37s]",
+                            "[6.04s - 6.16s]",
+                            "[7.63s - 7.84s]"
                         ],
-                        "answer": "[4.30s - 4.42s]",
-                        "answer_idx": 0,
+                        "answer": "[5.25s - 5.37s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],

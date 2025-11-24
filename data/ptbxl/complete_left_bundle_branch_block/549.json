@@ -22,13 +22,13 @@
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Shortening of the PR interval",
-                        "Presence of atrial fibrillation",
                         "Beat-to-beat variation in QRS amplitude",
                         "Prolongation of the QRS duration",
-                        "Presence of a normal QRS duration"
+                        "Reduction in QRS amplitude (Low voltage)",
+                        "Presence of atrial fibrillation"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,14 +45,14 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.81s - 1.98s]",
-                            "[2.03s - 2.21s]",
-                            "[3.22s - 3.44s]",
-                            "[4.46s - 4.64s]",
-                            "[4.89s - 5.07s]"
+                            "[1.14s - 1.33s]",
+                            "[2.17s - 2.36s]",
+                            "[6.02s - 6.18s]",
+                            "[7.93s - 8.00s]",
+                            "[8.20s - 8.36s]"
                         ],
-                        "answer": "[1.81s - 1.98s]",
-                        "answer_idx": 0,
+                        "answer": "[6.02s - 6.18s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -85,14 +85,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
                     "options": [
-                        "Presence of a dominant S wave in leads V1 and V2",
-                        "Presence of ST-segment depression in anterior leads",
                         "Presence of a tall, broad R wave in leads V1 and V2",
+                        "Presence of a dominant S wave in leads V1 and V2",
                         "Presence of a Delta wave (Slurred upstroke)",
-                        "Presence of pathological Q waves in leads V1 and V2"
+                        "Presence of a dominant R wave in leads V1 and V2",
+                        "Presence of atrial fibrillation"
                     ],
                     "answer": "Presence of a dominant S wave in leads V1 and V2",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -105,7 +105,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads V1 and V2 do not show a QRS complex with dominant S wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.68s - 2.91s]",
+                            "[3.24s - 3.43s]",
+                            "[3.51s - 3.67s]",
+                            "[4.89s - 5.12s]",
+                            "[6.31s - 6.55s]"
+                        ],
+                        "answer": "[3.51s - 3.67s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete left bundle branch block?",
                     "options": [

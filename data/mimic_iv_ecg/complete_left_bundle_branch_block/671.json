@@ -22,9 +22,9 @@
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of inverted T waves in anterior leads",
-                        "Variable QRS duration",
+                        "Prolongation of the QT interval",
                         "Prolongation of the QRS duration",
-                        "Shortening of the PR interval",
+                        "Reduction in QRS amplitude (Low voltage)",
                         "Presence of a normal QRS duration"
                     ],
                     "answer": "Prolongation of the QRS duration",
@@ -45,12 +45,12 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.67s - 3.80s]",
-                            "[3.91s - 4.20s]",
-                            "[4.33s - 4.45s]",
-                            "[7.19s - 7.47s]"
+                            "[4.49s - 4.62s]",
+                            "[4.72s - 5.01s]",
+                            "[5.14s - 5.26s]",
+                            "[7.29s - 7.56s]"
                         ],
-                        "answer": "[3.67s - 3.80s]",
+                        "answer": "[4.49s - 4.62s]",
                         "answer_idx": 0,
                         "question_type": "wave_grounding"
                     },
@@ -84,14 +84,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
                     "options": [
-                        "Presence of ST depression in leads V1 and V2",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of a dominant R wave in leads V1 and V2",
+                        "Presence of a Delta wave (Slurred upstroke)",
+                        "Presence of pathological Q waves in leads V1 and V2",
                         "Presence of a dominant S wave in leads V1 and V2",
-                        "Presence of a tall, broad R wave in leads V1 and V2"
+                        "Presence of inverted T waves in anterior leads",
+                        "Presence of a dominant R wave in leads V1 and V2"
                     ],
                     "answer": "Presence of a dominant S wave in leads V1 and V2",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -104,7 +104,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads V1 and V2 do not show a QRS complex with dominant S wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.60s - 0.88s]",
+                            "[5.60s - 5.80s]",
+                            "[7.70s - 7.82s]",
+                            "[7.86s - 7.99s]"
+                        ],
+                        "answer": "[7.86s - 7.99s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete left bundle branch block?",
                     "options": [

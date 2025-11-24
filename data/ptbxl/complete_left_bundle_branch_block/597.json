@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Beat-to-beat variation in QRS amplitude",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Variable QRS duration",
                         "Reduction in QRS amplitude (Low voltage)",
-                        "Prolongation of the QRS duration",
-                        "Shortening of the PR interval",
-                        "Presence of pathological Q waves in lateral leads"
+                        "Presence of a normal QRS duration",
+                        "Prolongation of the QRS duration"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 2,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates a non-prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.34s - 1.56s]",
-                            "[2.59s - 2.68s]",
-                            "[3.57s - 3.69s]",
-                            "[7.75s - 7.94s]"
+                            "[2.43s - 2.54s]",
+                            "[3.91s - 4.09s]",
+                            "[6.69s - 6.78s]",
+                            "[7.60s - 7.90s]"
                         ],
-                        "answer": "[2.59s - 2.68s]",
-                        "answer_idx": 1,
+                        "answer": "[6.69s - 6.78s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {

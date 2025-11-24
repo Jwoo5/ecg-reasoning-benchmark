@@ -21,7 +21,7 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of J-point elevation in lateral leads",
                         "Presence of diffuse concave ST-segment elevation in lateral leads",
                         "Presence of ST-segment depression in lateral leads",
                         "Presence of pathological Q waves in inferior leads",
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[4.93s - 5.13s]",
+                            "[6.33s - 6.61s]",
+                            "[6.68s - 6.79s]",
+                            "[6.86s - 6.97s]"
+                        ],
+                        "answer": "[6.86s - 6.97s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral ischemia?",
                     "options": [
+                        "Presence of camel hump T waves (P on T) in lateral leads",
                         "Presence of inverted T waves in lateral leads",
-                        "Presence of tall, peaked T waves in lateral leads",
                         "Presence of inverted T waves in leads V1 - V4",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of camel hump T waves (P on T) in lateral leads"
+                        "Presence of flattened T waves in lateral leads",
+                        "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of inverted T waves in lateral leads",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -98,14 +111,14 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.53s - 4.65s]",
-                            "[5.44s - 5.55s]",
-                            "[7.54s - 7.74s]",
-                            "[8.57s - 8.75s]"
+                            "[0.99s - 1.10s]",
+                            "[6.14s - 6.25s]",
+                            "[8.23s - 8.45s]",
+                            "[9.28s - 9.47s]"
                         ],
-                        "answer": "[8.57s - 8.75s]",
+                        "answer": "[9.28s - 9.47s]",
                         "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }

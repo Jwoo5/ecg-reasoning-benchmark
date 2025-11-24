@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete right bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of pathological Q waves in leads V1 and V2",
                         "Presence of ST elevation in leads V1 and V2",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of pathological Q waves in leads V1 and V2",
                         "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of a Delta wave (slurred upstroke) in precordial leads"
+                        "Presence of a Delta wave (slurred upstroke) in precordial leads",
+                        "Presence of an RSR' pattern in leads V1 and V2"
                     ],
                     "answer": "Presence of an RSR' pattern in leads V1 and V2",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -59,15 +59,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with RSR' pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with RSR' pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.13s - 0.23s]",
-                            "[3.49s - 3.71s]",
-                            "[4.56s - 4.73s]",
-                            "[5.56s - 5.73s]"
+                            "[3.68s - 3.85s]",
+                            "[4.04s - 4.22s]",
+                            "[5.38s - 5.50s]",
+                            "[7.32s - 7.53s]"
                         ],
-                        "answer": "[5.56s - 5.73s]",
-                        "answer_idx": 3,
+                        "answer": "[4.04s - 4.22s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -87,14 +87,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding in lead V1 or V2, which other diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
-                        "Presence of horizontal ST depression in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of tall, peaked T waves in lateral leads",
+                        "Presence of a slurred S wave in lateral leads",
+                        "Presence of left axis deviation",
                         "Presence of pathological Q waves in lateral leads",
-                        "Presence of a slurred S wave in lateral leads"
+                        "Presence of prominent U waves in lateral leads"
                     ],
                     "answer": "Presence of a slurred S wave in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -131,15 +131,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with slurred S waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with slurred S wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.78s - 1.95s]",
-                            "[2.74s - 2.95s]",
-                            "[7.32s - 7.50s]",
+                            "[1.52s - 1.70s]",
+                            "[5.56s - 5.73s]",
+                            "[5.78s - 5.99s]",
                             "[8.41s - 8.53s]"
                         ],
-                        "answer": "[1.78s - 1.95s]",
-                        "answer_idx": 0,
+                        "answer": "[5.56s - 5.73s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -159,11 +159,11 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
-                        "Shortening of the PR interval",
-                        "Prolongation of the QRS duration",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Variable QRS duration across different beats",
-                        "Presence of a normal QRS duration"
+                        "Prolongation of the QRS duration",
+                        "Presence of a slurred S wave in lateral leads",
+                        "Reduction in QRS amplitude in limb leads",
+                        "Beat-to-beat variation in QRS amplitude"
                     ],
                     "answer": "Prolongation of the QRS duration",
                     "answer_idx": 1,
@@ -183,13 +183,13 @@
                     {
                         "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.61s - 1.74s]",
-                            "[1.78s - 1.95s]",
-                            "[3.49s - 3.71s]",
-                            "[5.81s - 5.99s]"
+                            "[1.31s - 1.61s]",
+                            "[3.86s - 3.98s]",
+                            "[4.79s - 4.97s]",
+                            "[5.01s - 5.23s]"
                         ],
-                        "answer": "[1.78s - 1.95s]",
-                        "answer_idx": 1,
+                        "answer": "[4.79s - 4.97s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {

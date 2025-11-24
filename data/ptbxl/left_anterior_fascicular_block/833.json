@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of a qR pattern in leads I and aVL",
-                        "Presence of left axis deviation",
-                        "Presence of an indeterminate axis",
+                        "Presence of right axis deviation",
                         "Presence of a normal QRS axis",
+                        "Presence of left axis deviation",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of extreme axis deviation"
                     ],
                     "answer": "Presence of left axis deviation",
-                    "answer_idx": 1,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,10 +45,10 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.30s - 3.40s]",
-                            "[4.94s - 5.17s]",
+                            "[1.79s - 1.99s]",
+                            "[3.16s - 3.33s]",
                             "[5.30s - 5.43s]",
-                            "[6.08s - 6.27s]"
+                            "[5.76s - 5.86s]"
                         ],
                         "answer": "[5.30s - 5.43s]",
                         "answer_idx": 2,
@@ -83,10 +83,10 @@
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
                         "Presence of a qR pattern in leads I and aVL",
-                        "Presence of pathological Q waves in leads I and aVL",
                         "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of prominent U waves in leads I and aVL",
-                        "Prolongation of the QRS duration"
+                        "Presence of inverted T waves in leads I and aVL",
+                        "Presence of a broad, notched R wave in lead I and aVL",
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of a qR pattern in leads I and aVL",
                     "answer_idx": 0,
@@ -120,15 +120,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.02s - 3.20s]",
-                            "[7.58s - 7.67s]",
-                            "[8.37s - 8.49s]",
-                            "[8.60s - 8.78s]"
+                            "[0.86s - 0.96s]",
+                            "[1.02s - 1.15s]",
+                            "[1.38s - 1.54s]",
+                            "[3.02s - 3.20s]"
                         ],
-                        "answer": "[8.37s - 8.49s]",
-                        "answer_idx": 2,
+                        "answer": "[1.02s - 1.15s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -148,14 +148,14 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of an rS pattern in leads II, III, and aVF",
+                        "Presence of tall R waves in leads II, III, and aVF",
+                        "Presence of ST-segment depression in lateral leads",
+                        "Presence of deep QS complexes in leads II, III, and aVF",
                         "Presence of ST elevation in leads II, III, and aVF",
-                        "Presence of low voltage QRS complexes in limb leads",
-                        "Presence of ST-segment depression in lateral leads"
+                        "Presence of an rS pattern in leads II, III, and aVF"
                     ],
                     "answer": "Presence of an rS pattern in leads II, III, and aVF",
-                    "answer_idx": 1,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -189,15 +189,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.47s - 3.60s]",
-                            "[6.36s - 6.46s]",
-                            "[7.30s - 7.48s]",
-                            "[7.96s - 8.17s]"
+                            "[1.46s - 1.56s]",
+                            "[2.43s - 2.67s]",
+                            "[7.75s - 7.88s]",
+                            "[9.14s - 9.32s]"
                         ],
-                        "answer": "[3.47s - 3.60s]",
-                        "answer_idx": 0,
+                        "answer": "[7.75s - 7.88s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],

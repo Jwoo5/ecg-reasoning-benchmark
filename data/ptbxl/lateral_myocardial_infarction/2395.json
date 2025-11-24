@@ -23,12 +23,12 @@
                     "options": [
                         "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of ST-segment elevation in leads II, III, and aVF",
-                        "Presence of diffuse ST-segment elevation in all leads",
-                        "Presence of ST-segment depression in lateral leads",
-                        "Presence of ST-segment elevation in lateral leads"
+                        "Presence of ST-segment elevation in lead aVR",
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of diffuse ST-segment elevation in all leads"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.21s - 2.42s]",
+                            "[3.81s - 3.90s]",
+                            "[4.45s - 4.61s]",
+                            "[5.38s - 5.50s]"
+                        ],
+                        "answer": "[3.81s - 3.90s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral myocardial infarction?",
                     "options": [
@@ -59,10 +72,10 @@
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral myocardial infarction?",
                     "options": [
                         "Presence of pathological Q waves in lateral leads",
-                        "Presence of a slurred S wave in lateral leads",
                         "Presence of deep QS complexes in leads V1 and V2",
-                        "Presence of left axis deviation",
-                        "Presence of a broad monophasic R wave in lateral leads"
+                        "Presence of flattened T waves in inferior leads",
+                        "Presence of inverted T waves in lateral leads",
+                        "Presence of a slurred S wave in lateral leads"
                     ],
                     "answer": "Presence of pathological Q waves in lateral leads",
                     "answer_idx": 0,
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show pathological Q waves, in which of the following segments can you observe the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[3.63s - 3.75s]",
+                            "[3.97s - 4.18s]",
+                            "[5.17s - 5.43s]",
+                            "[7.30s - 7.39s]"
+                        ],
+                        "answer": "[7.30s - 7.39s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have lateral myocardial infarction?",
                     "options": [

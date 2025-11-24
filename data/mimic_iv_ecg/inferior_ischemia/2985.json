@@ -21,9 +21,9 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of J-point elevation in inferior leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of ST-segment elevation in inferior leads",
                         "Presence of diffuse concave ST-segment elevation in inferior leads",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of ST-segment depression in inferior leads",
                         "Presence of ST-segment depression in leads I and aVL"
                     ],
@@ -62,15 +62,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.45s - 0.67s]",
-                            "[5.44s - 5.55s]",
-                            "[6.83s - 6.93s]",
-                            "[7.17s - 7.35s]"
+                            "[1.23s - 1.42s]",
+                            "[2.71s - 2.89s]",
+                            "[3.10s - 3.20s]",
+                            "[6.20s - 6.30s]"
                         ],
-                        "answer": "[5.44s - 5.55s]",
-                        "answer_idx": 1,
+                        "answer": "[6.20s - 6.30s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],

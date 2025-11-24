@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose premature atrial complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of a fixed, rigid heart rate without variability",
                         "Presence of premature beats",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of a fixed, rigid heart rate without variability",
                         "Presence of a consistently regular RR interval",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of intermittent ventricular pauses (dropped beats)"
                     ],
                     "answer": "Presence of premature beats",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.19s - 4.30s]",
+                            "[5.47s - 5.58s]",
+                            "[5.93s - 6.06s]",
                             "[6.57s - 6.68s]",
-                            "[6.74s - 6.92s]",
-                            "[9.19s - 9.33s]"
+                            "[8.91s - 9.10s]"
                         ],
                         "answer": "[6.57s - 6.68s]",
-                        "answer_idx": 1,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -72,8 +72,8 @@
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature atrial complexes?",
                     "options": [
                         "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats",
                         "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats",
                         "Presence of a Delta wave (slurred upstroke) on the premature beat",
                         "Presence of a different QRS axis in the premature beat compared to normal beats"
                     ],

@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of diffuse concave ST-segment elevation in anterior leads",
                         "Presence of ST-segment depression in leads II, III, and aVF",
-                        "Presence of J-point elevation in anterior leads",
-                        "Presence of ST-segment depression in anterior leads",
-                        "Presence of ST-segment elevation in anterior leads"
+                        "Presence of left axis deviation",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of ST-segment depression in anterior leads"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.77s - 2.02s]",
+                            "[3.02s - 3.17s]",
+                            "[3.70s - 3.84s]",
+                            "[6.79s - 7.08s]"
+                        ],
+                        "answer": "[3.02s - 3.17s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior ischemia?",
                     "options": [
@@ -58,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior ischemia?",
                     "options": [
-                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of inverted T waves in anterior leads",
+                        "Presence of camel hump T waves (P on T) in anterior leads",
                         "Presence of flattened T waves in anterior leads",
-                        "Presence of tall, peaked T waves in anterior leads",
-                        "Presence of inverted T waves in leads II, III, and aVF",
-                        "Presence of inverted T waves in anterior leads"
+                        "Presence of inverted T waves in leads II, III, and aVF"
                     ],
                     "answer": "Presence of inverted T waves in anterior leads",
-                    "answer_idx": 4,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.04s - 1.22s]",
+                            "[3.22s - 3.46s]",
+                            "[5.67s - 5.82s]",
+                            "[8.21s - 8.41s]"
+                        ],
+                        "answer": "[3.22s - 3.46s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have anterior ischemia?",
                     "options": [

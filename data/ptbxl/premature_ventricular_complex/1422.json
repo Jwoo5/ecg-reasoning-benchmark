@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose premature ventricular complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of grouped beating patterns separated by pauses",
-                        "Presence of a consistently regular RR interval",
+                        "Presence of gradual acceleration and deceleration of the heart rate",
+                        "Presence of premature beats",
                         "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of an irregularly irregular ventricular rhythm",
-                        "Presence of premature beats"
+                        "Presence of grouped beating patterns separated by pauses"
                     ],
                     "answer": "Presence of premature beats",
-                    "answer_idx": 4,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.47s - 1.62s]",
-                            "[2.93s - 3.04s]",
-                            "[4.76s - 4.91s]",
-                            "[7.18s - 7.38s]"
+                            "[2.69s - 2.90s]",
+                            "[3.45s - 3.61s]",
+                            "[3.67s - 3.92s]",
+                            "[6.93s - 7.05s]"
                         ],
-                        "answer": "[1.47s - 1.62s]",
-                        "answer_idx": 0,
+                        "answer": "[3.45s - 3.61s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -71,14 +71,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature ventricular complexes?",
                     "options": [
-                        "Presence of significant QRS prolongation in the premature beat compared to normal beats",
                         "Absence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Presence of a Delta wave (slurred upstroke) on the premature beat",
+                        "Similarity of QRS morphology between the premature beat and normal beats",
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of ST elevation in the premature beat",
-                        "Similarity of QRS morphology between the premature beat and normal beats"
+                        "Presence of significant QRS prolongation in the premature beat compared to normal beats"
                     ],
                     "answer": "Presence of significant QRS prolongation in the premature beat compared to normal beats",
-                    "answer_idx": 0,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {

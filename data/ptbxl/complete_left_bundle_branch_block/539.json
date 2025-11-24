@@ -21,11 +21,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
+                        "Beat-to-beat variation in QRS amplitude",
+                        "Presence of a normal QRS duration",
                         "Shortening of the PR interval",
-                        "Presence of atrial fibrillation",
-                        "Variable QRS duration",
                         "Prolongation of the QRS duration",
-                        "Presence of a normal QRS duration"
+                        "Presence of ST-segment depression in anterior leads"
                     ],
                     "answer": "Prolongation of the QRS duration",
                     "answer_idx": 3,
@@ -45,11 +45,11 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.79s - 1.01s]",
+                            "[0.52s - 0.79s]",
                             "[1.12s - 1.29s]",
-                            "[3.50s - 3.68s]",
-                            "[5.12s - 5.38s]",
-                            "[8.90s - 9.15s]"
+                            "[6.45s - 6.64s]",
+                            "[7.38s - 7.57s]",
+                            "[8.09s - 8.29s]"
                         ],
                         "answer": "[1.12s - 1.29s]",
                         "answer_idx": 1,
@@ -85,14 +85,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
                     "options": [
-                        "Presence of pathological Q waves in leads V1 and V2",
                         "Presence of atrial fibrillation",
-                        "Presence of a Delta wave (Slurred upstroke)",
                         "Presence of a dominant S wave in leads V1 and V2",
-                        "Presence of a tall, broad R wave in leads V1 and V2"
+                        "Presence of pathological Q waves in leads V1 and V2",
+                        "Presence of a dominant R wave in leads V1 and V2",
+                        "Presence of ST depression in leads V1 and V2"
                     ],
                     "answer": "Presence of a dominant S wave in leads V1 and V2",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -105,7 +105,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads V1 and V2 do not show a QRS complex with dominant S wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.23s - 2.42s]",
+                            "[2.70s - 2.85s]",
+                            "[3.52s - 3.68s]",
+                            "[4.55s - 4.84s]",
+                            "[6.71s - 6.86s]"
+                        ],
+                        "answer": "[6.71s - 6.86s]",
+                        "answer_idx": 4,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete left bundle branch block?",
                     "options": [

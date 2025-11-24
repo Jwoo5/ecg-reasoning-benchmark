@@ -22,10 +22,10 @@
                     "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of ST-segment elevation in inferior leads",
-                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of diffuse concave ST-segment elevation in inferior leads",
                         "Presence of ST-segment depression in inferior leads",
-                        "Presence of ST-segment depression in leads I and aVL",
-                        "Presence of diffuse concave ST-segment elevation in inferior leads"
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of J-point elevation in inferior leads"
                     ],
                     "answer": "Presence of ST-segment depression in inferior leads",
                     "answer_idx": 2,
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.70s - 1.90s]",
+                            "[4.28s - 4.39s]",
+                            "[4.77s - 4.94s]",
+                            "[5.05s - 5.17s]"
+                        ],
+                        "answer": "[4.28s - 4.39s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior ischemia?",
                     "options": [
@@ -58,11 +71,11 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior ischemia?",
                     "options": [
-                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of tall, peaked T waves in inferior leads",
                         "Presence of inverted T waves in inferior leads",
-                        "Presence of flattened T waves in inferior leads",
                         "Presence of inverted T waves in leads I and aVL",
-                        "Presence of Camel-hump T waves (P on T) in inferior leads"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of flattened T waves in inferior leads"
                     ],
                     "answer": "Presence of inverted T waves in inferior leads",
                     "answer_idx": 1,
@@ -78,7 +91,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.11s - 1.39s]",
+                            "[2.42s - 2.52s]",
+                            "[5.42s - 5.62s]",
+                            "[6.89s - 7.01s]"
+                        ],
+                        "answer": "[5.42s - 5.62s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have inferior ischemia?",
                     "options": [

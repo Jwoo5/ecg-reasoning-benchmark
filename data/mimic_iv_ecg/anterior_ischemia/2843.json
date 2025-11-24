@@ -21,11 +21,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of flattened T waves in lateral leads",
-                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of diffuse concave ST-segment elevation in anterior leads",
+                        "Presence of inverted T waves in lateral leads",
                         "Presence of ST-segment depression in anterior leads",
-                        "Presence of J-point elevation in anterior leads",
-                        "Presence of diffuse concave ST-segment elevation in anterior leads"
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of J-point elevation in anterior leads"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
                     "answer_idx": 2,
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the anterior leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[4.12s - 4.22s]",
+                            "[7.12s - 7.21s]",
+                            "[8.61s - 8.89s]",
+                            "[9.28s - 9.45s]"
+                        ],
+                        "answer": "[7.12s - 7.21s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have anterior ischemia?",
                     "options": [
@@ -59,13 +72,13 @@
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior ischemia?",
                     "options": [
                         "Presence of flattened T waves in anterior leads",
+                        "Presence of inverted T waves in leads II, III, and aVF",
+                        "Presence of camel hump T waves (P on T) in anterior leads",
                         "Presence of inverted T waves in anterior leads",
-                        "Presence of inverted T waves in lateral leads",
-                        "Presence of tall, peaked T waves in anterior leads",
-                        "Presence of camel hump T waves (P on T) in anterior leads"
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Presence of inverted T waves in anterior leads",
-                    "answer_idx": 1,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,11 +115,11 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the inverted T wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.29s - 0.39s]",
-                            "[4.14s - 4.33s]",
-                            "[7.12s - 7.21s]",
+                            "[2.31s - 2.40s]",
+                            "[6.92s - 7.18s]",
                             "[9.28s - 9.45s]"
                         ],
                         "answer": "[9.28s - 9.45s]",

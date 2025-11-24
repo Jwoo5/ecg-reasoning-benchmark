@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
-                        "Presence of atrial fibrillation",
-                        "Presence of left posterior fascicular block",
-                        "Presence of right bundle branch block",
                         "Presence of left anterior fascicular block",
-                        "Presence of left bundle branch block"
+                        "Presence of right bundle branch block",
+                        "Presence of left bundle branch block",
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of left posterior fascicular block"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 2,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -58,11 +58,11 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of a normal QRS axis",
+                        "Prolongation of the QRS duration",
                         "Presence of right axis deviation",
-                        "Presence of an indeterminate axis",
-                        "Presence of atrial fibrillation",
-                        "Presence of a superior axis deviation"
+                        "Presence of a superior axis deviation",
+                        "Presence of left axis deviation",
+                        "Presence of a normal QRS axis"
                     ],
                     "answer": "Presence of right axis deviation",
                     "answer_idx": 1,
@@ -83,9 +83,9 @@
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.18s - 0.33s]",
-                            "[4.68s - 4.86s]",
+                            "[3.23s - 3.51s]",
+                            "[3.94s - 4.23s]",
                             "[5.48s - 5.70s]",
-                            "[5.78s - 6.07s]",
                             "[6.79s - 7.07s]"
                         ],
                         "answer": "[0.18s - 0.33s]",
@@ -120,11 +120,11 @@
                 "criterion_selection": {
                     "question": "Since the axis criterion was not met, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of inverted T waves in lateral leads",
                         "Presence of a negative P wave terminal force in lead V1 > 4mV\u00b7ms",
+                        "Presence of inverted T waves in lateral leads",
                         "Presence of a dominant R wave in V1",
-                        "Presence of a wide, notched R wave in lead V1",
-                        "Presence of an Epsilon wave in lead V1"
+                        "Presence of a dominant S wave in lead V1",
+                        "Presence of a wide, notched R wave in lead V1"
                     ],
                     "answer": "Presence of a dominant R wave in V1",
                     "answer_idx": 2,
@@ -144,14 +144,14 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.56s - 3.71s]",
-                            "[4.69s - 4.89s]",
-                            "[6.79s - 7.07s]",
-                            "[7.35s - 7.59s]",
-                            "[8.25s - 8.49s]"
+                            "[1.74s - 1.94s]",
+                            "[3.81s - 4.01s]",
+                            "[4.70s - 4.89s]",
+                            "[6.58s - 6.72s]",
+                            "[8.03s - 8.23s]"
                         ],
-                        "answer": "[3.56s - 3.71s]",
-                        "answer_idx": 0,
+                        "answer": "[6.58s - 6.72s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     },
                     {

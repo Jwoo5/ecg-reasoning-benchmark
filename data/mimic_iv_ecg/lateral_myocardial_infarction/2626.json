@@ -23,8 +23,8 @@
                     "options": [
                         "Presence of diffuse ST-segment elevation in all leads",
                         "Presence of ST-segment depression in lateral leads",
+                        "Presence of pathological Q waves in anterior leads",
                         "Presence of ST-segment elevation in leads II, III, and aVF",
-                        "Presence of flattened T waves in inferior leads",
                         "Presence of ST-segment elevation in lateral leads"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
@@ -41,7 +41,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[5.77s - 5.86s]",
+                            "[7.16s - 7.35s]",
+                            "[7.70s - 7.92s]",
+                            "[8.26s - 8.36s]"
+                        ],
+                        "answer": "[8.26s - 8.36s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have lateral myocardial infarction?",
                     "options": [
@@ -59,13 +72,13 @@
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral myocardial infarction?",
                     "options": [
                         "Presence of deep QS complexes in leads V1 and V2",
-                        "Presence of a slurred S wave in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of pathological Q waves in lateral leads",
+                        "Presence of a broad monophasic R wave in lateral leads",
+                        "Presence of flattened T waves in anterior leads",
                         "Presence of inverted T waves in lateral leads"
                     ],
                     "answer": "Presence of pathological Q waves in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -100,15 +113,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.22s - 1.31s]",
-                            "[6.14s - 6.37s]",
-                            "[6.68s - 6.79s]",
-                            "[8.47s - 8.68s]"
+                            "[0.28s - 0.38s]",
+                            "[2.29s - 2.40s]",
+                            "[2.49s - 2.66s]",
+                            "[8.48s - 8.71s]"
                         ],
-                        "answer": "[6.68s - 6.79s]",
-                        "answer_idx": 2,
+                        "answer": "[2.29s - 2.40s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],

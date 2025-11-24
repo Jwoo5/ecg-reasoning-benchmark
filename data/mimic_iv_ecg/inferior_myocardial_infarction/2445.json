@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose inferior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment elevation in inferior leads",
-                        "Presence of pathological Q waves in anterior leads",
+                        "Presence of ST-segment elevation in leads V1 and V2",
                         "Presence of ST-segment depression in leads II, III, and aVF",
                         "Presence of PR-segment depression in inferior leads",
-                        "Presence of ST-segment elevation in leads V1 and V2"
+                        "Presence of ST-segment elevation in inferior leads",
+                        "Presence of pathological Q waves in anterior leads"
                     ],
                     "answer": "Presence of ST-segment elevation in inferior leads",
-                    "answer_idx": 0,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -41,7 +41,21 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that the inferior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.17s - 2.30s]",
+                            "[2.38s - 2.55s]",
+                            "[4.32s - 4.59s]",
+                            "[5.09s - 5.23s]",
+                            "[7.78s - 8.03s]"
+                        ],
+                        "answer": "[2.17s - 2.30s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on the finding identified above, does this patient have inferior myocardial infarction?",
                     "options": [
@@ -59,13 +73,13 @@
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose inferior myocardial infarction?",
                     "options": [
                         "Presence of QS complexes in leads V1 and V2",
-                        "Presence of a Delta wave (slurred upstroke) in inferior leads",
-                        "Presence of pathological Q waves in inferior leads",
-                        "Presence of inverted T waves in lateral leads",
-                        "Presence of pathological Q waves in leads V1, V2, V3, and V4"
+                        "Presence of pathological Q waves in leads V1, V2, V3, and V4",
+                        "Prolongation of the QRS duration",
+                        "Presence of fragmented QRS complexes in inferior leads",
+                        "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of pathological Q waves in inferior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -99,16 +113,16 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.57s - 3.78s]",
-                            "[4.84s - 4.98s]",
-                            "[6.75s - 6.94s]",
-                            "[7.29s - 7.42s]",
-                            "[9.34s - 9.51s]"
+                            "[0.91s - 1.06s]",
+                            "[1.45s - 1.59s]",
+                            "[1.70s - 1.83s]",
+                            "[1.92s - 2.09s]",
+                            "[7.73s - 8.01s]"
                         ],
-                        "answer": "[4.84s - 4.98s]",
-                        "answer_idx": 1,
+                        "answer": "[1.70s - 1.83s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],

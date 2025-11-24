@@ -21,14 +21,14 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of an indeterminate axis",
                         "Presence of left axis deviation",
-                        "Presence of right axis deviation",
+                        "Presence of extreme axis deviation",
+                        "Presence of ST-segment depression in anterior leads",
                         "Presence of a normal QRS axis",
-                        "Presence of inverted T waves in lateral leads"
+                        "Presence of a vertical QRS axis"
                     ],
                     "answer": "Presence of left axis deviation",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[5.44s - 5.66s]",
-                            "[5.84s - 5.95s]",
-                            "[6.66s - 6.92s]",
-                            "[9.08s - 9.20s]"
+                            "[2.09s - 2.29s]",
+                            "[4.34s - 4.52s]",
+                            "[4.57s - 4.68s]",
+                            "[5.84s - 5.95s]"
                         ],
                         "answer": "[5.84s - 5.95s]",
-                        "answer_idx": 1,
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -82,14 +82,14 @@
                 "criterion_selection": {
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of prominent U waves in leads I and aVL",
                         "Presence of inverted T waves in leads I and aVL",
+                        "Presence of pathological Q waves in leads I and aVL",
+                        "Presence of ST-segment depression in anterior leads",
                         "Presence of a qR pattern in leads I and aVL",
-                        "Presence of ST-segment depression in lateral leads",
                         "Presence of an rS pattern in leads I and aVL"
                     ],
                     "answer": "Presence of a qR pattern in leads I and aVL",
-                    "answer_idx": 2,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -120,15 +120,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.45s - 0.67s]",
-                            "[1.52s - 1.73s]",
-                            "[3.44s - 3.55s]",
-                            "[6.41s - 6.52s]"
+                            "[2.88s - 3.00s]",
+                            "[3.59s - 3.70s]",
+                            "[4.32s - 4.58s]",
+                            "[8.26s - 8.47s]"
                         ],
-                        "answer": "[6.41s - 6.52s]",
-                        "answer_idx": 3,
+                        "answer": "[3.59s - 3.70s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -148,14 +148,14 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of an rS pattern in leads II, III, and aVF",
-                        "Presence of inverted T waves in lateral leads",
                         "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of ST elevation in leads II, III, and aVF",
-                        "Presence of deep QS complexes in leads II, III, and aVF"
+                        "Presence of deep QS complexes in leads II, III, and aVF",
+                        "Presence of ST-segment depression in lateral leads",
+                        "Presence of an rS pattern in leads II, III, and aVF",
+                        "Presence of tall R waves in leads II, III, and aVF"
                     ],
                     "answer": "Presence of an rS pattern in leads II, III, and aVF",
-                    "answer_idx": 0,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -189,15 +189,15 @@
                         "question_type": "lead_grounding"
                     },
                     {
-                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complexes with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.97s - 1.16s]",
-                            "[5.69s - 5.81s]",
-                            "[6.41s - 6.52s]",
-                            "[7.71s - 7.92s]"
+                            "[1.92s - 2.03s]",
+                            "[4.57s - 4.68s]",
+                            "[4.90s - 5.10s]",
+                            "[7.78s - 7.96s]"
                         ],
-                        "answer": "[6.41s - 6.52s]",
-                        "answer_idx": 2,
+                        "answer": "[1.92s - 2.03s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],

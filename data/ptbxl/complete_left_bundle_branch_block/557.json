@@ -24,8 +24,8 @@
                         "Evidence of consistent 1:1 atrioventricular conduction",
                         "Prolongation of the QRS duration",
                         "Prolongation of the QT interval",
-                        "Presence of a normal QRS duration",
-                        "Beat-to-beat variation in QRS amplitude"
+                        "Variable QRS duration",
+                        "Presence of a normal QRS duration"
                     ],
                     "answer": "Prolongation of the QRS duration",
                     "answer_idx": 1,
@@ -45,10 +45,10 @@
                     {
                         "question": "In which of the following leads can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.90s - 4.01s]",
-                            "[4.22s - 4.47s]",
+                            "[2.81s - 2.94s]",
+                            "[5.24s - 5.45s]",
                             "[6.15s - 6.28s]",
-                            "[8.98s - 9.26s]"
+                            "[7.45s - 7.70s]"
                         ],
                         "answer": "[6.15s - 6.28s]",
                         "answer_idx": 2,
@@ -86,9 +86,9 @@
                     "options": [
                         "Presence of a tall, broad R wave in leads V1 and V2",
                         "Presence of a dominant R wave in leads V1 and V2",
-                        "Presence of ST depression in leads V1 and V2",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of a dominant S wave in leads V1 and V2",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Presence of a Delta wave (Slurred upstroke)"
                     ],
                     "answer": "Presence of a dominant S wave in leads V1 and V2",
                     "answer_idx": 3,
@@ -104,7 +104,20 @@
                     "answer_idx": 1,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "To verify that leads V1 and V2 do not show a QRS complex with dominant S wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.00s - 2.25s]",
+                            "[2.47s - 2.74s]",
+                            "[2.98s - 3.10s]",
+                            "[8.17s - 8.29s]"
+                        ],
+                        "answer": "[2.98s - 3.10s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
                     "question": "Based on all the findings identified so far, does this patient have complete left bundle branch block?",
                     "options": [
