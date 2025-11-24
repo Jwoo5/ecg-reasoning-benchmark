@@ -61,8 +61,7 @@ class Inferencer():
             conversation = MultiTurnGenerator(model_name)
 
             answer_list = []
-
-            initial_question = sample["data"]["initial_diagnosis"]["question"]
+            initial_question = prompt.format(sample["data"]["initial_diagnosis"]["question"], sample["data"]["initial_diagnosis"]["options"])
             initial_diagnosis = self.QuestionAnswerer(initial_question, ecg, ecg_image, model_name, loaded_model_instance)
             
             conversation.init_chat(ecg, ecg_image, initial_question, initial_diagnosis)
@@ -74,9 +73,13 @@ class Inferencer():
             sample["data"]["initial_diagnosis"]["path"] = path
 
             for data in sample["data"][f"path_{path}"]:
-                #text = prompt.format(data["question"], data["options"])
+                
+                question = data["question"]
+                options = data["options"]
+                answer_idx = data["answer_idx"]
+                model_response = self.QuestionAnswerer(question, ecg, ecg_image, model_name, loaded_model_instance)
 
-                model_response = self.QuestionAnswerer(conversation.content, ecg, ecg_image, model_name, loaded_model_instance)
+                conversation.add_chat(question, options, answer_idx)
                 if model_response:
                     data["response_raw"] = model_response.strip()
                 else:
