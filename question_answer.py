@@ -1,4 +1,4 @@
-from constants import *
+import logging
 import json 
 import os
 import argparse
@@ -13,16 +13,20 @@ from tqdm import tqdm
 
 from models import build_model
 from data_utils import get_dataset_loader
+from constants import *
+
+logger = logging.getLogger(__name__)
 
 class Inferencer():
     def __init__(self, args):
         self.dir = args.dir if args.dir is not None else DIRECTORY
         self.save_dir = args.savedir if args.savedir is not None else OUTPUT_DIRECTORY
         self.dataset_list = args.dataset if args.dataset else DATASET_LIST
-        self.model_list = args.model if args.model is not None else MODEL_LIST
-        
+
+        self.target_model = args.model
+        self.hf_model_variant = args.hf_model_variant
+    
         self.ecg_base_dir = args.ecg_base_dir 
-        self.target_model = self.model_list[0]
 
     def ECGVisualizer(self, ecg, sampling_rate):
         ecg = ecg.numpy()
@@ -87,7 +91,7 @@ class Inferencer():
         model_name = self.target_model
 
         # 1. Load Model (Once per process execution)
-        current_model_instance = build_model(model_name)
+        current_model_instance = build_model(model_name, model_variant=self.hf_model_variant)
 
         # 2. Iterate over Datasets
         for dataset in self.dataset_list:
@@ -131,7 +135,14 @@ if __name__ == '__main__':
     parser.add_argument('-ds', '--dataset', nargs='*', help = 'mimic_iv_ecg, ptbxl')
     # parser.add_argument('-dx', '--diagnosis', nargs='*', help = '"lateral_myocardial_infarction", "complete_right_bundle_branch_block", "left_posterior_fascicular_block", "premature_atrial_complex", "left_anterior_fascicular_block", "complete_left_bundle_branch_block", "third_degree_av_block", "first_degree_av_block", "inferior_ischemia", "lateral_ischemia", "left_ventricular_hypertrophy", "premature_ventricular_complex", "inferior_myocardial_infarction", "anterior_myocardial_infarction", "second_degree_av_block", "anterior_ischemia", "right_ventricular_hypertrophy"]')
     # parser.add_argument('-l', '--label', nargs='*', help = 'positive, negative')
-    parser.add_argument('-m', '--model', nargs='*', help = '"gpt", "gemini", "qwen", "llama", "gem", "pulse", "opentslm", "llava-med", "medgemma","hulu-med"')
+    parser.add_argument('-m', '--model', help = '"gpt", "gemini", "qwen", "llama", "gem", "pulse", "opentslm", "llava-med", "medgemma","hulu-med"')
+    parser.add_argument(
+        "--hf-model-variant",
+        type=str,
+        default="4b-it",
+        help="Model variant for HuggingFace models (e.g., '4b-it', '27b-it')"
+    )
+
     parser.add_argument("--ecg-base-dir", type=str, default="/nfs_edlab/hschung/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3", help="Base directory for ECG signal files")
     args = parser.parse_args()
 
