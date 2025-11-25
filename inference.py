@@ -297,7 +297,7 @@ def main(args):
 
     n = N_MIMIC_IV_ECG if source_dataset.lower() == "mimic_iv_ecg" else N_PTBXL
     n_path1 = 0
-    with tqdm(total=n) as pbar:
+    with tqdm(total=n, ncols=100) as pbar:
         for dx in os.listdir(os.path.join(root_dir, source_dataset)):
             for fname in glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json")):
                 with open(fname, "r") as f:
