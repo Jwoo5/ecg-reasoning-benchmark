@@ -4,7 +4,12 @@ import re
 import torch
 
 from .. import BaseModel, register_model
-from .llava.constants import DEFAULT_IMAGE_TOKEN, IMAGE_TOKEN_INDEX
+from .llava.constants import (
+    DEFAULT_IM_END_TOKEN,
+    DEFAULT_IM_START_TOKEN,
+    DEFAULT_IMAGE_TOKEN,
+    IMAGE_TOKEN_INDEX,
+)
 from .llava.mm_utils import process_images, tokenizer_image_token
 from .llava.model.builder import load_pretrained_model
 
@@ -26,35 +31,42 @@ class GEMLlavaModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def get_response(self, conversation) -> str:
-        prompt = ""
+    def get_prompt(self, conversation) -> str:
+        seps = [" ", "</s>"]
 
-        first_user_turn_idx = 0
-        if conversation.conversation[0]["role"] == "system":
-            first_user_turn_idx = 1
-
-            prompt += conversation.conversation[0]["text"] + "\n\n"
-
+        assert (
+            conversation.conversation[0]["role"] == "system"
+        ), "The first turn in the conversation must be from the system."
         assert (
             conversation.conversation[-1]["role"] == "user"
         ), "The last turn in the conversation must be from the user."
         assert (
-            "image" in conversation.conversation[first_user_turn_idx]
+            "image" in conversation.conversation[1]
         ), "The conversation must contain an ECG image in the first user turn."
 
-        if len(conversation.conversation) > first_user_turn_idx + 1:
-            prompt += "**Dialogue history is as follows:**\n\n"
-            for turn in conversation.conversation[first_user_turn_idx:-1]:
-                if turn["role"] == "user":
-                    prompt += turn["text"]
-                elif turn["role"] == "model":
-                    prompt += turn["text"] + "\n\n"
-            prompt += "**Dialogue history ends.**\n\n"
+        prompt = conversation.conversation[0]["text"] + seps[0]
+        for i, turn in enumerate(conversation.conversation[1:]):
+            if turn["role"] == "user":
+                if i == 0:
+                    prompt += f"USER: {DEFAULT_IMAGE_TOKEN}\n"
+                else:
+                    prompt += f"USER: "
+                prompt += f"{turn['question']} "
+                prompt += "Choose from the following options:\n"
+                for option in turn["options"]:
+                    prompt += f"- {option}\n"
+                prompt += "\n" + seps[i % 2]
+            elif turn["role"] == "model":
+                prompt += f"ASSISTANT: {turn['text']}\n\n" + seps[i % 2]
 
-        prompt += conversation.conversation[-1]["text"]
+        prompt += "ASSISTANT: "
 
-        ecg_signal = conversation.conversation[first_user_turn_idx]["signal"]
-        ecg_image = conversation.conversation[first_user_turn_idx]["image"]
+        return prompt
+
+    def get_response(self, conversation) -> str:
+        prompt = self.get_prompt(conversation)
+        ecg_signal = conversation.conversation[1]["signal"]
+        ecg_image = conversation.conversation[1]["image"]
 
         response = self.generate(prompt, ecg_signal, ecg_image)
 
@@ -65,9 +77,8 @@ class GEMLlavaModel(BaseModel):
             self.model.device, dtype=torch.float16
         )
 
-        full_prompt = DEFAULT_IMAGE_TOKEN + "\n" + prompt
         input_ids = (
-            tokenizer_image_token(full_prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
+            tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
             .unsqueeze(0)
             .to(self.model.device)
         )

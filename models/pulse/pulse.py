@@ -8,7 +8,6 @@ from .LLaVA.llava.constants import (
     DEFAULT_IM_END_TOKEN,
     DEFAULT_IM_START_TOKEN,
     DEFAULT_IMAGE_TOKEN,
-    IMAGE_PLACEHOLDER,
     IMAGE_TOKEN_INDEX,
 )
 from .LLaVA.llava.conversation import conv_templates
@@ -40,68 +39,53 @@ class PulseModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def get_response(self, conversation) -> str:
-        prompt = ""
+    def get_prompt(self, conversation) -> str:
+        seps = [" ", "</s>"]
 
-        first_user_turn_idx = 0
-        if conversation.conversation[0]["role"] == "system":
-            first_user_turn_idx = 1
-
-            prompt += conversation.conversation[0]["text"] + "\n\n"
-
+        assert (
+            conversation.conversation[0]["role"] == "system"
+        ), "The first turn in the conversation must be from the system."
         assert (
             conversation.conversation[-1]["role"] == "user"
         ), "The last turn in the conversation must be from the user."
         assert (
-            "image" in conversation.conversation[first_user_turn_idx]
+            "image" in conversation.conversation[1]
         ), "The conversation must contain an ECG image in the first user turn."
 
-        if len(conversation.conversation) > first_user_turn_idx + 1:
-            prompt += "**Dialogue history is as follows:**\n\n"
-            for turn in conversation.conversation[first_user_turn_idx:-1]:
-                if turn["role"] == "user":
-                    prompt += turn["text"]
-                elif turn["role"] == "model":
-                    prompt += turn["text"] + "\n\n"
-            prompt += "**Dialogue history ends.**\n\n"
+        prompt = conversation.conversation[0]["text"] + seps[0]
+        for i, turn in enumerate(conversation.conversation[1:]):
+            if turn["role"] == "user":
+                if i == 0:
+                    prompt += f"USER: {DEFAULT_IMAGE_TOKEN}\n"
+                else:
+                    prompt += f"USER: "
+                prompt += f"{turn['question']} "
+                prompt += "Choose from the following options:\n"
+                for option in turn["options"]:
+                    prompt += f"- {option}\n"
+                prompt += "\n" + seps[i % 2]
+            elif turn["role"] == "model":
+                prompt += f"ASSISTANT: {turn['text']}\n\n" + seps[i % 2]
 
-        prompt += conversation.conversation[-1]["text"]
+        prompt += "ASSISTANT: "
 
-        ecg_signal = conversation.conversation[first_user_turn_idx]["signal"]
-        ecg_image = conversation.conversation[first_user_turn_idx]["image"]
+        return prompt
+
+    def get_response(self, conversation) -> str:
+        prompt = self.get_prompt(conversation)
+        ecg_image = conversation.conversation[1]["image"]
 
         response = self.generate(prompt, ecg_image)
 
         return response
 
-    def generate(self, prompt, ecg_image, **kwargs):
+    def generate(self, prompt: str, ecg_image, **kwargs):
         images_tensor = process_images([ecg_image], self.image_processor, self.model.config).to(
             self.model.device, dtype=torch.float16
         )
 
-        qs = prompt
-        image_token_se = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN
-
-        if IMAGE_PLACEHOLDER in qs:
-            if self.model.config.mm_use_im_start_end:
-                qs = re.sub(IMAGE_PLACEHOLDER, image_token_se, qs)
-            else:
-                qs = re.sub(IMAGE_PLACEHOLDER, DEFAULT_IMAGE_TOKEN, qs)
-        else:
-            if self.model.config.mm_use_im_start_end:
-                qs = image_token_se + "\n" + qs
-            else:
-                qs = DEFAULT_IMAGE_TOKEN + "\n" + qs
-
-        conv_mode = "llava_v1"
-
-        conv = conv_templates[conv_mode].copy()
-        conv.append_message(conv.roles[0], qs)
-        conv.append_message(conv.roles[1], None)
-        prompt_formatted = conv.get_prompt()
-
         input_ids = (
-            tokenizer_image_token(prompt_formatted, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
+            tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
             .unsqueeze(0)
             .to(self.model.device)
         )
@@ -112,9 +96,9 @@ class PulseModel(BaseModel):
                 images=images_tensor,
                 image_sizes=[ecg_image.size],
                 do_sample=False,
-                temperature=0.0,
+                # temperature=0.0,
                 max_new_tokens=300,
-                use_cache=True,
+                # use_cache=True,
             )
 
         return self.tokenizer.batch_decode(output, skip_special_tokens=True)[0].strip()

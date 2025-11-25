@@ -15,9 +15,13 @@ class Conversation:
             self.conversation.append({"role": "system", "text": prompt})
 
     def add_user_turn(
-        self, message: str, ecg_signal: Optional[torch.Tensor] = None, ecg_image: Optional[Image.Image] = None
+        self,
+        question: str,
+        options: List[str],
+        ecg_signal: Optional[torch.Tensor] = None,
+        ecg_image: Optional[Image.Image] = None,
     ) -> None:
-        turn = {"role": "user", "text": message}
+        turn = {"role": "user", "question": question, "options": options}
         if ecg_signal is not None:
             turn["signal"] = ecg_signal
         if ecg_image:
@@ -27,16 +31,6 @@ class Conversation:
     def add_model_turn(self, message: str) -> None:
         turn = {"role": "model", "text": message}
         self.conversation.append(turn)
-
-    def add_single_turn(
-        self, user_message: str, model_message: str, ecg_image: Optional[Image.Image] = None
-    ) -> None:
-        self.add_user_turn(user_message, ecg_image)
-        self.add_model_turn(model_message)
-
-    def add_multi_turn(self, turns: List[Dict[str, Union[str, Image.Image]]]) -> None:
-        for turn in turns:
-            self.conversation.append(turn)
 
     # def init_chat(self, ecg, ecg_image, question, answer):
 
@@ -73,6 +67,13 @@ class Conversation:
     #     # if "gemini" in self.model_name:
     #     #     self.conversation.append({"role": "user", "parts" : [{"text" : f"question : {question}, option : {option}"}]})
     #     #     self.conversation.append({"role": "model", "parts" : [{"text" : f"{option[answer_idx]}"}]})
+
+
+def make_letter_indexed(options: List[str]) -> List[str]:
+    indexed_options = []
+    for i, option in enumerate(options):
+        indexed_options.append(f"({chr(ord('a') + i)}) {option}")
+    return indexed_options
 
 
 def base64_image_encoder(image: Image.Image):

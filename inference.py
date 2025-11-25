@@ -16,7 +16,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from models import BaseModel, build_model, get_model_name
-from utils import Conversation
+from utils import Conversation, make_letter_indexed
 
 logger = logging.getLogger(__name__)
 
@@ -24,22 +24,16 @@ logger = logging.getLogger(__name__)
 N_MIMIC_IV_ECG = 3355
 N_PTBXL = 3076
 
-# TODO
-system_prompt = """**Instructions:**
+system_prompt = """You are an expert cardiologist assistant evaluating a specific ECG case.
+
+**Instructions:**
 1. Read the question and the provided options.
 2. Analyze the ECG systematically to answer the question.
-3. Select the answer(s) from the given options that best address the question.
-4. **Constraint:** Your response must contain **ONLY** the full text of the selected option \
-(including the letter index). Do not include any explanation, reasoning, or extra words.
-"""
+3. Select the answer from the given options that correspond to the findings **visible in the \
+ECG image** or the correct diagnostic criterion requested.
+4. **Constraint:** Your response must contain **ONLY** the full text of the selected option. \
+Do not include any explanation, reasoning, or extra words.
 
-prompt = """**Question:**
-{}
-
-**Options:**
-{}
-
-**Answer:**
 """
 
 
@@ -150,18 +144,6 @@ class Inferencer:
 
         return image
 
-    def make_step_message(self, step: Dict) -> str:
-        question = step["question"]
-        options = step["options"]
-        options_str = ""
-        for i, option in enumerate(options):
-            options_str += f"({chr(ord('a') + i)}) {option}, "
-        # remove trailing comma and space
-        options_str = options_str.rstrip(", ")
-
-        message = prompt.format(question, options_str)
-        return message
-
     def get_response(self, conversation: Conversation) -> str:
         return self.model.get_response(conversation)
 
@@ -173,22 +155,20 @@ class Inferencer:
         ecg_image: Optional[Image.Image] = None,
         return_response: bool = False,
     ) -> Optional[str]:
-        message = self.make_step_message(step)
-        conversation.add_user_turn(message, ecg_signal=ecg_signal, ecg_image=ecg_image)
+        question = step["question"]
+        # indexed_options = make_letter_indexed(step["options"])
+        indexed_options = step["options"]
+
+        conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
         response = self.get_response(conversation)
         step["model_response"] = response
 
         # add model turn to conversation with the ground truth answer
         if "answer" in step:
             if isinstance(step["answer"], list):
-                answer_str = ""
-                for ans_idx, ans in zip(step["answer_idx"], step["answer"]):
-                    answer_str += f"({chr(ord('a') + ans_idx)}) {ans}, "
-                answer_str = answer_str.rstrip(", ")
+                answer_str = ", ".join(step["answer"])
             else:
-                ans_idx = step["answer_idx"]
-                ans = step["answer"]
-                answer_str = f"({chr(ord('a') + ans_idx)}) {ans}"
+                answer_str = step["answer"]
 
             conversation.add_model_turn(answer_str)
         else:
@@ -197,23 +177,23 @@ class Inferencer:
         if return_response:
             return response
 
-    def parse_response(self, response: str) -> Union[int, List[int]]:
-        # parse the response to get the selected option index, where the response is expected to be
-        # (a) ..., (b) ..., etc.
-        # if the response is comma separated options, return all selected options as a list of indices
-        # TODO we can parse the answer by exact match including the text to make it more concrete
-        # e.g., match with "(a) left anterior fascicular block", not just "(a)"
+    # def parse_response(self, response: str) -> Union[int, List[int]]:
+    #     # parse the response to get the selected option index, where the response is expected to be
+    #     # (a) ..., (b) ..., etc.
+    #     # if the response is comma separated options, return all selected options as a list of indices
+    #     # TODO we can parse the answer by exact match including the text to make it more concrete
+    #     # e.g., match with "(a) left anterior fascicular block", not just "(a)"
 
-        pattern = r"\(([a-z])\)"
-        matches = re.findall(pattern, response)
-        if matches:
-            indices = [ord(match) - ord("a") for match in matches]
-            if len(indices) == 1:
-                return indices[0]
-            else:
-                return indices
-        else:
-            return -1
+    #     pattern = r"\(([a-z])\)"
+    #     matches = re.findall(pattern, response)
+    #     if matches:
+    #         indices = [ord(match) - ord("a") for match in matches]
+    #         if len(indices) == 1:
+    #             return indices[0]
+    #         else:
+    #             return indices
+    #     else:
+    #         return -1
 
     def inference(self, sample: Dict, ecg_base_dir: str) -> Dict:
         sample_result = sample.copy()
@@ -227,8 +207,6 @@ class Inferencer:
         )
         ecg_image = self.visualize_ecg(ecg_tensor, sampling_rate)
 
-        # TODO add system prompt?
-        # TODO pass ecg_image to system prompt, instead of initial user prompt?
         conversation = Conversation(system_prompt)
 
         sample["data"]["initial_diagnostic_question"]["question"] += (
@@ -244,23 +222,15 @@ class Inferencer:
             return_response=True,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
-        
-        parsed_response_idx = self.parse_response(response)
-        if parsed_response_idx in [0, 1]:  # 0 stands for "Yes", 1 stands for "No"
+        if response.strip().lower() in ["yes", "no"]:
             eval_path = 1
-        elif parsed_response_idx == -1:
-            # it is hit when the response does not include letter index (e.g., (a), (b), etc.)
-            if response.strip().lower() in ["yes", "no"]:
-                eval_path = 1
-            elif response.strip().lower() == "i don't know":
-                eval_path = 2
-            else:
-                logger.warning(f"Could not parse response: {response}")
-                sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
-                sample_result["metadata"]["parsing_error"] = True
-                return sample_result
-        else:
+        elif response.strip().lower() == "i don't know":
             eval_path = 2
+        else:
+            logger.warning(f"Could not parse response: {response}")
+            sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
+            sample_result["metadata"]["parsing_error"] = True
+            return sample_result
 
         if eval_path == 1:
             pass
