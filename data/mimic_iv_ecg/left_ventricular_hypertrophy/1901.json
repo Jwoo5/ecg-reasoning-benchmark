@@ -185,22 +185,18 @@
                 "criterion_selection": {
                     "question": "In addition to the voltage criteria you have evaluated so far, which other voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
-                        [
-                            "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                        ],
+                        "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV*s",
                         "Sum of R wave in V1 and S wave in V5 > 1.1mV",
-                        "P wave terminal force in lead V1 > 4mV\u00b7ms",
+                        "P wave terminal force in lead V1 > 4mV*ms",
                         "Presence of flattened T waves in inferior leads",
                         "Presence of low voltage QRS complexes (< 0.5mV) in limb leads"
                     ],
-                    "answer": [
-                        "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                    ],
+                    "answer": "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV*s",
                     "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, is the Cornell Product calculated on this ECG greater than 0.244mV\u00b7s? Note that the Cornell Product is calculated as the sum of the S amplitude in lead V3 and the R amplitude in lead aVL, multiplied by the QRS duration in seconds.",
+                    "question": "Regarding the criterion you selected, is the Cornell Product calculated on this ECG greater than 0.244mV*s? Note that the Cornell Product is calculated as the sum of the S amplitude in lead V3 and the R amplitude in lead aVL, multiplied by the QRS duration in seconds.",
                     "options": [
                         "Yes",
                         "No"

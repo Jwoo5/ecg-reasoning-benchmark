@@ -186,20 +186,16 @@
                     "options": [
                         "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
                         "Presence of pathological Q waves in inferior leads",
-                        [
-                            "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                        ],
-                        "P wave terminal force in lead V1 > 4mV\u00b7ms",
+                        "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV*s",
+                        "P wave terminal force in lead V1 > 4mV*ms",
                         "Sum of R wave in V1 and S wave in V5 > 1.1mV"
                     ],
-                    "answer": [
-                        "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                    ],
+                    "answer": "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV*s",
                     "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, is the Cornell Product calculated on this ECG greater than 0.244mV\u00b7s? Note that the Cornell Product is calculated as the sum of the S amplitude in lead V3 and the R amplitude in lead aVL, multiplied by the QRS duration in seconds.",
+                    "question": "Regarding the criterion you selected, is the Cornell Product calculated on this ECG greater than 0.244mV*s? Note that the Cornell Product is calculated as the sum of the S amplitude in lead V3 and the R amplitude in lead aVL, multiplied by the QRS duration in seconds.",
                     "options": [
                         "Yes",
                         "No"

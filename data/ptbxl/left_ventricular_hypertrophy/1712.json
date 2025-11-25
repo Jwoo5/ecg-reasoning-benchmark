@@ -184,21 +184,17 @@
                     "question": "In addition to the voltage criteria you have evaluated so far, which other voltage criterion should be evaluated to diagnose left ventricular hypertrophy?",
                     "options": [
                         "Evidence of consistent 1:1 atrioventricular conduction",
-                        [
-                            "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                        ],
+                        "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV*s",
                         "R wave amplitude in lead V1 > 0.7mV",
                         "Sum of R wave in V1 and S wave in V5 > 1.1mV",
                         "Ratio of R wave to S wave amplitude in lead V1 > 1.0"
                     ],
-                    "answer": [
-                        "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV\u00b7s"
-                    ],
+                    "answer": "Cornell Product ((R amplitude in aVL + S amplitude in V3) x QRS duration) > 0.244mV*s",
                     "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, is the Cornell Product calculated on this ECG greater than 0.244mV\u00b7s? Note that the Cornell Product is calculated as the sum of the S amplitude in lead V3 and the R amplitude in lead aVL, multiplied by the QRS duration in seconds.",
+                    "question": "Regarding the criterion you selected, is the Cornell Product calculated on this ECG greater than 0.244mV*s? Note that the Cornell Product is calculated as the sum of the S amplitude in lead V3 and the R amplitude in lead aVL, multiplied by the QRS duration in seconds.",
                     "options": [
                         "Yes",
                         "No"
