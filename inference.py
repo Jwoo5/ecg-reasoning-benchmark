@@ -249,13 +249,23 @@ class Inferencer:
         parsed_response_idx = self.parse_response(response)
         if parsed_response_idx in [0, 1]:  # 0 stands for "Yes", 1 stands for "No"
             eval_path = 1
-            # del sample_result["data"]["path_2"] # TODO
         elif parsed_response_idx == -1:
-            sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
-            sample_result["metadata"]["parsing_error"] = True
-            return sample_result
+            # it is hit when the response does not include letter index (e.g., (a), (b), etc.)
+            if response.strip().lower() in ["yes", "no"]:
+                eval_path = 1
+            elif response.strip().lower() == "i don't know":
+                eval_path = 2
+            else:
+                sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
+                sample_result["metadata"]["parsing_error"] = True
+                return sample_result
         else:
             eval_path = 2
+
+        if eval_path == 1:
+            pass
+            # del sample_result["data"]["path_2"]
+        elif eval_path == 2:
             del sample_result["data"]["path_1"]
 
         sample_result["data"]["initial_diagnostic_question"]["eval_path"] = eval_path
