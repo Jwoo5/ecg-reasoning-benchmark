@@ -209,10 +209,13 @@ class Inferencer:
 
         conversation = Conversation(system_prompt)
 
-        # sample["data"]["initial_diagnostic_question"]["question"] += (
-        #     " If you choose 'I don't know', you will receive guidance on how to systematically "
-        #     "analyze the ECG to improve your decision-making skills."
-        # )
+        # disable this prompt for pulse / gem models as they tend to misinterpret it, which
+        # seems due that they were not instruction-tuned.
+        if not ("pulse" in self.model_name.lower() or "gem" in self.model_name.lower()):
+            sample["data"]["initial_diagnostic_question"]["question"] += (
+                " If you choose 'I don't know', you will receive guidance on how to systematically "
+                "analyze the ECG to improve your decision-making skills."
+            )
 
         response = self.proceed_step(
             step=sample["data"]["initial_diagnostic_question"],
