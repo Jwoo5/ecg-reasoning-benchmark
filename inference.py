@@ -209,10 +209,10 @@ class Inferencer:
 
         conversation = Conversation(system_prompt)
 
-        sample["data"]["initial_diagnostic_question"]["question"] += (
-            " If you choose 'I don't know', you will receive guidance on how to systematically "
-            "analyze the ECG to improve your decision-making skills."
-        )
+        # sample["data"]["initial_diagnostic_question"]["question"] += (
+        #     " If you choose 'I don't know', you will receive guidance on how to systematically "
+        #     "analyze the ECG to improve your decision-making skills."
+        # )
 
         response = self.proceed_step(
             step=sample["data"]["initial_diagnostic_question"],
