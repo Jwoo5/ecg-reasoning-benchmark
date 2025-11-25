@@ -213,7 +213,6 @@ class Inferencer:
             else:
                 return indices
         else:
-            logger.warning(f"Could not parse response: {response}")
             return -1
 
     def inference(self, sample: Dict, ecg_base_dir: str) -> Dict:
@@ -256,6 +255,7 @@ class Inferencer:
             elif response.strip().lower() == "i don't know":
                 eval_path = 2
             else:
+                logger.warning(f"Could not parse response: {response}")
                 sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
                 sample_result["metadata"]["parsing_error"] = True
                 return sample_result
