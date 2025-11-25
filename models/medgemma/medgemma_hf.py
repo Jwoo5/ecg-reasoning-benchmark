@@ -1,4 +1,10 @@
-from transformers import AutoProcessor, AutoModelForImageTextToText
+# AutoModelForImageTextToText is available in transformers >= 4.50.0,
+# while other models are available in earlier versions (e.g., gem, pulse)
+# so we catch the import error here for backward compatibility.
+try:
+    from transformers import AutoProcessor, AutoModelForImageTextToText
+except:
+    pass
 from transformers import BitsAndBytesConfig
 import logging
 import torch
@@ -12,14 +18,14 @@ logger = logging.getLogger(__name__)
 class MedGemmaHFModel(BaseModel):
     def __init__(
         self,
-        model_variant: str = "4b-it",
+        hf_model_variant: str = "4b-it",
         use_quantization: bool = True,
         is_thinking: bool = False
     ):
-        self.model_variant = model_variant
+        self.hf_model_variant = hf_model_variant
         self.is_thinking = is_thinking
 
-        model_id = f"google/medgemma-{model_variant}"
+        model_id = f"google/medgemma-{hf_model_variant}"
 
         model_kwargs = dict(
             torch_dtype=torch.bfloat16,
@@ -32,8 +38,11 @@ class MedGemmaHFModel(BaseModel):
         self.model = AutoModelForImageTextToText.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
+    def get_response(self, conversation):
+        raise NotImplementedError
+
     def generate(self, prompt, ecg_image, **kwargs):
-        if "27b" in self.model_variant and self.is_thinking:
+        if "27b" in self.hf_model_variant and self.is_thinking:
             system_instruction = f"SYSTEM INSTRUCTION: think silently if needed. You are an expert cardiologist."
             max_new_tokens = 1300
         else:
@@ -72,9 +81,9 @@ class MedGemmaHFModel(BaseModel):
         return response
 
     @classmethod
-    def build_model(cls, model_variant="4b-it", use_quantization=True, is_thinking=False, **kwargs):
+    def build_model(cls, hf_model_variant="4b-it", use_quantization=True, is_thinking=False, **kwargs):
         return cls(
-            model_variant=model_variant,
+            hf_model_variant=hf_model_variant,
             use_quantization=use_quantization,
             is_thinking=is_thinking
         )
