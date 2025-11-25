@@ -285,7 +285,7 @@ def main(args):
     n_path1 = 0
     with tqdm(total=n, ncols=140) as pbar:
         for dx in sorted(os.listdir(os.path.join(root_dir, source_dataset))):
-            for fname in glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json")):
+            for fname in sorted(glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json"))):
                 with open(fname, "r") as f:
                     sample = json.load(f)
 
