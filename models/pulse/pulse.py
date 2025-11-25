@@ -70,7 +70,7 @@ class PulseModel(BaseModel):
         ecg_signal = conversation.conversation[first_user_turn_idx]["signal"]
         ecg_image = conversation.conversation[first_user_turn_idx]["image"]
 
-        response = self.generate(prompt, ecg_signal, ecg_image)
+        response = self.generate(prompt, ecg_image)
 
         return response
 
