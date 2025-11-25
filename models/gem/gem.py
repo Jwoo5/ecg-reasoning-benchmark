@@ -5,8 +5,6 @@ import torch
 
 from .. import BaseModel, register_model
 from .llava.constants import (
-    DEFAULT_IM_END_TOKEN,
-    DEFAULT_IM_START_TOKEN,
     DEFAULT_IMAGE_TOKEN,
     IMAGE_TOKEN_INDEX,
 )
@@ -87,7 +85,11 @@ class GEMLlavaModel(BaseModel):
 
         with torch.inference_mode():
             output = self.model.generate(
-                inputs=input_ids, images=image_tensor, ecgs=ecg_tensor, max_new_tokens=300
+                inputs=input_ids,
+                images=image_tensor,
+                ecgs=ecg_tensor,
+                max_new_tokens=300,
+                do_sample=False,
             )
 
         return self.tokenizer.decode(output[0, input_ids.shape[0] :], skip_special_tokens=True).strip()
