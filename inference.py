@@ -15,7 +15,6 @@ import wfdb
 from PIL import Image
 from tqdm import tqdm
 
-from constants import *
 from models import BaseModel, build_model, get_model_name
 from utils import Conversation
 
@@ -94,7 +93,7 @@ class Inferencer:
         source_dataset: str,
         ecg_id: str,
         base_dir: str,
-        subject_id: Optional[str] = None,  # for mimic iv ecg
+        subject_id: Optional[str] = None,  # for mimic-iv-ecg
     ) -> Tuple[torch.Tensor, int]:
         if source_dataset.lower() == "ptbxl":
             assert os.path.exists(os.path.join(base_dir, "records500")), (
