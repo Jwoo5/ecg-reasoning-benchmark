@@ -213,7 +213,8 @@ class Inferencer:
             else:
                 return indices
         else:
-            raise ValueError(f"Could not parse response: {response}")
+            logger.warning(f"Could not parse response: {response}")
+            return -1
 
     def inference(self, sample: Dict, ecg_base_dir: str) -> Dict:
         sample_result = sample.copy()
@@ -243,15 +244,20 @@ class Inferencer:
             ecg_image=ecg_image,
             return_response=True,
         )
+        sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
+        
         parsed_response_idx = self.parse_response(response)
         if parsed_response_idx in [0, 1]:  # 0 stands for "Yes", 1 stands for "No"
             eval_path = 1
             # del sample_result["data"]["path_2"] # TODO
+        elif parsed_response_idx == -1:
+            sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
+            sample_result["metadata"]["parsing_error"] = True
+            return sample_result
         else:
             eval_path = 2
             del sample_result["data"]["path_1"]
 
-        sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
         sample_result["data"]["initial_diagnostic_question"]["eval_path"] = eval_path
 
         if eval_path == 2:
