@@ -2,28 +2,31 @@
 # while other models are available in earlier versions (e.g., gem, pulse)
 # so we catch the import error here for backward compatibility.
 try:
-    from transformers import AutoProcessor, AutoModelForImageTextToText
+    from transformers import AutoModelForImageTextToText, AutoProcessor
 except:
     pass
-from transformers import BitsAndBytesConfig
 import logging
-import torch
 
-from .. import BaseModel
-from .. import register_model
+import torch
+from transformers import BitsAndBytesConfig
+
+from .. import BaseModel, register_model
 
 logger = logging.getLogger(__name__)
 
-@register_model("medgemma_hf")
+
+@register_model("medgemma-hf")
 class MedGemmaHFModel(BaseModel):
     def __init__(
-        self,
-        hf_model_variant: str = "4b-it",
-        use_quantization: bool = True,
-        is_thinking: bool = False
+        self, hf_model_variant: str = "4b-it", use_quantization: bool = True, is_thinking: bool = False
     ):
         self.hf_model_variant = hf_model_variant
         self.is_thinking = is_thinking
+
+        if "27b" in hf_model_variant and is_thinking:
+            self.max_new_tokens = 1300
+        else:
+            self.max_new_tokens = 300
 
         model_id = f"google/medgemma-{hf_model_variant}"
 
@@ -39,41 +42,46 @@ class MedGemmaHFModel(BaseModel):
         self.processor = AutoProcessor.from_pretrained(model_id)
 
     def get_response(self, conversation):
-        raise NotImplementedError
+        assert (
+            conversation.conversation[0]["role"] == "system"
+        ), "The first turn in the conversation must be from the system."
+        assert (
+            conversation.conversation[-1]["role"] == "user"
+        ), "The last turn in the conversation must be from the user."
+        assert (
+            "image" in conversation.conversation[1]
+        ), "The conversation must contain an ECG image in the first user turn."
 
-    def generate(self, prompt, ecg_image, **kwargs):
+        system = conversation.conversation[0]["text"]
+
         if "27b" in self.hf_model_variant and self.is_thinking:
-            system_instruction = f"SYSTEM INSTRUCTION: think silently if needed. You are an expert cardiologist."
-            max_new_tokens = 1300
-        else:
-            system_instruction = f"You are an expert cardiologist."
-            max_new_tokens = 300
-        
-        messages = [
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": system_instruction}]
-            },
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {"type": "image", "image": ecg_image}
-                ]
-            }
-        ]
+            system += f"SYSTEM INSTRUCTION: think silently if needed."
 
+        messages = [{"role": "system", "content": [{"type": "text", "text": system}]}]
+        for i, turn in enumerate(conversation.conversation[1:]):
+            if turn["role"] == "user":
+                user_text = f"{turn['question']} Choose from the following options:\n"
+                for option in turn["options"]:
+                    user_text += f"- {option}\n"
+                user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
+                if i == 0:
+                    user["content"].append({"type": "image", "image": turn["image"]})
+                messages.append(user)
+            elif turn["role"] == "model":
+                messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
+
+        response = self.generate(messages)
+
+        return response
+
+    def generate(self, messages, **kwargs):
         inputs = self.processor.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            tokenize=True,
-            return_dict=True,
-            return_tensors="pt"
+            messages, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt"
         ).to(self.model.device, dtype=torch.bfloat16)
 
         input_len = inputs["input_ids"].shape[-1]
         with torch.inference_mode():
-            output = self.model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
+            output = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, do_sample=False)
             output = output[0][input_len:]
 
         response = self.processor.decode(output, skip_special_tokens=True).strip()
@@ -83,9 +91,7 @@ class MedGemmaHFModel(BaseModel):
     @classmethod
     def build_model(cls, hf_model_variant="4b-it", use_quantization=True, is_thinking=False, **kwargs):
         return cls(
-            hf_model_variant=hf_model_variant,
-            use_quantization=use_quantization,
-            is_thinking=is_thinking
+            hf_model_variant=hf_model_variant, use_quantization=use_quantization, is_thinking=is_thinking
         )
 
     def load_state_dict(self, **kwargs):
