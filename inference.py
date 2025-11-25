@@ -32,7 +32,7 @@ system_prompt = """You are an expert cardiologist assistant evaluating a specifi
 3. Select the answer from the given options that correspond to the findings **visible in the \
 ECG image** or the correct diagnostic criterion requested.
 4. **Constraint:** Your response must contain **ONLY** the full text of the selected option. \
-Do not include any explanation, reasoning, or extra words.
+Do not include any uncertainty, explanation, reasoning, or extra words.
 
 """
 
