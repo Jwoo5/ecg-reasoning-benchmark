@@ -278,9 +278,13 @@ class Inferencer:
                 if isinstance(step, list):
                     # it is hit for grounding steps
                     for g_step in step:
-                        response = self.proceed_step(g_step, conversation, return_response=True)
+                        response = self.proceed_step(
+                            g_step, conversation, return_response=True, verbose=self.debug
+                        )
                 else:
-                    response = self.proceed_step(step, conversation, return_response=False)
+                    response = self.proceed_step(
+                        step, conversation, return_response=False, verbose=self.debug
+                    )
 
         return sample_result
 
