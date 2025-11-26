@@ -1,8 +1,6 @@
 # ecg-reasoning-benchmark
-1. GEM, PULSE 둘 다 돌아감 (different conda environment, different imports (./gem and ./pulse))
+1. Open-TSLM sota model for ecg (OpenTSLM/llama3b-ecg-flamingo) OpenTSLM_Inference.py currently working code in OpenTSLM repo src directory, based on ECGQACoTQADataset of OpenTSLM repo.
 
-2. GEM, PULSE 인퍼런스로 현재 나오는 answer도 post-processing 해야되는 상태 (ex. ###Answer: (a) Yes 혹은 그냥 yes로 나옴)
+2. Note: 100hz sampled ecgs used as input for OpenTSLM model (12, 1000), can use 100hz data for PTB-XL but must downsample for mimic-iv-ecg. Many of the outputs produce none despite providing options and requiring the model to choose from options. 
 
-3. checkpoints 디렉토리 만들어서 (https://github.com/YubaoZhao/ECG-Chat) 에서 ECG-CoCa 체크포인트 다운받아서 넣어줘야됨 (ecg-chat 학회 억셉되서 체크포인트 공개함) 
-
-4. TODO: ECG-Chat, process output  
+3. Todo: Integrate into current framework
