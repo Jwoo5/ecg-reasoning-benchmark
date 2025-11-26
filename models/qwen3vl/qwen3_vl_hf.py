@@ -25,7 +25,8 @@ class Qwen3VLHFModel(BaseModel):
         model_id = f"Qwen/Qwen3-VL-{hf_model_variant}"
 
         model_kwargs = dict(
-            dtype="bfloat16",
+            dtype=torch.bfloat16,
+            attn_implementation="flash_attention_2",
             device_map="auto",
         )
 
