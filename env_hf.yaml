@@ -5,8 +5,8 @@ dependencies:
   - python=3.12
   - pip:
       - accelerate==1.12.0
-      # - torch==2.7.1 # adjust for cuda version as needed
-      # - torchvision==0.22.1 # adjust for cuda version as needed
+      # - torch==2.6.0 # adjust for cuda version as needed
+      # - torchvision==0.21.0 # adjust for cuda version as needed
       # - flash-attn==2.7.3 # adjust for torch and cuda version as needed
       - ecg-plot==0.2.8
       - matplotlib==3.10.7
