@@ -63,9 +63,16 @@ class MedGemmaHFModel(BaseModel):
                 user_text = f"{turn['question']} Choose from the following options:\n"
                 for option in turn["options"]:
                     user_text += f"- {option}\n"
-                user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 if i == 0:
-                    user["content"].append({"type": "image", "image": turn["image"]})
+                    user = {
+                        "role": "user",
+                        "content": [
+                            {"type": "image", "image": turn["image"]},
+                            {"type": "text", "text": user_text},
+                        ],
+                    }
+                else:
+                    user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 messages.append(user)
             elif turn["role"] == "model":
                 messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
