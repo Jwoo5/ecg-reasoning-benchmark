@@ -221,7 +221,7 @@ class Inferencer:
                 " If you choose 'I don't know', you will receive guidance on how to systematically "
                 "analyze the ECG to improve your decision-making skills."
             )
-        elif self.model_name in ["qwen3-vl-hf"]:
+        if self.model_name in ["qwen3-vl-hf"]:
             required_base64_image = True
 
         response = self.proceed_step(
