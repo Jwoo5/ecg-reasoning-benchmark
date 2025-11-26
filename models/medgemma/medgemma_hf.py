@@ -60,9 +60,20 @@ class MedGemmaHFModel(BaseModel):
         messages = [{"role": "system", "content": [{"type": "text", "text": system}]}]
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
-                user_text = f"{turn['question']} Choose from the following options:\n"
+                user_text = f"Question: {turn['question']}\n\n"
+                if i == 0:
+                    user_text += "Options:\n"
+                elif "select all possible leads" in turn["question"].lower():
+                    user_text += (
+                        "This question may have multiple correct answers from the following options:\n"
+                    )
+                else:
+                    user_text += "This question has one of the following options as the correct answer:\n"
                 for option in turn["options"]:
                     user_text += f"- {option}\n"
+                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                user_text += "include any uncertainty, explanation, reasoning, or extra words."
+
                 if i == 0:
                     user = {
                         "role": "user",

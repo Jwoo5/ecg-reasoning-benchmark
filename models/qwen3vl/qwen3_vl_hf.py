@@ -2,16 +2,17 @@
 # while other models are available in earlier versions (e.g., gem, pulse)
 # so we catch the import error here for backward compatibility.
 try:
-    from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
+    from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 except:
     pass
 import logging
+
 import torch
 
-from .. import BaseModel
-from .. import register_model
+from .. import BaseModel, register_model
 
 logger = logging.getLogger(__name__)
+
 
 @register_model("qwen3-vl-hf")
 class Qwen3VLHFModel(BaseModel):
@@ -44,43 +45,37 @@ class Qwen3VLHFModel(BaseModel):
         ), "The conversation must contain an ECG image in the first user turn."
 
         system = conversation.conversation[0]["text"]
-        messages = [
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": system}]
-            }
-        ]
+        messages = [{"role": "system", "content": [{"type": "text", "text": system}]}]
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
-                user_text = f"{turn['question']} Choose from the following options:\n"
+                user_text = f"Question: {turn['question']}\n\n"
+                if i == 0:
+                    user_text += "Options:\n"
+                elif "select all possible leads" in turn["question"].lower():
+                    user_text += (
+                        "This question may have multiple correct answers from the following options:\n"
+                    )
+                else:
+                    user_text += "This question has one of the following options as the correct answer:\n"
                 for option in turn["options"]:
                     user_text += f"- {option}\n"
+                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                user_text += "include any uncertainty, explanation, reasoning, or extra words."
+
                 if i == 0:
                     user = {
                         "role": "user",
                         "content": [
                             {"type": "image", "image": f"data:image/png;base64,{turn['image']}"},
-                            {"type": "text", "text": user_text}
-                        ]
+                            {"type": "text", "text": user_text},
+                        ],
                     }
                 else:
-                    user = {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": user_text}
-                        ]
-                    }
+                    user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 messages.append(user)
             elif turn["role"] == "model":
-                messages.append(
-                    {
-                        "role": "assistant",
-                        "content": [
-                            {"type": "text", "text": turn["text"]}
-                        ]
-                    }
-                )
-        
+                messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
+
         response = self.generate(messages)
 
         return response

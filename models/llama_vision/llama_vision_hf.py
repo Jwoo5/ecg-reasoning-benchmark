@@ -2,16 +2,17 @@
 # while other models are available in earlier versions (e.g., gem, pulse)
 # so we catch the import error here for backward compatibility.
 try:
-    from transformers import MllamaForConditionalGeneration, AutoProcessor
+    from transformers import AutoProcessor, MllamaForConditionalGeneration
 except:
     pass
 import logging
+
 import torch
 
-from .. import BaseModel
-from .. import register_model
+from .. import BaseModel, register_model
 
 logger = logging.getLogger(__name__)
+
 
 @register_model("llama-3.2-vision-hf")
 class LlamaVisionHFModel(BaseModel):
@@ -43,44 +44,39 @@ class LlamaVisionHFModel(BaseModel):
         ), "The conversation must contain an ECG image in the first user turn."
 
         system = conversation.conversation[0]["text"]
-        messages = [
-            {
-                "role": "system",
-                "content": system
-            }
-        ]
+        messages = [{"role": "system", "content": system}]
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
-                user_text = f"{turn['question']} Choose from the following options:\n"
+                user_text = f"Question: {turn['question']}\n\n"
+                if i == 0:
+                    user_text += "Options:\n"
+                elif "select all possible leads" in turn["question"].lower():
+                    user_text += (
+                        "This question may have multiple correct answers from the following options:\n"
+                    )
+                else:
+                    user_text += "This question has one of the following options as the correct answer:\n"
                 for option in turn["options"]:
                     user_text += f"- {option}\n"
+                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                user_text += "include any uncertainty, explanation, reasoning, or extra words."
+
                 if i == 0:
                     user = {
                         "role": "user",
-                        "content": [
-                            {"type": "image"},
-                            {"type": "text", "text": user_text}
-                        ]
+                        "content": [{"type": "image"}, {"type": "text", "text": user_text}],
                     }
                 else:
-                    user = {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": user_text}
-                        ]
-                    }
+                    user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 messages.append(user)
             elif turn["role"] == "model":
-                messages.append(
-                    {
-                        "role": "assistant",
-                        "content": [
-                            {"type": "text", "text": turn["text"]}
-                        ]
-                    }
-                )
-        
+                messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
+
+        print(f"\nQuestion: {conversation.conversation[-1]['question']}")
+
         response = self.generate(messages, conversation.conversation[1]["image"])
+
+        print(f"Response: {response}")
 
         return response
 
@@ -89,12 +85,9 @@ class LlamaVisionHFModel(BaseModel):
             messages,
             add_generation_prompt=True,
         )
-        inputs = self.processor(
-            ecg_image,
-            input_text,
-            add_special_tokens=False,
-            return_tensors="pt"
-        ).to(self.model.device)
+        inputs = self.processor(ecg_image, input_text, add_special_tokens=False, return_tensors="pt").to(
+            self.model.device
+        )
 
         input_len = inputs["input_ids"].shape[-1]
         with torch.inference_mode():

@@ -16,7 +16,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from models import BaseModel, build_model, get_model_name
-from utils import Conversation, make_letter_indexed, base64_image_encoder
+from utils import Conversation, base64_image_encoder, make_letter_indexed
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +31,6 @@ system_prompt = """You are an expert cardiologist assistant evaluating a specifi
 2. Analyze the ECG systematically to answer the question.
 3. Select the answer from the given options that correspond to the findings **visible in the \
 ECG image** or the correct diagnostic criterion requested.
-4. **Constraint:** Your response must contain **ONLY** the full text of the selected option. \
-Do not include any uncertainty, explanation, reasoning, or extra words.
 
 """
 
@@ -216,11 +214,13 @@ class Inferencer:
         required_base64_image = False
         # disable this prompt for pulse / gem models as they tend to misinterpret it, which
         # seems due that they were not instruction-tuned.
-        if self.model_name not in ["pulse", "gem"]:
-            sample["data"]["initial_diagnostic_question"]["question"] += (
-                " If you choose 'I don't know', you will receive guidance on how to systematically "
-                "analyze the ECG to improve your decision-making skills."
-            )
+        # if self.model_name not in ["pulse", "gem"]:
+        sample["data"]["initial_diagnostic_question"]["question"] += (
+            " If you don't know how to analyze the ECG to answer this question, choose "
+            "'I don't know'. Then, you will receive guidance on how to systematically "
+            "analyze the ECG to improve your decision-making skills. NEVER choose 'I don't know' "
+            "because you are uncertain or want to avoid answering the question. "
+        )
         if self.model_name in ["qwen3-vl-hf"]:
             required_base64_image = True
 
@@ -238,10 +238,17 @@ class Inferencer:
         elif response.strip().lower() == "i don't know":
             eval_path = 2
         else:
-            logger.warning(f"Could not parse response: {response}")
-            sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
-            sample_result["metadata"]["parsing_error"] = True
-            return sample_result
+            if "final answer" in response.lower():
+                final_answer = response.lower().split("final answer")[-1].strip(" :.\n").strip()
+                if "i don't know" in final_answer:
+                    eval_path = 2
+                elif "yes" in final_answer or "no" in final_answer:
+                    eval_path = 1
+                else:
+                    logger.warning(f"Could not parse response: {response}")
+                    sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
+                    sample_result["metadata"]["parsing_error"] = True
+                    return sample_result
 
         if eval_path == 1:
             pass
@@ -294,6 +301,7 @@ def main(args):
 
     n = N_MIMIC_IV_ECG if source_dataset.lower() == "mimic_iv_ecg" else N_PTBXL
     n_path1 = 0
+    n_failed = 0
     with tqdm(total=n, ncols=140) as pbar:
         for dx in sorted(os.listdir(os.path.join(root_dir, source_dataset))):
             for fname in sorted(glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json"))):
@@ -303,9 +311,11 @@ def main(args):
                 result = inferencer.inference(sample, ecg_base_dir)
                 if result["data"]["initial_diagnostic_question"]["eval_path"] == 1:
                     n_path1 += 1
+                elif result["data"]["initial_diagnostic_question"]["eval_path"] == -1:
+                    n_failed += 1
 
                 pbar.set_description(
-                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{pbar.n+1}"
+                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{pbar.n+1-n_failed} | Failed: {n_failed}"
                 )
 
                 save_path = os.path.join(output_dir, model_name, source_dataset, dx, os.path.basename(fname))

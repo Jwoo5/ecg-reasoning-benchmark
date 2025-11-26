@@ -7,12 +7,13 @@ except:
     pass
 
 import logging
+
 import torch
 
-from .. import BaseModel
-from .. import register_model
+from .. import BaseModel, register_model
 
 logger = logging.getLogger(__name__)
+
 
 @register_model("hulumed-hf")
 class HuluMedHFModel(BaseModel):
@@ -25,6 +26,7 @@ class HuluMedHFModel(BaseModel):
             from transformers.image_utils import VideoInput
         except:
             import transformers
+
             raise ImportError(
                 "Hulu-Med HF model requires to import VideoInput from transformers.image_utils, "
                 "which is available in transformers==4.51.2 but not in your current version "
@@ -58,43 +60,34 @@ class HuluMedHFModel(BaseModel):
         ), "The conversation must contain an ECG image in the first user turn."
 
         system = conversation.conversation[0]["text"]
-        messages = [
-            {
-                "role": "system",
-                "content": system
-            }
-        ]
+        messages = [{"role": "system", "content": system}]
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
-                user_text = f"{turn['question']} Choose from the following options:\n"
+                user_text = f"Question: {turn['question']}\n\n"
+                if i == 0:
+                    user_text += "Options:\n"
+                elif "select all possible leads" in turn["question"].lower():
+                    user_text += (
+                        "This question may have multiple correct answers from the following options:\n"
+                    )
+                else:
+                    user_text += "This question has one of the following options as the correct answer:\n"
                 for option in turn["options"]:
                     user_text += f"- {option}\n"
+                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                user_text += "include any uncertainty, explanation, reasoning, or extra words."
+
                 if i == 0:
                     user = {
                         "role": "user",
-                        "content": [
-                            {"type": "image"},
-                            {"type": "text", "text": user_text}
-                        ]
+                        "content": [{"type": "image"}, {"type": "text", "text": user_text}],
                     }
                 else:
-                    user = {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": user_text}
-                        ]
-                    }
+                    user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 messages.append(user)
             elif turn["role"] == "model":
-                messages.append(
-                    {
-                        "role": "assistant",
-                        "content": [
-                            {"type": "text", "text": turn["text"]}
-                        ]
-                    }
-                )
-        
+                messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
+
         response = self.generate(messages, conversation.conversation[1]["image"])
 
         return response
@@ -106,10 +99,7 @@ class HuluMedHFModel(BaseModel):
         )
 
         inputs = self.processor(
-            images=[ecg_image],
-            text=input_text,
-            add_special_tokens=False,
-            return_tensors="pt"
+            images=[ecg_image], text=input_text, add_special_tokens=False, return_tensors="pt"
         ).to(self.model.device, dtype=torch.bfloat16)
 
         with torch.inference_mode():
