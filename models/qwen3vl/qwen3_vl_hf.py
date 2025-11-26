@@ -8,7 +8,6 @@ except:
 import logging
 import torch
 
-from utils import base64_image_encoder
 from .. import BaseModel
 from .. import register_model
 
@@ -57,11 +56,10 @@ class Qwen3VLHFModel(BaseModel):
                 for option in turn["options"]:
                     user_text += f"- {option}\n"
                 if i == 0:
-                    base64_image = base64_image_encoder(turn["image"])
                     user = {
                         "role": "user",
                         "content": [
-                            {"type": "image", "image": f"data:image/png;base64,{base64_image}"},
+                            {"type": "image", "image": f"data:image/png;base64,{turn['image']}"},
                             {"type": "text", "text": user_text}
                         ]
                     }

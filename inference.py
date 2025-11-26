@@ -16,7 +16,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from models import BaseModel, build_model, get_model_name
-from utils import Conversation, make_letter_indexed
+from utils import Conversation, make_letter_indexed, base64_image_encoder
 
 logger = logging.getLogger(__name__)
 
@@ -154,10 +154,14 @@ class Inferencer:
         ecg_signal: Optional[torch.Tensor] = None,
         ecg_image: Optional[Image.Image] = None,
         return_response: bool = False,
+        required_base64_image: bool = False,
     ) -> Optional[str]:
         question = step["question"]
         # indexed_options = make_letter_indexed(step["options"])
         indexed_options = step["options"]
+
+        if required_base64_image and ecg_image is not None:
+            ecg_image = base64_image_encoder(ecg_image)
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
         response = self.get_response(conversation)
@@ -209,6 +213,7 @@ class Inferencer:
 
         conversation = Conversation(system_prompt)
 
+        required_base64_image = False
         # disable this prompt for pulse / gem models as they tend to misinterpret it, which
         # seems due that they were not instruction-tuned.
         if self.model_name not in ["pulse", "gem"]:
@@ -216,6 +221,8 @@ class Inferencer:
                 " If you choose 'I don't know', you will receive guidance on how to systematically "
                 "analyze the ECG to improve your decision-making skills."
             )
+        elif self.model_name in ["qwen3-vl-hf"]:
+            required_base64_image = True
 
         response = self.proceed_step(
             step=sample["data"]["initial_diagnostic_question"],
@@ -223,6 +230,7 @@ class Inferencer:
             ecg_signal=ecg_tensor,
             ecg_image=ecg_image,
             return_response=True,
+            required_base64_image=required_base64_image,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
         if response.strip().lower() in ["yes", "no"]:

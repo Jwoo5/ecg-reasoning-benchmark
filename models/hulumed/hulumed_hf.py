@@ -6,17 +6,6 @@ try:
 except:
     pass
 
-try:
-    from transformers.image_utils import VideoInput
-except:
-    import transformers
-    raise ImportError(
-        "Hulu-Med HF model requires to import VideoInput from transformers.image_utils, "
-        "which is available in transformers==4.51.2 but not in your current version "
-        f"({transformers.__version__}). Please consider reinstalling transformers with the "
-        "correct version."
-    )
-
 import logging
 import torch
 
@@ -31,6 +20,18 @@ class HuluMedHFModel(BaseModel):
         self,
         hf_model_variant: str = "7B",
     ):
+        # Check transformers version for VideoInput
+        try:
+            from transformers.image_utils import VideoInput
+        except:
+            import transformers
+            raise ImportError(
+                "Hulu-Med HF model requires to import VideoInput from transformers.image_utils, "
+                "which is available in transformers==4.51.2 but not in your current version "
+                f"({transformers.__version__}). Please consider reinstalling transformers with the "
+                "correct version."
+            )
+
         self.hf_model_variant = hf_model_variant
 
         model_id = f"ZJU-AI4H/Hulu-Med-{hf_model_variant}"
