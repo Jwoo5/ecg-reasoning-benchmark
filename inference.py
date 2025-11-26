@@ -244,17 +244,10 @@ class Inferencer:
         elif response.strip().lower() == "i don't know":
             eval_path = 2
         else:
-            if "final answer" in response.lower():
-                final_answer = response.lower().split("final answer")[-1].strip(" :.\n").strip()
-                if "i don't know" in final_answer:
-                    eval_path = 2
-                elif "yes" in final_answer or "no" in final_answer:
-                    eval_path = 1
-                else:
-                    logger.warning(f"Could not parse response: {response}")
-                    sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
-                    sample_result["metadata"]["parsing_error"] = True
-                    return sample_result
+            logger.warning(f"Could not parse response: {response}")
+            sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
+            sample_result["metadata"]["parsing_error"] = True
+            return sample_result
 
         if eval_path == 1:
             pass
@@ -279,11 +272,13 @@ class Inferencer:
                     # it is hit for grounding steps
                     for g_step in step:
                         response = self.proceed_step(
-                            g_step, conversation, return_response=True, verbose=self.debug
+                            # g_step, conversation, return_response=True, verbose=self.debug
+                            g_step, conversation, return_response=True
                         )
                 else:
                     response = self.proceed_step(
-                        step, conversation, return_response=False, verbose=self.debug
+                        # step, conversation, return_response=False, verbose=self.debug
+                        step, conversation, return_response=False
                     )
 
         return sample_result
