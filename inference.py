@@ -211,7 +211,7 @@ class Inferencer:
 
         # disable this prompt for pulse / gem models as they tend to misinterpret it, which
         # seems due that they were not instruction-tuned.
-        if not ("pulse" in self.model_name.lower() or "gem" in self.model_name.lower()):
+        if self.model_name not in ["pulse", "gem"]:
             sample["data"]["initial_diagnostic_question"]["question"] += (
                 " If you choose 'I don't know', you will receive guidance on how to systematically "
                 "analyze the ECG to improve your decision-making skills."
