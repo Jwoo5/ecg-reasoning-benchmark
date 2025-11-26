@@ -71,11 +71,17 @@ class PulseModel(BaseModel):
 
         return prompt
 
-    def get_response(self, conversation) -> str:
+    def get_response(self, conversation, verbose: bool = False) -> str:
         prompt = self.get_prompt(conversation)
         ecg_image = conversation.conversation[1]["image"]
 
+        if verbose:
+            print(f"\nQuestion: {conversation.conversation[-1]['question']}")
+
         response = self.generate(prompt, ecg_image)
+
+        if verbose:
+            print(f"Response: {response}")
 
         return response
 

@@ -4,10 +4,7 @@ import re
 import torch
 
 from .. import BaseModel, register_model
-from .llava.constants import (
-    DEFAULT_IMAGE_TOKEN,
-    IMAGE_TOKEN_INDEX,
-)
+from .llava.constants import DEFAULT_IMAGE_TOKEN, IMAGE_TOKEN_INDEX
 from .llava.mm_utils import process_images, tokenizer_image_token
 from .llava.model.builder import load_pretrained_model
 
@@ -61,12 +58,18 @@ class GEMLlavaModel(BaseModel):
 
         return prompt
 
-    def get_response(self, conversation) -> str:
+    def get_response(self, conversation, verbose: bool = False) -> str:
         prompt = self.get_prompt(conversation)
         ecg_signal = conversation.conversation[1]["signal"]
         ecg_image = conversation.conversation[1]["image"]
 
+        if verbose:
+            print(f"\nQuestion: {conversation.conversation[-1]['question']}")
+
         response = self.generate(prompt, ecg_signal, ecg_image)
+
+        if verbose:
+            print(f"Response: {response}")
 
         return response
 

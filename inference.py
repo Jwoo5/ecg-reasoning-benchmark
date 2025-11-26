@@ -71,14 +71,18 @@ def get_parser():
     parser.add_argument(
         "--output-dir", type=str, default="results", help="output directory to save the results"
     )
+    parser.add_argument(
+        "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
+    )
 
     return parser
 
 
 class Inferencer:
-    def __init__(self, model: BaseModel):
+    def __init__(self, model: BaseModel, debug: bool = False):
         self.model = model
         self.model_name = get_model_name(model)
+        self.debug = debug
 
     def get_ecg_signal(
         self,
@@ -142,8 +146,8 @@ class Inferencer:
 
         return image
 
-    def get_response(self, conversation: Conversation) -> str:
-        return self.model.get_response(conversation)
+    def get_response(self, conversation: Conversation, verbose: bool = False) -> str:
+        return self.model.get_response(conversation, verbose=verbose)
 
     def proceed_step(
         self,
@@ -153,6 +157,7 @@ class Inferencer:
         ecg_image: Optional[Image.Image] = None,
         return_response: bool = False,
         required_base64_image: bool = False,
+        verbose: bool = False,
     ) -> Optional[str]:
         question = step["question"]
         # indexed_options = make_letter_indexed(step["options"])
@@ -162,7 +167,7 @@ class Inferencer:
             ecg_image = base64_image_encoder(ecg_image)
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
-        response = self.get_response(conversation)
+        response = self.get_response(conversation, verbose=verbose)
         step["model_response"] = response
 
         # add model turn to conversation with the ground truth answer
@@ -231,6 +236,7 @@ class Inferencer:
             ecg_image=ecg_image,
             return_response=True,
             required_base64_image=required_base64_image,
+            verbose=self.debug,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
         if response.strip().lower() in ["yes", "no"]:
@@ -281,7 +287,7 @@ class Inferencer:
 
 def main(args):
     model = build_model(args.model, hf_model_variant=args.hf_model_variant)
-    inferencer = Inferencer(model)
+    inferencer = Inferencer(model, debug=args.debug)
 
     root_dir = args.root
     source_dataset = args.dataset

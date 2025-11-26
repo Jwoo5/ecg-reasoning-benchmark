@@ -33,7 +33,7 @@ class Qwen3VLHFModel(BaseModel):
         self.model = Qwen3VLForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
-    def get_response(self, conversation):
+    def get_response(self, conversation, verbose: bool = False):
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -76,7 +76,13 @@ class Qwen3VLHFModel(BaseModel):
             elif turn["role"] == "model":
                 messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
 
+        if verbose:
+            print(f"\nQuestion: {conversation.conversation[-1]['question']}")
+
         response = self.generate(messages)
+
+        if verbose:
+            print(f"Response: {response}")
 
         return response
 
