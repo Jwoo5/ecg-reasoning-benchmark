@@ -40,8 +40,11 @@ class GeminiModel(BaseModel):
         base64_image = base64_image_encoder(conversation.conversation[first_user_turn_idx]["image"])
 
         for turn in conversation.conversation[first_user_turn_idx:]:
-            content.append[{"role" : turn["role"], "content" : [{"type": "input_text", "text" : turn["text"]}]}]
-
+            if turn["role"] == "user":
+                content.append[{"role" : "user", "content" : [{"type": "input_text", "text" : turn["text"]}]}]
+            elif turn["role"] == "model":
+                content.append[{"role" : "assistant", "content" : [{"type": "input_text", "text" : turn["text"]}]}]
+                
         content[0]["content"].append({"type" : "input_image", "image_url": f"data:image/png;base64,{base64_image}"})
         response = self.generate(content, system_instruction)
         return response, 
