@@ -218,7 +218,7 @@ class Inferencer:
 
         required_base64_image = False
         # disable this prompt for pulse / gem models as they tend to misinterpret it, which
-        # seems due that they were not instruction-tuned.
+        # seems due that they were not instruction-tuned well.
         # if self.model_name not in ["pulse", "gem"]:
         sample["data"]["initial_diagnostic_question"]["question"] += (
             " If you don't know how to analyze the ECG to answer this question, choose "
@@ -239,9 +239,18 @@ class Inferencer:
             verbose=self.debug,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
-        if response.strip().lower() in ["yes", "no"]:
+        if (
+            response.strip(".").lower() in ["yes", "no"]
+            or response.strip(".").lower().startswith("yes")
+            or response.strip(".").lower().endswith("yes")
+            or response.strip(".").lower().startswith("no")
+            or response.strip(".").lower().endswith("no")
+        ):
             eval_path = 1
-        elif response.strip().lower() == "i don't know":
+        elif (
+            response.strip(".").lower() == "i don't know"
+            or response.strip(".").lower() == "i don't know"
+        ):
             eval_path = 2
         else:
             logger.warning(f"Could not parse response: {response}")
