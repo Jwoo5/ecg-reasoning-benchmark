@@ -5,6 +5,7 @@ import torch
 
 from .. import BaseModel, register_model
 from .llava.constants import DEFAULT_IMAGE_TOKEN, IMAGE_TOKEN_INDEX
+from .llava.conversation import conv_templates
 from .llava.mm_utils import process_images, tokenizer_image_token
 from .llava.model.builder import load_pretrained_model
 
@@ -59,7 +60,46 @@ class GEMLlavaModel(BaseModel):
         return prompt
 
     def get_response(self, conversation, verbose: bool = False) -> str:
-        prompt = self.get_prompt(conversation)
+        assert (
+            conversation.conversation[0]["role"] == "system"
+        ), "The first turn in the conversation must be from the system."
+        assert (
+            conversation.conversation[-1]["role"] == "user"
+        ), "The last turn in the conversation must be from the user."
+        assert (
+            "image" in conversation.conversation[1]
+        ), "The conversation must contain an ECG image in the first user turn."
+
+
+        conv = conv_templates["llava_v1"].copy()
+        conv.system = conversation.conversation[0]["text"]
+
+        for i, turn in enumerate(conversation.conversation[1:]):
+            if turn["role"] == "user":
+                user_text = f"Question: {turn['question']}\n\n"
+                if i == 0:
+                    user_text += "Options:\n"
+                elif "select all possible leads" in turn["question"].lower():
+                    user_text += (
+                        "This question may have multiple correct answers from the following options:\n"
+                    )
+                else:
+                    user_text += "This question has one of the following options as the correct answer:\n"
+                for option in turn["options"]:
+                    user_text += f"- {option}\n"
+                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
+
+                if i == 0:
+                    user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text
+                
+                conv.append_message(conv.roles[0], user_text)
+            elif turn["role"] == "model":
+                conv.append_message(conv.roles[1], turn["text"])
+        conv.append_message(conv.roles[1], None)
+
+        prompt = conv.get_prompt()
+
         ecg_signal = conversation.conversation[1]["signal"]
         ecg_image = conversation.conversation[1]["image"]
 

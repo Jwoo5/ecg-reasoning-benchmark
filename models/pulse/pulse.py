@@ -39,9 +39,7 @@ class PulseModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def get_prompt(self, conversation) -> str:
-        seps = [" ", "</s>"]
-
+    def get_response(self, conversation, verbose: bool = False) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -52,27 +50,36 @@ class PulseModel(BaseModel):
             "image" in conversation.conversation[1]
         ), "The conversation must contain an ECG image in the first user turn."
 
-        prompt = conversation.conversation[0]["text"] + seps[0]
+
+        conv = conv_templates["llava_v1"].copy()
+        conv.system = conversation.conversation[0]["text"]
+
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
+                user_text = f"Question: {turn['question']}\n\n"
                 if i == 0:
-                    prompt += f"USER: {DEFAULT_IMAGE_TOKEN}\n"
+                    user_text += "Options:\n"
+                elif "select all possible leads" in turn["question"].lower():
+                    user_text += (
+                        "This question may have multiple correct answers from the following options:\n"
+                    )
                 else:
-                    prompt += f"USER: "
-                prompt += f"{turn['question']} "
-                prompt += "Choose from the following options:\n"
+                    user_text += "This question has one of the following options as the correct answer:\n"
                 for option in turn["options"]:
-                    prompt += f"- {option}\n"
-                prompt += "\n" + seps[i % 2]
+                    user_text += f"- {option}\n"
+                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
+
+                if i == 0:
+                    user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text
+                
+                conv.append_message(conv.roles[0], user_text)
             elif turn["role"] == "model":
-                prompt += f"ASSISTANT: {turn['text']}\n\n" + seps[i % 2]
+                conv.append_message(conv.roles[1], turn["text"])
+        conv.append_message(conv.roles[1], None)
 
-        prompt += "ASSISTANT: "
+        prompt = conv.get_prompt()
 
-        return prompt
-
-    def get_response(self, conversation, verbose: bool = False) -> str:
-        prompt = self.get_prompt(conversation)
         ecg_image = conversation.conversation[1]["image"]
 
         if verbose:
@@ -102,9 +109,7 @@ class PulseModel(BaseModel):
                 images=images_tensor,
                 image_sizes=[ecg_image.size],
                 do_sample=False,
-                # temperature=0.0,
                 max_new_tokens=300,
-                # use_cache=True,
             )
 
         return self.tokenizer.batch_decode(output, skip_special_tokens=True)[0].strip()
