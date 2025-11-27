@@ -11,6 +11,7 @@ from .LLaVA.llava.constants import (
     IMAGE_TOKEN_INDEX,
 )
 from .LLaVA.llava.conversation import conv_templates
+from .LLaVA.llava.utils import disable_torch_init
 from .LLaVA.llava.mm_utils import (
     get_model_name_from_path,
     process_images,
@@ -27,6 +28,7 @@ class PulseModel(BaseModel):
         self.model_cfg_name = "PULSE-ECG/PULSE-7B"
         model_name = get_model_name_from_path(self.model_cfg_name)
 
+        disable_torch_init()
         self.tokenizer, self.model, self.image_processor, _ = load_pretrained_model(
             self.model_cfg_name,
             model_base=None,
@@ -113,9 +115,3 @@ class PulseModel(BaseModel):
             )
 
         return self.tokenizer.batch_decode(output, skip_special_tokens=True)[0].strip()
-
-    def load_state_dict(self, **kwargs):
-        raise ValueError(
-            "PULSE model does not support loading state dicts directly as it loads "
-            "pretrained weights in the constructor."
-        )

@@ -117,9 +117,3 @@ class MedGemmaHFModel(BaseModel):
         return cls(
             hf_model_variant=hf_model_variant, use_quantization=use_quantization, is_thinking=is_thinking
         )
-
-    def load_state_dict(self, **kwargs):
-        raise ValueError(
-            "MedGemma HF model does not support loading state dicts directly as it loads "
-            "pretrained weights in the constructor."
-        )

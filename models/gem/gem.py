@@ -6,6 +6,7 @@ import torch
 from .. import BaseModel, register_model
 from .llava.constants import DEFAULT_IMAGE_TOKEN, IMAGE_TOKEN_INDEX
 from .llava.conversation import conv_templates
+from .llava.utils import disable_torch_init
 from .llava.mm_utils import process_images, tokenizer_image_token
 from .llava.model.builder import load_pretrained_model
 
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 @register_model("gem")
 class GEMLlavaModel(BaseModel):
     def __init__(self, device_map="auto", torch_dtype=torch.float16):
+        disable_torch_init()
         self.tokenizer, self.model, self.image_processor, _ = load_pretrained_model(
             "LANSG/GEM",
             model_base=None,
@@ -136,9 +138,3 @@ class GEMLlavaModel(BaseModel):
             )
 
         return self.tokenizer.decode(output[0, input_ids.shape[0] :], skip_special_tokens=True).strip()
-
-    def load_state_dict(self, **kwargs):
-        raise ValueError(
-            "GEM model does not support loading state dicts directly as it loads "
-            "pretrained weights in the constructor."
-        )

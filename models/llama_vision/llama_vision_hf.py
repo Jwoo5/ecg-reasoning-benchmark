@@ -103,9 +103,3 @@ class LlamaVisionHFModel(BaseModel):
     @classmethod
     def build_model(cls, hf_model_variant="32B-Instruct", **kwargs):
         return cls(hf_model_variant=hf_model_variant)
-
-    def load_state_dict(self, **kwargs):
-        raise ValueError(
-            "MedGemma HF model does not support loading state dicts directly as it loads "
-            "pretrained weights in the constructor."
-        )
