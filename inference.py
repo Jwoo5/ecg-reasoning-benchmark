@@ -144,6 +144,9 @@ class Inferencer:
         image = Image.open(buf).convert("RGB")
         plt.close(fig)
 
+        width, height = image.size
+        image = image.resize((width // 2, height // 2))
+
         return image
 
     def get_response(self, conversation: Conversation, verbose: bool = False) -> str:
@@ -214,18 +217,23 @@ class Inferencer:
         )
         ecg_image = self.visualize_ecg(ecg_tensor, sampling_rate)
 
+        global system_prompt
+        if self.model_name not in ["opentslm"]:
+            system_prompt += (
+                "Note that the provided ECG image shows the 10-second 12-lead ECG recording, where "
+                "each red square grid represents 0.2 seconds horizontally and 0.5 mV vertically.\n\n"
+            )
+
         conversation = Conversation(system_prompt)
 
-        required_base64_image = False
-        # disable this prompt for pulse / gem models as they tend to misinterpret it, which
-        # seems due that they were not instruction-tuned well.
-        # if self.model_name not in ["pulse", "gem"]:
+
         sample["data"]["initial_diagnostic_question"]["question"] += (
             " If you don't know how to analyze the ECG to answer this question, choose "
             "'I don't know'. Then, you will receive guidance on how to systematically "
             "analyze the ECG to improve your decision-making skills. NEVER choose 'I don't know' "
             "because you are uncertain or want to avoid answering the question. "
         )
+        required_base64_image = False
         if self.model_name in ["qwen3-vl-hf"]:
             required_base64_image = True
 
@@ -284,18 +292,17 @@ class Inferencer:
 
         for stage in sample_result["data"][f"path_{eval_path}"]:
             for step in stage.values():
-                # TODO should parse response to check if the model's answer is correct at each step
                 if isinstance(step, list):
                     # it is hit for grounding steps
                     for g_step in step:
-                        response = self.proceed_step(
+                        self.proceed_step(
                             # g_step, conversation, return_response=True, verbose=self.debug
-                            g_step, conversation, return_response=True
+                            g_step, conversation
                         )
                 else:
-                    response = self.proceed_step(
+                    self.proceed_step(
                         # step, conversation, return_response=False, verbose=self.debug
-                        step, conversation, return_response=False
+                        step, conversation
                     )
 
         return sample_result
