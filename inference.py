@@ -229,7 +229,7 @@ class Inferencer:
 
         sample["data"]["initial_diagnostic_question"]["question"] += (
             " If you don't know how to analyze the ECG to answer this question, choose "
-            "'I don't know'. Then, you will receive guidance on how to systematically "
+            "\"I don't know\". Then, you will receive guidance on how to systematically "
             "analyze the ECG to improve your decision-making skills. NEVER choose 'I don't know' "
             "because you are uncertain or want to avoid answering the question. "
         )
