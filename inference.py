@@ -14,7 +14,7 @@ import torch
 import wfdb
 from PIL import Image
 from tqdm import tqdm
-
+import pdb 
 from models import BaseModel, build_model, get_model_name
 from utils import Conversation, make_letter_indexed
 
@@ -89,6 +89,7 @@ class Inferencer:
         base_dir: str,
         subject_id: Optional[str] = None,  # for mimic-iv-ecg
     ) -> Tuple[torch.Tensor, int]:
+
         if source_dataset.lower() == "ptbxl":
             assert os.path.exists(os.path.join(base_dir, "records500")), (
                 f"PTB-XL dataset directory structure not found in {base_dir}. "
@@ -96,7 +97,10 @@ class Inferencer:
             )
 
             dir_num = int(ecg_id) // 1000 * 1000
-            path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
+            if self.model_name == "opentslm":
+                path = os.path.join(base_dir, "records100", f"{dir_num:05d}", f"{int(ecg_id):05d}_lr")
+            else:    
+                path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
 
             ecg_record, header = wfdb.rdsamp(path)
             sampling_rate = header["fs"]
@@ -211,7 +215,7 @@ class Inferencer:
 
         # disable this prompt for pulse / gem models as they tend to misinterpret it, which
         # seems due that they were not instruction-tuned.
-        if self.model_name not in ["pulse", "gem"]:
+        if self.model_name not in ["pulse", "gem", "opentslm"]:
             sample["data"]["initial_diagnostic_question"]["question"] += (
                 " If you choose 'I don't know', you will receive guidance on how to systematically "
                 "analyze the ECG to improve your decision-making skills."
@@ -265,6 +269,7 @@ class Inferencer:
 
 
 def main(args):
+
     model = build_model(args.model, hf_model_variant=args.hf_model_variant)
     inferencer = Inferencer(model)
 
