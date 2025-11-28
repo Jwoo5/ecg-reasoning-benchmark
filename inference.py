@@ -220,7 +220,7 @@ class Inferencer:
         global system_prompt
         if self.model_name not in ["opentslm"]:
             system_prompt += (
-                "Note that the provided ECG image shows the 10-second 12-lead ECG recording, where "
+                "The provided ECG is the 10-second 12-lead ECG recording, where "
                 "each red square grid represents 0.2 seconds horizontally and 0.5 mV vertically.\n\n"
             )
 
