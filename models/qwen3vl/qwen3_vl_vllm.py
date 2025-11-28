@@ -1,44 +1,57 @@
-# AutoModelForImageTextToText is available in transformers >= 4.50.0,
-# while other models are available in earlier versions (e.g., gem, pulse)
-# so we catch the import error here for backward compatibility.
-try:
-    from transformers import (
-        AutoProcessor,
-        Qwen3VLForConditionalGeneration,
-        Qwen3VLMoeForConditionalGeneration
-    )
-except:
-    pass
-import logging
-
 import torch
+from qwen_vl_utils import process_vision_info
+from transformers import AutoProcessor
+from vllm import LLM, SamplingParams
 
 from .. import BaseModel, register_model
 
-logger = logging.getLogger(__name__)
-
-
-@register_model("qwen3-vl-hf")
-class Qwen3VLHFModel(BaseModel):
+@register_model("qwen3-vl-vllm")
+class Qwen3VLVLLMModel(BaseModel):
     def __init__(
         self,
-        hf_model_variant: str = "32B-Instruct",
+        model_variant: str = "235B-A22B-Instruct-FP8",
     ):
-        self.hf_model_variant = hf_model_variant
+        import os
+        os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
-        model_id = f"Qwen/Qwen3-VL-{hf_model_variant}"
+        self.model_variant = model_variant
 
-        model_kwargs = dict(
-            dtype=torch.bfloat16,
-            attn_implementation="flash_attention_2",
-            device_map="auto",
+        model_id = f"Qwen/Qwen3-VL-{model_variant}"
+
+        self.model = LLM(
+            model=model_id,
+            mm_encoder_tp_mode="data",
+            enable_expert_parallel=True,
+            tensor_parallel_size=torch.cuda.device_count(),
+            seed=0,
+        )
+        self.processor = AutoProcessor.from_pretrained(model_id)
+
+        self.sampling_params = SamplingParams(
+            temperature=0,
+            max_tokens=300,
+            top_k=-1,
+            stop_token_ids=[],
         )
 
-        if "A3B" in hf_model_variant or "A22B" in hf_model_variant:
-            self.model = Qwen3VLMoeForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
-        else:
-            self.model = Qwen3VLForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
-        self.processor = AutoProcessor.from_pretrained(model_id)
+    def prepare_inputs_for_vllm(self, messages, processor):
+        text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        image_inputs, video_inputs, video_kwargs = process_vision_info(
+            messages,
+            image_patch_size=processor.image_processor.patch_size,
+            return_video_kwargs=True,
+            return_video_metadata=True,
+        )
+
+        mm_data = {}
+        if image_inputs is not None:
+            mm_data["image"] = image_inputs
+            
+        return {
+            "prompt": text,
+            "multi_modal_data": mm_data,
+            "mm_processor_kwargs": video_kwargs
+        }
 
     def get_response(self, conversation, verbose: bool = False):
         assert (
@@ -94,30 +107,14 @@ class Qwen3VLHFModel(BaseModel):
         return response
 
     def generate(self, messages, **kwargs):
-        inputs = self.processor.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            tokenize=True,
-            return_dict=True,
-            return_tensors="pt",
-        ).to(self.model.device, dtype=torch.bfloat16)
+        inputs = [self.prepare_inputs_for_vllm(message, self.processor) for message in [messages]]
 
-        input_len = inputs["input_ids"].shape[-1]
-        with torch.inference_mode():
-            output = self.model.generate(
-                **inputs,
-                max_new_tokens=300,
-                do_sample=False,
-                temperature=None,
-                top_p=None,
-                top_k=None,
-            )
-            output = output[0][input_len:]
+        outputs = self.model.generate(inputs, sampling_params=self.sampling_params)
 
-        response = self.processor.decode(output, skip_special_tokens=True).strip()
+        response = outputs[0].outputs[0].text
 
         return response
 
     @classmethod
     def build_model(cls, hf_model_variant="32B-Instruct", **kwargs):
-        return cls(hf_model_variant=hf_model_variant)
+        return cls(model_variant=hf_model_variant)
