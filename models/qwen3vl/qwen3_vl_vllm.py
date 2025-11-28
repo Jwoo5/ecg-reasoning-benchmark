@@ -1,7 +1,6 @@
+import os
 import torch
-from qwen_vl_utils import process_vision_info
 from transformers import AutoProcessor
-from vllm import LLM, SamplingParams
 
 from .. import BaseModel, register_model
 
@@ -11,7 +10,9 @@ class Qwen3VLVLLMModel(BaseModel):
         self,
         model_variant: str = "235B-A22B-Instruct-FP8",
     ):
-        import os
+        # Import vllm here to avoid issues if not using this model
+        from vllm import LLM, SamplingParams
+
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
         self.model_variant = model_variant
@@ -35,6 +36,9 @@ class Qwen3VLVLLMModel(BaseModel):
         )
 
     def prepare_inputs_for_vllm(self, messages, processor):
+        # Import process_vision_info here to avoid issues if not using this model
+        from qwen_vl_utils import process_vision_info
+
         text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         image_inputs, video_inputs, video_kwargs = process_vision_info(
             messages,
