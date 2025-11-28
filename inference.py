@@ -242,14 +242,22 @@ class Inferencer:
         if (
             response.strip(".").lower() in ["yes", "no"]
             or response.strip(".").lower().startswith("yes")
+            or response.strip(".").lower().startswith("**yes**")
             or response.strip(".").lower().endswith("yes")
+            or response.strip(".").lower().endswith("**yes**")
             or response.strip(".").lower().startswith("no")
+            or response.strip(".").lower().startswith("**no**")
             or response.strip(".").lower().endswith("no")
+            or response.strip(".").lower().endswith("**no**")
         ):
             eval_path = 1
         elif (
             response.strip(".").lower() == "i don't know"
             or response.strip(".").lower() == "i don't know"
+            or response.strip(".").lower().startswith("i don't know")
+            or response.strip(".").lower().startswith("**i don't know**")
+            or response.strip(".").lower().endswith("i don't know")
+            or response.strip(".").lower().endswith("**i don't know**")
         ):
             eval_path = 2
         else:
