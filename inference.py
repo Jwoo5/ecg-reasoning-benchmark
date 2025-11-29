@@ -242,7 +242,9 @@ class Inferencer:
             "because you are uncertain or want to avoid answering the question. "
         )
         required_base64_image = False
-        if self.model_name in ["qwen3-vl-hf", "qwen3-vl-vllm"]:
+        if (
+            self.model_name.startswith("qwen3-vl-hf")
+        ):
             required_base64_image = True
 
         response = self.proceed_step(
