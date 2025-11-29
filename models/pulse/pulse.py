@@ -41,7 +41,7 @@ class PulseModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def get_response(self, conversation, verbose: bool = False) -> str:
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -59,18 +59,28 @@ class PulseModel(BaseModel):
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
                 user_text = f"Question: {turn['question']}\n\n"
-                if i == 0:
-                    user_text += "Options:\n"
-                elif "select all possible leads" in turn["question"].lower():
-                    user_text += (
-                        "This question may have multiple correct answers from the following options:\n"
-                    )
+
+                do_add_options = False
+                # do not add options in previous turns to reserve context length
+                if enable_condensed_chat:
+                    if i == len(conversation.conversation[1:]) - 1:
+                        do_add_options = True
                 else:
-                    user_text += "This question has one of the following options as the correct answer:\n"
-                for option in turn["options"]:
-                    user_text += f"- {option}\n"
-                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
-                user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
+                    do_add_options = True
+
+                if do_add_options:
+                    if i == 0:
+                        user_text += "Options:\n"
+                    elif "select all possible leads" in turn["question"].lower():
+                        user_text += (
+                            "This question may have multiple correct answers from the following options:\n"
+                        )
+                    else:
+                        user_text += "This question has one of the following options as the correct answer:\n"
+                    for option in turn["options"]:
+                        user_text += f"- {option}\n"
+                    user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                    user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
 
                 if i == 0:
                     user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text

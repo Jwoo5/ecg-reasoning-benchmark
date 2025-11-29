@@ -4,7 +4,7 @@ class BaseModel:
         """Build a new model instance."""
         raise NotImplementedError("Model Must implement the build_model method.")
 
-    def get_response(self, conversation) -> str:
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
         """Generate a response based on the conversation history."""
         raise NotImplementedError("Model Must implement the get_response method.")
 

@@ -37,6 +37,8 @@ def build_model(
 def get_model_name(model: BaseModel) -> str:
     for name, cls in MODEL_REGISTRY.items():
         if isinstance(model, cls):
+            if hasattr(model, "model_variant"):
+                name += f"-{model.model_variant}"
             return name
     raise ValueError("Model class not found in registry.")
 

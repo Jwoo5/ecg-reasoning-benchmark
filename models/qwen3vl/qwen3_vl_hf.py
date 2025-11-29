@@ -22,11 +22,11 @@ logger = logging.getLogger(__name__)
 class Qwen3VLHFModel(BaseModel):
     def __init__(
         self,
-        hf_model_variant: str = "32B-Instruct",
+        model_variant: str = "32B-Instruct",
     ):
-        self.hf_model_variant = hf_model_variant
+        self.model_variant = model_variant
 
-        model_id = f"Qwen/Qwen3-VL-{hf_model_variant}"
+        model_id = f"Qwen/Qwen3-VL-{model_variant}"
 
         model_kwargs = dict(
             dtype=torch.bfloat16,
@@ -34,13 +34,13 @@ class Qwen3VLHFModel(BaseModel):
             device_map="auto",
         )
 
-        if "A3B" in hf_model_variant or "A22B" in hf_model_variant:
+        if "A3B" in model_variant or "A22B" in model_variant:
             self.model = Qwen3VLMoeForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
         else:
             self.model = Qwen3VLForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
-    def get_response(self, conversation, verbose: bool = False):
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -56,18 +56,28 @@ class Qwen3VLHFModel(BaseModel):
         for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
                 user_text = f"Question: {turn['question']}\n\n"
-                if i == 0:
-                    user_text += "Options:\n"
-                elif "select all possible leads" in turn["question"].lower():
-                    user_text += (
-                        "This question may have multiple correct answers from the following options:\n"
-                    )
+
+                do_add_options = False
+                # do not add options in previous turns to reserve context length
+                if enable_condensed_chat:
+                    if i == len(conversation.conversation[1:]) - 1:
+                        do_add_options = True
                 else:
-                    user_text += "This question has one of the following options as the correct answer:\n"
-                for option in turn["options"]:
-                    user_text += f"- {option}\n"
-                user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
-                user_text += "include any uncertainty, explanation, reasoning, or extra words."
+                    do_add_options = True
+
+                if do_add_options:
+                    if i == 0:
+                        user_text += "Options:\n"
+                    elif "select all possible leads" in turn["question"].lower():
+                        user_text += (
+                            "This question may have multiple correct answers from the following options:\n"
+                        )
+                    else:
+                        user_text += "This question has one of the following options as the correct answer:\n"
+                    for option in turn["options"]:
+                        user_text += f"- {option}\n"
+                    user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                    user_text += "include any uncertainty, explanation, reasoning, or extra words."
 
                 if i == 0:
                     user = {
@@ -119,5 +129,5 @@ class Qwen3VLHFModel(BaseModel):
         return response
 
     @classmethod
-    def build_model(cls, hf_model_variant="32B-Instruct", **kwargs):
-        return cls(hf_model_variant=hf_model_variant)
+    def build_model(cls, model_variant="32B-Instruct", **kwargs):
+        return cls(model_variant=model_variant)

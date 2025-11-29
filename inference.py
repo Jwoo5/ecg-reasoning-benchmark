@@ -54,10 +54,10 @@ def get_parser():
         "--model", type=str, help="name of the model to run inference on (e.g., gem, pulse, etc.)"
     )
     parser.add_argument(
-        "--hf-model-variant",
+        "--model-variant",
         type=str,
         default=None,
-        help="model variant for any huggingface models (e.g., '4b-it', '27b-it' for medgemma_hf)",
+        help="model variant for any models (e.g., '4b-it', '27b-it' for medgemma_hf)",
     )
     parser.add_argument(
         "--ecg-base-dir",
@@ -70,6 +70,15 @@ def get_parser():
     )
     parser.add_argument(
         "--output-dir", type=str, default="results", help="output directory to save the results"
+    )
+    parser.add_argument(
+        "--enable-condensed-chat",
+        action="store_true",
+        help=(
+            "whether to enable condensed chat mode to reduce the context length. if enabled, "
+            "answer options will only be provided in the last turn of the conversation, and previous "
+            "turns will contain only the answer text without the options"
+        )
     )
     parser.add_argument(
         "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
@@ -146,8 +155,15 @@ class Inferencer:
 
         return image
 
-    def get_response(self, conversation: Conversation, verbose: bool = False) -> str:
-        return self.model.get_response(conversation, verbose=verbose)
+    def get_response(
+        self,
+        conversation: Conversation,
+        enable_condensed_chat: bool = False,
+        verbose: bool = False
+    ) -> str:
+        return self.model.get_response(
+            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose
+        )
 
     def proceed_step(
         self,
@@ -157,6 +173,7 @@ class Inferencer:
         ecg_image: Optional[Image.Image] = None,
         return_response: bool = False,
         required_base64_image: bool = False,
+        enable_condensed_chat: bool = False,
         verbose: bool = False,
     ) -> Optional[str]:
         question = step["question"]
@@ -167,7 +184,9 @@ class Inferencer:
             ecg_image = base64_image_encoder(ecg_image)
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
-        response = self.get_response(conversation, verbose=verbose)
+        response = self.get_response(
+            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose
+        )
         step["model_response"] = response
 
         # add model turn to conversation with the ground truth answer
@@ -202,7 +221,7 @@ class Inferencer:
     #     else:
     #         return -1
 
-    def inference(self, sample: Dict, ecg_base_dir: str) -> Dict:
+    def inference(self, sample: Dict, ecg_base_dir: str, enable_condensed_chat: bool = False) -> Dict:
         sample_result = sample.copy()
         sample_result["metadata"]["model"] = self.model_name
 
@@ -233,6 +252,7 @@ class Inferencer:
             ecg_image=ecg_image,
             return_response=True,
             required_base64_image=required_base64_image,
+            enable_condensed_chat=enable_condensed_chat,
             verbose=self.debug,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
@@ -285,20 +305,24 @@ class Inferencer:
                     # it is hit for grounding steps
                     for g_step in step:
                         self.proceed_step(
-                            # g_step, conversation, return_response=True, verbose=self.debug
-                            g_step, conversation, return_response=False
+                            g_step,
+                            conversation,
+                            return_response=False,
+                            enable_condensed_chat=enable_condensed_chat
                         )
                 else:
                     self.proceed_step(
-                        # step, conversation, return_response=False, verbose=self.debug
-                        step, conversation, return_response=False
+                        step,
+                        conversation,
+                        return_response=False,
+                        enable_condensed_chat=enable_condensed_chat
                     )
 
         return sample_result
 
 
 def main(args):
-    model = build_model(args.model, hf_model_variant=args.hf_model_variant)
+    model = build_model(args.model, model_variant=args.model_variant)
     inferencer = Inferencer(model, debug=args.debug)
 
     root_dir = args.root
@@ -307,8 +331,8 @@ def main(args):
     output_dir = args.output_dir
 
     model_name = args.model
-    if args.hf_model_variant:
-        model_name += f"_{args.hf_model_variant}"
+    if args.model_variant:
+        model_name += f"_{args.model_variant}"
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
@@ -326,7 +350,9 @@ def main(args):
                 with open(fname, "r") as f:
                     sample = json.load(f)
 
-                result = inferencer.inference(sample, ecg_base_dir)
+                result = inferencer.inference(
+                    sample, ecg_base_dir, enable_condensed_chat=args.enable_condensed_chat
+                )
                 if result["data"]["initial_diagnostic_question"]["eval_path"] == 1:
                     n_path1 += 1
                 elif result["data"]["initial_diagnostic_question"]["eval_path"] == -1:
