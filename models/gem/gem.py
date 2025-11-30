@@ -61,7 +61,7 @@ class GEMLlavaModel(BaseModel):
 
         return prompt
 
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -147,4 +147,4 @@ class GEMLlavaModel(BaseModel):
                 do_sample=False,
             )
 
-        return self.tokenizer.decode(output[0, input_ids.shape[0] :], skip_special_tokens=True).strip()
+        return self.tokenizer.batch_decode(output, skip_special_tokens=True)[0].strip()

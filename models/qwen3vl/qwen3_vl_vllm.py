@@ -57,7 +57,7 @@ class Qwen3VLVLLMModel(BaseModel):
             "mm_processor_kwargs": video_kwargs
         }
 
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."

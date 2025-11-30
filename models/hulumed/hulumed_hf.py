@@ -48,7 +48,7 @@ class HuluMedHFModel(BaseModel):
         self.model = AutoModelForCausalLM.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
 
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -123,6 +123,7 @@ class HuluMedHFModel(BaseModel):
                 **inputs,
                 max_new_tokens=300,
                 do_sample=False,
+                use_cache=True,
             )
 
         response = self.processor.decode(output[0], skip_special_tokens=True).strip(".")

@@ -107,7 +107,10 @@ class Inferencer:
             )
 
             dir_num = int(ecg_id) // 1000 * 1000
-            path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
+            if self.model_name == "opentslm":
+                path = os.path.join(base_dir, "records100", f"{dir_num:05d}", f"{int(ecg_id):05d}_lr")
+            else:    
+                path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
 
             ecg_record, header = wfdb.rdsamp(path)
             sampling_rate = header["fs"]
@@ -159,10 +162,11 @@ class Inferencer:
         self,
         conversation: Conversation,
         enable_condensed_chat: bool = False,
-        verbose: bool = False
+        verbose: bool = False,
+        target_dx: Optional[str] = None,
     ) -> str:
         return self.model.get_response(
-            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose
+            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose, target_dx=target_dx
         )
 
     def proceed_step(
@@ -175,6 +179,7 @@ class Inferencer:
         required_base64_image: bool = False,
         enable_condensed_chat: bool = False,
         verbose: bool = False,
+        target_dx: Optional[str] = None,
     ) -> Optional[str]:
         question = step["question"]
         # indexed_options = make_letter_indexed(step["options"])
@@ -185,7 +190,7 @@ class Inferencer:
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
         response = self.get_response(
-            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose
+            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose, target_dx=target_dx
         )
         step["model_response"] = response
 
@@ -222,6 +227,8 @@ class Inferencer:
     #         return -1
 
     def inference(self, sample: Dict, ecg_base_dir: str, enable_condensed_chat: bool = False) -> Dict:
+        dx = sample["metadata"]["target_dx"].replace("_", " ")
+
         sample_result = sample.copy()
         sample_result["metadata"]["model"] = self.model_name
 
@@ -310,14 +317,16 @@ class Inferencer:
                             g_step,
                             conversation,
                             return_response=False,
-                            enable_condensed_chat=enable_condensed_chat
+                            enable_condensed_chat=enable_condensed_chat,
+                            target_dx=dx,
                         )
                 else:
                     self.proceed_step(
                         step,
                         conversation,
                         return_response=False,
-                        enable_condensed_chat=enable_condensed_chat
+                        enable_condensed_chat=enable_condensed_chat,
+                        target_dx=dx,
                     )
 
         return sample_result
@@ -359,7 +368,6 @@ def main(args):
                     n_path1 += 1
                 elif result["data"]["initial_diagnostic_question"]["eval_path"] == -1:
                     n_failed += 1
-
                 pbar.set_description(
                     f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{pbar.n+1-n_failed} | Failed: {n_failed}"
                 )

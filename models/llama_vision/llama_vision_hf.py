@@ -32,7 +32,7 @@ class LlamaVisionHFModel(BaseModel):
         self.model = MllamaForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False) -> str:
+    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
