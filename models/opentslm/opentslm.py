@@ -1,16 +1,17 @@
 import logging
-import torch
+
 import numpy as np
+import torch
 from huggingface_hub import hf_hub_download
 
 from .. import BaseModel, register_model
-
+from .OpenTSLM.model.llm.OpenTSLMFlamingo import OpenTSLMFlamingo
 from .OpenTSLM.prompt.full_prompt import FullPrompt
 from .OpenTSLM.prompt.text_prompt import TextPrompt
 from .OpenTSLM.prompt.text_time_series_prompt import TextTimeSeriesPrompt
-from .OpenTSLM.model.llm.OpenTSLMFlamingo import OpenTSLMFlamingo
 
 logger = logging.getLogger(__name__)
+
 
 @register_model("opentslm")
 class OpenTSLMModel(BaseModel):
@@ -22,19 +23,13 @@ class OpenTSLMModel(BaseModel):
         self.checkpoint_filename = "best_model.pt"
 
         # Initialize the specific OpenTSLM architecture
-        self.model = OpenTSLMFlamingo(
-            device="cpu",
-            llm_id=self.base_llm_id
-        )
+        self.model = OpenTSLMFlamingo(device="cpu", llm_id=self.base_llm_id)
 
-        checkpoint_path = hf_hub_download(
-            repo_id=self.checkpoint_repo_id,
-            filename=self.checkpoint_filename
-        )
+        checkpoint_path = hf_hub_download(repo_id=self.checkpoint_repo_id, filename=self.checkpoint_filename)
 
         # Load weights
         self.model.load_from_file(checkpoint_path)
-        self.model = self.model.to(self.device) 
+        self.model = self.model.to(self.device)
         if hasattr(self.model, "device"):
             self.model.device = self.device
         self.model.eval()
@@ -102,7 +97,7 @@ class OpenTSLMModel(BaseModel):
             return output.strip(), ""
 
         reasoning = output[:idx].strip()
-        answer_part = output[idx + len(marker):].strip()
+        answer_part = output[idx + len(marker) :].strip()
 
         # Clean up valid sentence endings from the answer part if strictly extracting options
         answer_part = answer_part.split("\n", 1)[0].strip()
@@ -141,12 +136,10 @@ class OpenTSLMModel(BaseModel):
             clinical_context = "12-lead clinical ECG recording."
         pre_prompt += f"Clinical Context: {clinical_context}\n\n"
         pre_prompt += "Your task is to examine the ECG signal and answer the following medical question:\n\n"
-        
+
         last_turn = conversation.conversation[-1]
         question = last_turn["question"]
         pre_prompt += f"Question: {question}\n\n"
-
-        question_text = last_turn["question"]
 
         pre_prompt += "Instructions:\n"
         pre_prompt += "- Begin by analyzing the time series without assuming a specific answer.\n"
@@ -162,29 +155,21 @@ class OpenTSLMModel(BaseModel):
             "- Consider the ECG morphology, intervals, and any abnormalities that relate to "
             "the question.\n"
         )
-        
 
-        lead_names = ["I","II","III","aVR","aVL","aVF","V1","V2","V3","V4","V5","V6"]
+        lead_names = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"]
         ts_prompts = []
         for idx, lead_signal in enumerate(norm_ecg):
             lead_name = lead_names[idx] if idx < len(lead_names) else f"Lead_{idx}"
             mean_val = means[idx]
             std_val = stds[idx]
-            label = (
-                f"This is ECG Lead {lead_name}, it has mean {mean_val:.4f} "
-                f"and std {std_val:.4f}:"
-            )
-            ts_prompts.append(
-                TextTimeSeriesPrompt(label, lead_signal.tolist())
-            )
+            label = f"This is ECG Lead {lead_name}, it has mean {mean_val:.4f} " f"and std {std_val:.4f}:"
+            ts_prompts.append(TextTimeSeriesPrompt(label, lead_signal.tolist()))
 
         # for the very first question (initial diagnostic question)
         if len(conversation.conversation) == 2:
             post_prompt = "Options:\n"
         elif "select all possible leads" in question.lower():
-            post_prompt = (
-                "This question may have multiple correct answers from the following options:\n"
-            )
+            post_prompt = "This question may have multiple correct answers from the following options:\n"
         else:
             post_prompt = "This question has one of the following options as the correct answer:\n"
 
@@ -193,14 +178,10 @@ class OpenTSLMModel(BaseModel):
             post_prompt += f"- {option}\n"
 
         post_prompt += (
-            "Make sure that your last word is the answer. you MUST end your response with \"Answer: \""
+            'Make sure that your last word is the answer. you MUST end your response with "Answer: "'
         )
 
-        full_prompt = FullPrompt(
-            TextPrompt(pre_prompt),
-            ts_prompts,
-            TextPrompt(post_prompt)
-        )
+        full_prompt = FullPrompt(TextPrompt(pre_prompt), ts_prompts, TextPrompt(post_prompt))
         return full_prompt
 
     def get_response(self, conversation, target_dx: str, verbose: bool = False, **kwargs) -> str:

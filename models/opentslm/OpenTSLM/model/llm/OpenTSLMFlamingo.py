@@ -6,31 +6,32 @@
 # SPDX-License-Identifier: MIT
 #
 from types import SimpleNamespace
+from typing import Dict, List, Tuple
 
 import torch
 import torch._dynamo
 import torch.nn.functional as F
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from ...model_config import ENCODER_OUTPUT_DIM, PATCH_SIZE
+from ...open_flamingo.flamingo_lm import FlamingoLayer, FlamingoLMMixin
+from ...open_flamingo.utils import extend_instance
+from ...prompt.full_prompt import FullPrompt
 from ..encoder.CNNTokenizer import CNNTokenizer
 from .TimeSeriesFlamingoWithTrainableEncoder import (
     TimeSeriesFlamingoWithTrainableEncoder,
 )
-
-from ...open_flamingo.flamingo_lm import FlamingoLMMixin, FlamingoLayer
-from ...open_flamingo.utils import extend_instance
-from typing import List, Dict, Tuple
-from transformers import AutoTokenizer, AutoModelForCausalLM
-
-from ...model_config import ENCODER_OUTPUT_DIM, PATCH_SIZE
 from .TimeSeriesLLM import TimeSeriesLLM
-from ...prompt.full_prompt import FullPrompt
+
 
 def _attention_type_property(self):
     """Proxy the attention_type attribute from the underlying decoder layer."""
     return getattr(self.decoder_layer, "attention_type", None)
 
+
 # Add the attention_type property to FlamingoLayer
 FlamingoLayer.attention_type = property(_attention_type_property)
+
 
 class OpenTSLMFlamingo(TimeSeriesLLM):
     def __init__(
@@ -63,9 +64,7 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
         )
 
         # add Flamingo special tokens to the tokenizer
-        text_tokenizer.add_special_tokens(
-            {"additional_special_tokens": ["<|endofchunk|>", "<image>"]}
-        )
+        text_tokenizer.add_special_tokens({"additional_special_tokens": ["<|endofchunk|>", "<image>"]})
         if text_tokenizer.pad_token is None:
             text_tokenizer.add_special_tokens({"pad_token": "<PAD>"})
             text_tokenizer.pad_token = "<PAD>"
@@ -117,9 +116,7 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
             lang_encoder.config.text_config, "hidden_size"
         ):
             if not hasattr(lang_encoder.config, "hidden_size"):
-                lang_encoder.config.hidden_size = (
-                    lang_encoder.config.text_config.hidden_size
-                )
+                lang_encoder.config.hidden_size = lang_encoder.config.text_config.hidden_size
 
         model = TimeSeriesFlamingoWithTrainableEncoder(
             SimpleNamespace(visual=time_series_encoder),
@@ -168,9 +165,7 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
                     # Ensure padding has the same number of dimensions as the time series
                     padding_shape = list(ts.shape)
                     padding_shape[1] = max_length - current_length
-                    padding = torch.zeros(
-                        padding_shape, device=ts.device, dtype=ts.dtype
-                    )
+                    padding = torch.zeros(padding_shape, device=ts.device, dtype=ts.dtype)
                     padded = torch.cat([ts, padding], dim=1)
                 else:
                     # If already at or exceeding max_length, truncate
@@ -183,14 +178,10 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
         cast_dtype = None
         tokenizer = self.text_tokenizer
         media_token_id = tokenizer("<image>", add_special_tokens=False)["input_ids"][-1]
-        endofchunk_token_id = tokenizer("<|endofchunk|>", add_special_tokens=False)[
-            "input_ids"
-        ][-1]
+        endofchunk_token_id = tokenizer("<|endofchunk|>", add_special_tokens=False)["input_ids"][-1]
 
         # Process time series data
-        images = pad_time_series(batch).to(
-            self.device, dtype=cast_dtype, non_blocking=True
-        )
+        images = pad_time_series(batch).to(self.device, dtype=cast_dtype, non_blocking=True)
         images = images.unsqueeze(1)  # Add time dimension
 
         # Process text inputs WITH answers
@@ -240,18 +231,14 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
 
         return input_ids, images, attention_mask, labels
 
-    def generate(
-        self, batch: List[Dict[str, any]], max_new_tokens: int = 50, **generate_kwargs
-    ) -> List[str]:
+    def generate(self, batch: List[Dict[str, any]], max_new_tokens: int = 50, **generate_kwargs) -> List[str]:
         # Temporarily disable compilation to avoid data-dependent operation issues
         original_disable = torch._dynamo.config.disable
         torch._dynamo.config.disable = True
 
         try:
             with torch.inference_mode():
-                input_ids, images, attention_mask, _ = self.pad_and_apply_batch(
-                    batch, include_labels=True
-                )
+                input_ids, images, attention_mask, _ = self.pad_and_apply_batch(batch, include_labels=True)
 
                 gen_ids = self.llm.generate(
                     vision_x=images,
@@ -266,9 +253,7 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
                 # Remove input ids from generation
                 answer_only_ids = gen_ids[:, input_ids.shape[1] :]
 
-                return self.text_tokenizer.batch_decode(
-                    answer_only_ids, skip_special_tokens=True
-                )
+                return self.text_tokenizer.batch_decode(answer_only_ids, skip_special_tokens=True)
         finally:
             # Restore original compilation setting
             torch._dynamo.config.disable = original_disable
@@ -278,9 +263,7 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
         batch: same format as generate()
         answers: List[str] of length B
         """
-        input_ids, images, attention_mask, labels = self.pad_and_apply_batch(
-            batch, include_labels=False
-        )
+        input_ids, images, attention_mask, labels = self.pad_and_apply_batch(batch, include_labels=False)
 
         output = self.model(
             vision_x=images,
@@ -323,9 +306,7 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
 
         # Remove 'model.' prefix if present in checkpoint keys
         if all(k.startswith("model.") for k in model_state.keys()):
-            model_state = {
-                k.replace("model.", "", 1): v for k, v in model_state.items()
-            }
+            model_state = {k.replace("model.", "", 1): v for k, v in model_state.items()}
 
         # Load state dict with strict=False to handle missing/unexpected keys
         missing_keys, unexpected_keys = self.load_state_dict(model_state, strict=False)
@@ -360,16 +341,17 @@ class OpenTSLMFlamingo(TimeSeriesLLM):
                 max_new_tokens=max_new_tokens,
                 do_sample=False,
                 temperature=0.0,
+                num_beams=1,
                 top_p=None,
+                use_cache=True,
             )
             return output[0]
         finally:
             # Restore original compilation setting
             torch._dynamo.config.disable = original_disable
 
-def extend_time_series_to_match_patch_size_and_aggregate(
-    batch, *, patch_size: int = PATCH_SIZE
-):
+
+def extend_time_series_to_match_patch_size_and_aggregate(batch, *, patch_size: int = PATCH_SIZE):
     """Pad variable-length series so each sample length is a multiple of *patch_size*."""
 
     for element in batch:

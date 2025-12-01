@@ -4,8 +4,7 @@ import io
 import json
 import logging
 import os
-import re
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union
 
 import ecg_plot
 import matplotlib.pyplot as plt
@@ -78,7 +77,7 @@ def get_parser():
             "whether to enable condensed chat mode to reduce the context length. if enabled, "
             "answer options will only be provided in the last turn of the conversation, and previous "
             "turns will contain only the answer text without the options"
-        )
+        ),
     )
     parser.add_argument(
         "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
@@ -109,7 +108,7 @@ class Inferencer:
             dir_num = int(ecg_id) // 1000 * 1000
             if self.model_name == "opentslm":
                 path = os.path.join(base_dir, "records100", f"{dir_num:05d}", f"{int(ecg_id):05d}_lr")
-            else:    
+            else:
                 path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
 
             ecg_record, header = wfdb.rdsamp(path)
@@ -208,24 +207,6 @@ class Inferencer:
         if return_response:
             return response
 
-    # def parse_response(self, response: str) -> Union[int, List[int]]:
-    #     # parse the response to get the selected option index, where the response is expected to be
-    #     # (a) ..., (b) ..., etc.
-    #     # if the response is comma separated options, return all selected options as a list of indices
-    #     # TODO we can parse the answer by exact match including the text to make it more concrete
-    #     # e.g., match with "(a) left anterior fascicular block", not just "(a)"
-
-    #     pattern = r"\(([a-z])\)"
-    #     matches = re.findall(pattern, response)
-    #     if matches:
-    #         indices = [ord(match) - ord("a") for match in matches]
-    #         if len(indices) == 1:
-    #             return indices[0]
-    #         else:
-    #             return indices
-    #     else:
-    #         return -1
-
     def inference(self, sample: Dict, ecg_base_dir: str, enable_condensed_chat: bool = False) -> Dict:
         dx = sample["metadata"]["target_dx"].replace("_", " ")
 
@@ -249,9 +230,7 @@ class Inferencer:
             "because you are uncertain or want to avoid answering the question. "
         )
         required_base64_image = False
-        if (
-            self.model_name.startswith("qwen3-vl-hf")
-        ):
+        if self.model_name.startswith("qwen3-vl-hf"):
             required_base64_image = True
 
         response = self.proceed_step(
@@ -263,6 +242,7 @@ class Inferencer:
             required_base64_image=required_base64_image,
             enable_condensed_chat=enable_condensed_chat,
             verbose=self.debug,
+            target_dx=dx,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
         if (
@@ -279,7 +259,6 @@ class Inferencer:
             eval_path = 1
         elif (
             response.strip(".").lower() == "i don't know"
-            or response.strip(".").lower() == "i don't know"
             or response.strip(".").lower().startswith("i don't know")
             or response.strip(".").lower().startswith("**i don't know**")
             or response.strip(".").lower().endswith("i don't know")
@@ -318,7 +297,6 @@ class Inferencer:
                             conversation,
                             return_response=False,
                             enable_condensed_chat=enable_condensed_chat,
-                            target_dx=dx,
                         )
                 else:
                     self.proceed_step(
@@ -326,7 +304,6 @@ class Inferencer:
                         conversation,
                         return_response=False,
                         enable_condensed_chat=enable_condensed_chat,
-                        target_dx=dx,
                     )
 
         return sample_result
@@ -362,7 +339,9 @@ def main(args):
                     sample = json.load(f)
 
                 result = inferencer.inference(
-                    sample, ecg_base_dir, enable_condensed_chat=args.enable_condensed_chat
+                    sample,
+                    ecg_base_dir,
+                    enable_condensed_chat=args.enable_condensed_chat,
                 )
                 if result["data"]["initial_diagnostic_question"]["eval_path"] == 1:
                     n_path1 += 1

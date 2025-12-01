@@ -5,9 +5,9 @@ try:
     from transformers import (
         AutoProcessor,
         Qwen3VLForConditionalGeneration,
-        Qwen3VLMoeForConditionalGeneration
+        Qwen3VLMoeForConditionalGeneration,
     )
-except:
+except ImportError:
     pass
 import logging
 
@@ -40,7 +40,9 @@ class Qwen3VLHFModel(BaseModel):
             self.model = Qwen3VLForConditionalGeneration.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
+    def get_response(
+        self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
+    ) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -76,7 +78,9 @@ class Qwen3VLHFModel(BaseModel):
                         user_text += "This question has one of the following options as the correct answer:\n"
                     for option in turn["options"]:
                         user_text += f"- {option}\n"
-                    user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                    user_text += (
+                        "Your response must be **ONLY** the full text of the selected option. Do not "
+                    )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words."
 
                 if i == 0:
@@ -116,11 +120,12 @@ class Qwen3VLHFModel(BaseModel):
         with torch.inference_mode():
             output = self.model.generate(
                 **inputs,
-                max_new_tokens=300,
+                max_new_tokens=1024,
                 do_sample=False,
-                temperature=None,
+                temperature=0.0,
+                num_beams=1,
                 top_p=None,
-                top_k=None,
+                use_cache=True,
             )
             output = output[0][input_len:]
 

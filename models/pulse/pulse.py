@@ -1,23 +1,17 @@
 import logging
-import re
 
 import torch
 
 from .. import BaseModel, register_model
-from .LLaVA.llava.constants import (
-    DEFAULT_IM_END_TOKEN,
-    DEFAULT_IM_START_TOKEN,
-    DEFAULT_IMAGE_TOKEN,
-    IMAGE_TOKEN_INDEX,
-)
+from .LLaVA.llava.constants import DEFAULT_IMAGE_TOKEN, IMAGE_TOKEN_INDEX
 from .LLaVA.llava.conversation import conv_templates
-from .LLaVA.llava.utils import disable_torch_init
 from .LLaVA.llava.mm_utils import (
     get_model_name_from_path,
     process_images,
     tokenizer_image_token,
 )
 from .LLaVA.llava.model.builder import load_pretrained_model
+from .LLaVA.llava.utils import disable_torch_init
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +35,9 @@ class PulseModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
+    def get_response(
+        self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
+    ) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -51,7 +47,6 @@ class PulseModel(BaseModel):
         assert (
             "image" in conversation.conversation[1]
         ), "The conversation must contain an ECG image in the first user turn."
-
 
         conv = conv_templates["llava_v1"].copy()
         conv.system = conversation.conversation[0]["text"]
@@ -79,12 +74,14 @@ class PulseModel(BaseModel):
                         user_text += "This question has one of the following options as the correct answer:\n"
                     for option in turn["options"]:
                         user_text += f"- {option}\n"
-                    user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                    user_text += (
+                        "Your response must be **ONLY** the full text of the selected option. Do not "
+                    )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
 
                 if i == 0:
                     user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text
-                
+
                 conv.append_message(conv.roles[0], user_text)
             elif turn["role"] == "model":
                 conv.append_message(conv.roles[1], turn["text"])
@@ -120,8 +117,12 @@ class PulseModel(BaseModel):
                 input_ids,
                 images=images_tensor,
                 image_sizes=[ecg_image.size],
+                max_new_tokens=1024,
                 do_sample=False,
-                max_new_tokens=300,
+                temperature=0.0,
+                num_beams=1,
+                top_p=None,
+                use_cache=True,
             )
 
         return self.tokenizer.batch_decode(output, skip_special_tokens=True)[0].strip()

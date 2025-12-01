@@ -1,21 +1,23 @@
 import logging
+
 import torch
 
 from .. import BaseModel, register_model
 from .LLaVA_Med.llava.constants import (
-    IMAGE_TOKEN_INDEX,
-    DEFAULT_IMAGE_TOKEN,
+    DEFAULT_IM_END_TOKEN,
     DEFAULT_IM_START_TOKEN,
-    DEFAULT_IM_END_TOKEN
+    DEFAULT_IMAGE_TOKEN,
+    IMAGE_TOKEN_INDEX,
 )
 from .LLaVA_Med.llava.conversation import conv_templates
+from .LLaVA_Med.llava.mm_utils import (
+    get_model_name_from_path,
+    process_images,
+    tokenizer_image_token,
+)
 from .LLaVA_Med.llava.model.builder import load_pretrained_model
 from .LLaVA_Med.llava.utils import disable_torch_init
-from .LLaVA_Med.llava.mm_utils import (
-    tokenizer_image_token,
-    get_model_name_from_path,
-    process_images
-)
+
 
 @register_model("llava-med")
 class LLaVAMedModel(BaseModel):
@@ -38,14 +40,21 @@ class LLaVAMedModel(BaseModel):
             pad_token_id = self.tokenizer.pad_token_id
         else:
             pad_token_id = self.tokenizer.eos_token_id
-        
+
         self.model.config.pad_token_id = pad_token_id
 
     @classmethod
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
-    
-    def get_response(self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs) -> str:
+
+    def get_response(
+        self,
+        conversation,
+        target_dx: str,
+        enable_condensed_chat: bool = False,
+        verbose: bool = False,
+        **kwargs,
+    ) -> str:
         assert (
             conversation.conversation[0]["role"] == "system"
         ), "The first turn in the conversation must be from the system."
@@ -89,7 +98,9 @@ class LLaVAMedModel(BaseModel):
                         user_text += "This question has one of the following options as the correct answer:\n"
                     for option in turn["options"]:
                         user_text += f"- {option}\n"
-                    user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
+                    user_text += (
+                        "Your response must be **ONLY** the full text of the selected option. Do not "
+                    )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
 
                 if i == 0:
@@ -106,14 +117,26 @@ class LLaVAMedModel(BaseModel):
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
-        
+
         response = self.generate(prompt, ecg_image)
+
+        # For the initial diagnostic question, we manually post-process to extract the final
+        # answer as this model tends to phrase the option rather than select it directly.
+        if len(conversation.conversation) == 2:
+            if response.lower().startswith(f"the ecg in the image is from a patient with {target_dx}"):
+                response = "yes"
+            elif (
+                response.lower().startswith(f"the ecg does not show any evidence of {target_dx}")
+                or response.lower().startswith(f"the ecg does not show any signs of {target_dx}")
+                or response.lower().startswith(f"the ecg in the image does not show any signs of {target_dx}")
+            ):
+                response = "no"
 
         if verbose:
             print(f"Response: {response}")
 
         return response
-    
+
     def generate(self, prompt: str, ecg_image, **kwargs):
         images_tensor = process_images([ecg_image], self.image_processor, self.model.config).to(
             self.model.device, dtype=torch.float16
@@ -129,8 +152,11 @@ class LLaVAMedModel(BaseModel):
             output = self.model.generate(
                 input_ids,
                 images=images_tensor,
+                max_new_tokens=1024,
                 do_sample=False,
-                max_new_tokens=300,
+                temperature=0.0,
+                num_beams=1,
+                top_p=None,
                 use_cache=True,
             )
 
