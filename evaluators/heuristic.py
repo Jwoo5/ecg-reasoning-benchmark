@@ -1,3 +1,4 @@
+import argparse
 import re
 from typing import List, Union
 
@@ -6,10 +7,17 @@ from . import Evaluator, register_evaluator
 
 @register_evaluator("heuristic")
 class HeuristicEvaluator(Evaluator):
-    def __init__(self, use_builtin_metrics: bool = True):
-        super().__init__(use_builtin_metrics=use_builtin_metrics)
+    @staticmethod
+    def parse_arguments(args) -> argparse.Namespace:
+        parser = Evaluator.add_default_arguments()
+        return parser.parse_args(args)
 
-    def validate(self, gt: Union[str, List[str]], model_response: str, question_type: str) -> bool:
+    def __init__(self, args: argparse.Namespace):
+        super().__init__(args)
+
+    def validate(
+        self, gt: Union[str, List[str]], model_response: str, question_type: str, **kwargs
+    ) -> bool:
         """Validate the model response using heuristic rules.
 
         Args:
@@ -68,6 +76,7 @@ class HeuristicEvaluator(Evaluator):
 
         elif gt in response:
             # case by case handling as they seem hard to be parsed generally
+            # just include known failure cases here
             if (
                 gt == "prolongation of the pr interval"
                 and response == "progressive prolongation of the pr interval"
