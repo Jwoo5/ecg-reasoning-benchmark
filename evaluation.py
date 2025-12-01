@@ -6,7 +6,7 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-from evaluators import get_evaluator
+from evaluators import get_evaluator_cls
 
 
 def get_parser():
@@ -55,11 +55,19 @@ def get_parser():
     return parser
 
 
-def main(args):
-    output_dir = args.save_dir
+def main():
+    parser = get_parser()
+    args, remaining_args = parser.parse_known_args()
 
-    evaluator = get_evaluator(args.evaluator, use_builtin_metrics=True)
+    output_dir = os.path.join(args.save_dir, args.evaluator)
 
+    evaluator_cls = get_evaluator_cls(args.evaluator)
+    evaluator_args = evaluator_cls.parse_arguments(remaining_args)
+    evaluator = evaluator_cls(evaluator_args)
+
+    is_dry_run = getattr(evaluator.args, "estimate_cost", False)
+
+    total_input_tokens = 0
     rows = {}
     for model in args.model:
         for dataset in args.dataset:
@@ -85,8 +93,15 @@ def main(args):
                         #     f"Model name mismatch: {result['metadata']['model']} vs {model}"
                         # )
 
-                        evaluator.evaluate(result)
+                        if is_dry_run:
+                            total_input_tokens += evaluator.evaluate(result)
+                        else:
+                            evaluator.evaluate(result)
                 pbar.set_description(f"Evaluating {model} on {dataset} - Done")
+
+            if is_dry_run:
+                print(f"[Dry Run] Total input tokens for {model} on {dataset}: {total_input_tokens}")
+                continue
 
             # aggregate metrics into rows to make dataframes
             # NOTE only the built-in metrics are taken accounted here
@@ -131,15 +146,14 @@ def main(args):
                 rows[dataset][name].append(row)
 
     # save calculated metrics to csv files
-    for dataset in args.dataset:
-        for name in evaluator.metrics.keys():
-            df = pd.DataFrame(rows[dataset][name])
-            if not os.path.exists(os.path.join(output_dir, dataset)):
-                os.makedirs(os.path.join(output_dir, dataset))
-            df.to_csv(os.path.join(output_dir, dataset, f"{name}.csv"), index=False)
+    if not is_dry_run:
+        for dataset in args.dataset:
+            for name in evaluator.metrics.keys():
+                df = pd.DataFrame(rows[dataset][name])
+                if not os.path.exists(os.path.join(output_dir, dataset)):
+                    os.makedirs(os.path.join(output_dir, dataset))
+                df.to_csv(os.path.join(output_dir, dataset, f"{name}.csv"), index=False)
 
 
 if __name__ == "__main__":
-    parser = get_parser()
-    args = parser.parse_args()
-    main(args)
+    main()

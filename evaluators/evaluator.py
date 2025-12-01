@@ -1,9 +1,43 @@
-from typing import List, Union
+import argparse
+from typing import List, Optional, Union
 
 
 class Evaluator:
-    def __init__(self, use_builtin_metrics: bool = True):
-        if use_builtin_metrics:
+    @staticmethod
+    def parse_arguments(args):
+        """Parse evaluator-specific arguments.
+
+        Args:
+            args: List of command-line arguments.
+
+        Returns:
+            Parsed arguments.
+        """
+        parser = argparse.ArgumentParser()
+        # expected to raise an error if there are unknown args when the subclass do not override
+        # the parser
+        return parser.parse_args(args)
+
+    @staticmethod
+    def add_default_arguments() -> argparse.ArgumentParser:
+        """Add default evaluator arguments to the parser.
+        Expected to be used in the subclass implementations of parse_arguments.
+
+        Returns:
+            argparse.ArgumentParser: The argument parser with default evaluator arguments.
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "--use-builtin-metrics",
+            action="store_true",
+            help="if set, use the built-in metrics defined in the Evaluator class.",
+        )
+        return parser
+
+    def __init__(self, args):
+        self.args = args
+
+        if args.use_builtin_metrics:
             # if there is no custom implementation of init_metrics, we don't need to wrap it
             # because the built-in one will be used directly
             if type(self).init_metrics is not Evaluator.init_metrics:
@@ -224,12 +258,49 @@ class Evaluator:
         return reduced_metrics
 
     # built-in evaluation implementations
-    def evaluate(self, result: dict) -> None:
+    def evaluate(self, result: dict) -> Optional[int]:
         """Evaluate a single sample result and save metrics.
+        For those evaluators that have `estimate_cost` argument (e.g., GeminiEvaluator), this method
+        may return an integer representing the token count instead of performing evaluation.
 
         Args:
             result (dict): The result to evaluate.
         """
+        dx = result["metadata"]["target_dx"]
+        dx_label = result["metadata"]["dx_label"]
+        dx_label_str = "yes" if dx_label else "no"
+
+        is_dry_run = getattr(self.args, "estimate_cost", False)
+        if is_dry_run:
+            # in dry-run mode, we do not evaluate metrics and just calculate token usage instead to
+            # estimate cost
+            total_input_tokens = 0
+            total_input_tokens += self.validate(
+                question=result["data"]["initial_diagnostic_question"]["question"],
+                gt=dx_label_str,
+                model_response=result["data"]["initial_diagnostic_question"]["model_response"],
+                question_type="initial_diagnostic_question",
+            )
+            if "path_1" in result["data"]:
+                for loop_idx, loop in enumerate(result["data"]["path_1"]):
+                    for step_name, step in loop.items():
+                        if step_name == "grounding":
+                            for g_step in step:
+                                total_input_tokens += self.validate(
+                                    question=g_step["question"],
+                                    gt=g_step["answer"],
+                                    model_response=g_step["model_response"],
+                                    question_type=g_step["question_type"],
+                                )
+                        else:
+                            total_input_tokens += self.validate(
+                                question=step["question"],
+                                gt=step["answer"],
+                                model_response=step["model_response"],
+                                question_type=step_name,
+                            )
+            return total_input_tokens
+
         if not hasattr(self, "metrics") or self.metrics is None:
             raise ValueError("Metrics have not been initialized. Call init_metrics() before evaluate().")
 
@@ -238,10 +309,6 @@ class Evaluator:
                 "Built-in metrics require to be initialized with the default name 'total'. "
                 "Call init_metrics('total') before evaluate()."
             )
-
-        dx = result["metadata"]["target_dx"]
-        dx_label = result["metadata"]["dx_label"]
-        dx_label_str = "yes" if dx_label else "no"
 
         if dx not in self.metrics:
             raise ValueError(
@@ -267,11 +334,14 @@ class Evaluator:
         else:
 
             def _eval_step(step, terminated_early, metric_names) -> bool:
-                step_name = step["question_type"]
+                question = step["question"]
                 gt = step["answer"]
                 model_response = step["model_response"]
+                step_name = step["question_type"]
 
-                corrected = self.validate(gt, model_response, step_name)
+                corrected = self.validate(
+                    question=question, gt=gt, model_response=model_response, question_type=step_name
+                )
                 for name in metric_names:
                     self.metrics[name]["path_1"]["per_loop"][step_name]["total_w_gt"] += 1
                     if not terminated_early:
@@ -286,8 +356,14 @@ class Evaluator:
 
             self.metrics["total"]["path_1"]["total"] += 1
             self.metrics[dx]["path_1"]["total"] += 1
+            question = initial_diagnostic_question_result["question"]
             model_response = initial_diagnostic_question_result["model_response"]
-            initial_dx_correct = self.validate(dx_label_str, model_response, "initial_diagnostic_question")
+            initial_dx_correct = self.validate(
+                question=question,
+                gt=dx_label_str,
+                model_response=model_response,
+                question_type="initial_diagnostic_question",
+            )
             if initial_dx_correct:
                 self.metrics["total"]["initial_diagnostic_question"]["correct"] += 1
                 self.metrics[dx]["initial_diagnostic_question"]["correct"] += 1
@@ -323,9 +399,17 @@ class Evaluator:
                     self.metrics[dx]["path_1"]["per_loop"]["depth_sum"] += depth_in_loop
 
                     if not terminated_early and loop_idx == len(result["data"]["path_1"]) - 1:
-                        final_dx_correct = self._validate_decision(
-                            loop["decision"]["answer"], loop["decision"]["model_response"]
-                        )
+                        if hasattr(self, "_validate_decision"):
+                            final_dx_correct = self._validate_decision(
+                                loop["decision"]["answer"], loop["decision"]["model_response"]
+                            )
+                        else:
+                            final_dx_correct = self.validate(
+                                question=loop["decision"]["question"],
+                                gt=loop["decision"]["answer"],
+                                model_response=loop["decision"]["model_response"],
+                                question_type="decision",
+                            )
 
             if not terminated_early:
                 self.metrics["total"]["path_1"]["completed"] += 1
@@ -335,15 +419,21 @@ class Evaluator:
                     self.metrics["total"]["path_1"]["aligned"] += 1
                     self.metrics[dx]["path_1"]["aligned"] += 1
 
-    def validate(self, gt: Union[str, List[str]], model_response: str, question_type: str) -> bool:
+    def validate(
+        self, question: str, gt: Union[str, List[str]], model_response: str, question_type: str, **kwargs
+    ) -> Union[bool, int]:
         """Validate the model response against the ground truth.
+        For those evaluators that have `estimate_cost` argument (e.g., GeminiEvaluator), this method
+        may return an integer representing the token count instead of a boolean validation result.
 
         Args:
+            question (str): The question being evaluated.
             gt (Union[str, List[str]]): The ground truth answer(s).
             model_response (str): The model's response.
             question_type (str): The type of question being evaluated.
 
         Returns:
-            bool: True if the model response is correct, False otherwise.
+            Union[bool, int]: True if the model response is correct, False otherwise,
+                or an integer token count if estimating cost.
         """
         raise NotImplementedError("Evaluator must implement the validate method.")

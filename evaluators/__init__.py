@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-def get_evaluator(evaluator_name: str, **kwargs) -> Evaluator:
+def get_evaluator_cls(evaluator_name: str) -> Evaluator:
     evaluator = None
 
     if evaluator_name in EVALUATOR_REGISTRY:
@@ -19,10 +19,7 @@ def get_evaluator(evaluator_name: str, **kwargs) -> Evaluator:
         f"Could not infer evaluator from evaluator name '{evaluator_name}'. "
         f"Available evaluators are: {str(EVALUATOR_REGISTRY.keys())}"
     )
-
-    evaluator_instance = evaluator(**kwargs)
-
-    return evaluator_instance
+    return evaluator
 
 
 def register_evaluator(name):
