@@ -4,6 +4,7 @@ import io
 import json
 import logging
 import os
+import shutil
 from typing import Dict, Optional, Tuple, Union
 
 import ecg_plot
@@ -68,9 +69,6 @@ def get_parser():
         ),
     )
     parser.add_argument(
-        "--output-dir", type=str, default="results", help="output directory to save the results"
-    )
-    parser.add_argument(
         "--enable-condensed-chat",
         action="store_true",
         help=(
@@ -78,6 +76,12 @@ def get_parser():
             "answer options will only be provided in the last turn of the conversation, and previous "
             "turns will contain only the answer text without the options"
         ),
+    )
+    parser.add_argument(
+        "--output-dir", type=str, default="results", help="output directory to save the results"
+    )
+    parser.add_argument(
+        "--rebase", action="store_true", help="whether to re-base and overwrite existing results"
     )
     parser.add_argument(
         "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
@@ -226,11 +230,16 @@ class Inferencer:
         sample["data"]["initial_diagnostic_question"]["question"] += (
             " If you don't know how to analyze the ECG to answer this question, choose "
             "'I don't know'. Then, you will receive guidance on how to systematically "
-            "analyze the ECG to improve your decision-making skills. NEVER choose 'I don't know' "
-            "because you are uncertain or want to avoid answering the question. "
+            # "analyze the ECG to improve your decision-making skills. NEVER choose 'I don't know' "
+            # "because you want to avoid answering the question. "
+            "analyze the ECG to improve your decision-making skills."
         )
         required_base64_image = False
-        if self.model_name.startswith("qwen3-vl-hf"):
+        if (
+            self.model_name.startswith("qwen3-vl-hf")
+            or self.model_name.startswith("gemini")
+            or self.model_name.startswith("gpt")
+        ):
             required_base64_image = True
 
         response = self.proceed_step(
@@ -329,12 +338,23 @@ def main(args):
         os.path.join(root_dir, source_dataset)
     ), f"Dataset directory not found: {os.path.join(root_dir, source_dataset)}"
 
+    if args.rebase and os.path.exists(os.path.join(output_dir, model_name, source_dataset)):
+        shutil.rmtree(os.path.join(output_dir, model_name, source_dataset))
+
     n = N_MIMIC_IV_ECG if source_dataset.lower() == "mimic_iv_ecg" else N_PTBXL
     n_path1 = 0
     n_failed = 0
+    n_total = 0
     with tqdm(total=n, ncols=140) as pbar:
         for dx in sorted(os.listdir(os.path.join(root_dir, source_dataset))):
             for fname in sorted(glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json"))):
+                save_path = os.path.join(output_dir, model_name, source_dataset, dx, os.path.basename(fname))
+                if not os.path.exists(os.path.dirname(save_path)):
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                elif os.path.exists(save_path):
+                    pbar.update(1)
+                    continue
+
                 with open(fname, "r") as f:
                     sample = json.load(f)
 
@@ -343,17 +363,16 @@ def main(args):
                     ecg_base_dir,
                     enable_condensed_chat=args.enable_condensed_chat,
                 )
+
+                n_total += 1
                 if result["data"]["initial_diagnostic_question"]["eval_path"] == 1:
                     n_path1 += 1
                 elif result["data"]["initial_diagnostic_question"]["eval_path"] == -1:
                     n_failed += 1
-                pbar.set_description(
-                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{pbar.n+1-n_failed} | Failed: {n_failed}"
-                )
 
-                save_path = os.path.join(output_dir, model_name, source_dataset, dx, os.path.basename(fname))
-                if not os.path.exists(os.path.dirname(save_path)):
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                pbar.set_description(
+                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{n_total-n_failed} | Failed: {n_failed}"
+                )
 
                 with open(save_path, "w") as f:
                     json.dump(result, f, indent=4)
