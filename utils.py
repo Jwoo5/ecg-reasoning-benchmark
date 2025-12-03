@@ -1,11 +1,11 @@
 import base64
 import io
-from typing import Dict, List, Optional, Union
+import os
+from pathlib import Path
+from typing import List, Optional
 
 import torch
 from PIL import Image
-
-# from google import genai
 
 
 class Conversation:
@@ -32,42 +32,6 @@ class Conversation:
         turn = {"role": "model", "text": message}
         self.conversation.append(turn)
 
-    # def init_chat(self, ecg, ecg_image, question, answer):
-
-    #     self.conversation.append({"question" : question, "ecg_image" : ecg_image, "ecg" : ecg, "answer" : answer })
-    #     # if "gpt" in self.model_name:
-    #     #     base64_image = base64_image_encoder(ecg_image)
-    #     #     self.conversation.append({"role": "user", "content": [{ "type": "input_text", "text": f"{prompt}, {question}, {ecg}"},
-    #     #                 {
-    #     #                     "type": "input_image",
-    #     #                     "image_url": f"data:image/png;base64,{base64_image}"
-    #     #                 }]
-    #     #     })
-    #     #     self.conversation.append({"role" : "assistant", "content" : f"{answer}"})
-
-    #     # if "gemini" in self.model_name:
-    #     #     base64_image = base64_image_encoder(ecg_image)
-    #     #     self.conversation.append({"role" : "user", "parts": [
-    #     #         {"text" : f"{prompt}, {question}, {ecg}"},
-    #     #         genai.types.Part.from_bytes(
-    #     #             data=base64_image,
-    #     #             mime_type='image/png',
-    #     #         ),
-    #     #         ]
-    #     #     })
-    #     #     self.conversation.append({"role": "model", "parts":[{"text" : f"{answer}"}]})
-
-    # def add_chat(self, question, option, answer_idx):
-
-    #     self.conversation.append({"question" : question, "answer" : option[answer_idx]})
-    #     # if "gpt" in self.model_name:
-    #     #     self.conversation.append({"role": "user", "content" : f"question : {question}, option : {option}"})
-    #     #     self.conversation.append({"role": "assistant", "content" : option[answer_idx]})
-
-    #     # if "gemini" in self.model_name:
-    #     #     self.conversation.append({"role": "user", "parts" : [{"text" : f"question : {question}, option : {option}"}]})
-    #     #     self.conversation.append({"role": "model", "parts" : [{"text" : f"{option[answer_idx]}"}]})
-
 
 def make_letter_indexed(options: List[str]) -> List[str]:
     indexed_options = []
@@ -81,3 +45,16 @@ def base64_image_encoder(image: Image.Image):
     image.save(buf, format="PNG")
     img_bytes = buf.getvalue()
     return base64.b64encode(img_bytes).decode("utf-8")
+
+
+def get_cache_dir() -> Path:
+    cache_home = os.environ.get("ERB_CACHE")
+
+    if cache_home:
+        target_dir = Path(cache_home)
+    else:
+        target_dir = Path.home() / ".cache" / "ecg_reasoning_benchmark"
+
+    target_dir.mkdir(parents=True, exist_ok=True)
+
+    return target_dir

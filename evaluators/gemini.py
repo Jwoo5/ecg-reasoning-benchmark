@@ -1,6 +1,9 @@
 import argparse
 import getpass
+import hashlib
+import json
 import os
+import pickle
 from typing import List, Union
 
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
@@ -12,6 +15,8 @@ except ImportError as e:
     raise ImportError(
         "Google Gemini SDK is not installed. Please install it with `pip install google-genai`."
     ) from e
+
+from utils import get_cache_dir
 
 from . import Evaluator, register_evaluator
 
@@ -45,7 +50,9 @@ def is_retryable_error(exception):
         if exception.code == 429 or "RESOURCE_EXHAUSTED" in str(exception):
             print(f"\n Quota exceeded (429). Retrying... Error: {exception}")
             return True
+    elif isinstance(exception, errors.ServerError):
         if exception.code and exception.code >= 500:
+            print(f"\n Server error ({exception.code}). Retrying... Error: {exception}")
             return True
 
     return False
@@ -85,6 +92,22 @@ class GeminiEvaluator(Evaluator):
                 "Only applicable if --use-cache is set."
             ),
         )
+        parser.add_argument(
+            "--save-cache",
+            action="store_true",
+            help="If set, saves the response cache to disk.",
+        )
+        parser.add_argument(
+            "--save-cache-interval",
+            type=int,
+            default=100,
+            help="Interval (in number of entries) to save the cache to disk.",
+        )
+        parser.add_argument(
+            "--load-cache",
+            action="store_true",
+            help="If set, loads the response cache from disk.",
+        )
 
         return parser.parse_args(args)
 
@@ -110,8 +133,31 @@ class GeminiEvaluator(Evaluator):
 
         self.use_cache = args.use_cache
         self.cache_size = args.cache_size
+        self.save_cache = args.save_cache
+        self.save_cache_interval = args.save_cache_interval
+        self.load_cache = args.load_cache
+
         if self.use_cache:
-            self.cache = {}
+            if self.save_cache or self.load_cache:
+                self.cache_dir = get_cache_dir()
+                key = {
+                    "model": "gemini",
+                    "model_name": self.model_name,
+                }
+                serialized_key = json.dumps(key, sort_keys=True, default=str)
+                self.cache_file = hashlib.sha256(serialized_key.encode("utf-8")).hexdigest() + ".pkl"
+
+            self.cache = None
+            if self.load_cache:
+                if os.path.exists(os.path.join(self.cache_dir, self.cache_file)):
+                    with open(os.path.join(self.cache_dir, self.cache_file), "rb") as f:
+                        self.cache = pickle.load(f)
+                    print(
+                        f"Loaded cache with {len(self.cache)} entries from {self.cache_file} for "
+                        f"evaluator {self.model_name}."
+                    )
+            if self.cache is None:
+                self.cache = {}
 
     def _get_evaluation_prompt(self, question, gt_answer, model_response):
         """Constructs the system prompt for clinical evaluation."""
@@ -189,8 +235,11 @@ class GeminiEvaluator(Evaluator):
             if self.use_cache:
                 if self.cache_size == -1 or len(self.cache) < self.cache_size:
                     self.cache[prompt_text] = is_aligned
+                    if self.save_cache and len(self.cache) % self.save_cache_interval == 0:
+                        with open(os.path.join(self.cache_dir, self.cache_file), "wb") as f:
+                            pickle.dump(self.cache, f)
                 else:
-                    # remove the first inserted item
+                    # remove the the oldest entry from the cache
                     self.cache.pop(next(iter(self.cache)))
                     self.cache[prompt_text] = is_aligned
 
