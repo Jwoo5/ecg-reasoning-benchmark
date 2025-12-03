@@ -1,71 +1,188 @@
-import logging
-from google import genai
-from .. import BaseModel
-from .. import register_model
-from utils import base64_image_encoder
-logger = logging.getLogger(__name__)
+import getpass
+import hashlib
+import json
+import os
+import pickle
+
+from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
+
+from utils import get_cache_dir
+
+from .. import BaseModel, register_model
+
+try:
+    from google import genai
+    from google.genai import errors, types
+except ImportError as e:
+    pass
+
+
+def is_retryable_error(exception):
+    """Determines if an exception is 429 (Resource Exhausted) or 5xx (Server Error)."""
+    if isinstance(exception, errors.ClientError):
+        if exception.code == 429 or "RESOURCE_EXHAUSTED" in str(exception):
+            print(f"\n Quota exceeded (429). Retrying... Error: {exception}")
+            return True
+    elif isinstance(exception, errors.ServerError):
+        if exception.code and exception.code >= 500:
+            print(f"\n Server error ({exception.code}). Retrying... Error: {exception}")
+            return True
+
+    return False
+
 
 @register_model("gemini")
 class GeminiModel(BaseModel):
     def __init__(
         self,
-        hf_model_variant: str = "3-flash",
-        is_thinking: bool = False
+        model_variant: str = "2.5-flash",
+        thinking_budget: int = 1024,
+        gemini_api_key: str = None,
     ):
-        self.hf_model_variant = hf_model_variant
-        self.is_thinking = is_thinking
+        try:
+            from google import genai
+        except ImportError as e:
+            raise ImportError(
+                "Google Gemini SDK is not installed. Please install it with `pip install google-genai`."
+            ) from e
 
-        self.model_id = f"gemini-{self.hf_model_variant}"
-        self.model = genai.Client()
+        if model_variant.startswith("gemini-"):
+            model_variant = model_variant[len("gemini-") :]
 
+        self.model_variant = model_variant
+        self.thinking_budget = thinking_budget
+        self.model_id = f"gemini-{self.model_variant}"
+        if self.model_id not in ["gemini-2.5-pro", "gemini-3.0-pro"]:
+            self.thinking_budget = 0
 
-    def get_response(self, conversation):
-        #1. 들어올때 
+        self.api_key = gemini_api_key
+        if not self.api_key:
+            if "GOOGLE_API_KEY" in os.environ:
+                self.api_key = os.environ["GOOGLE_API_KEY"]
+            else:
+                print("Gemini API Key not provided.")
+                self.api_key = getpass.getpass("Please enter your Gemini API Key: ")
 
-        content = []
+        try:
+            self.model = genai.Client(api_key=self.api_key)
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize Gemini client: {e}")
 
-        first_user_turn_idx = 0
-        if conversation.conversation[0]["role"] == "system":
-            first_user_turn_idx = 1
-            system_instruction = conversation.conversation[0]["text"]
-        else : 
-            system_instruction = "You are an expert cardiologist."
-        
+        # XXX hardcode for temporary - should be passed from outside (by argument)
+        # self.dataset = "ptbxl"
+        # self.dataset = "mimic_iv_ecg"
+
+        # cache_dir = get_cache_dir() / "models" / self.model_id
+        # cache_dir.mkdir(parents=True, exist_ok=True)
+        # self.cache_file = cache_dir / f"response_cache_{self.dataset}.pkl"
+        # self.cache = {}
+        # if self.cache_file.exists():
+        #     with open(self.cache_file, "rb") as f:
+        #         self.cache = pickle.load(f)
+        #     print(f"Loaded cache with {len(self.cache)} entries from {self.cache_file}.")
+
+    @classmethod
+    def build_model(
+        cls, model_variant: str = "3-flash", thinking_budget: int = 0, gemini_api_key: str = None, **kwargs
+    ):
+        return cls(
+            model_variant=model_variant, thinking_budget=thinking_budget, gemini_api_key=gemini_api_key
+        )
+
+    @retry(
+        retry=retry_if_exception(is_retryable_error),
+        wait=wait_exponential(multiplier=2, min=2, max=60),
+        stop=stop_after_attempt(15),
+    )
+    def _call_gemini_api(self, model_name, contents, config):
+        return self.model.models.generate_content(
+            model=model_name,
+            contents=contents,
+            config=config,
+        )
+
+    def get_response(
+        self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
+    ) -> str:
+        assert (
+            conversation.conversation[0]["role"] == "system"
+        ), "The first turn in the conversation must be from the system."
         assert (
             conversation.conversation[-1]["role"] == "user"
         ), "The last turn in the conversation must be from the user."
         assert (
-            "image" in conversation.conversation[first_user_turn_idx]
+            "image" in conversation.conversation[1]
         ), "The conversation must contain an ECG image in the first user turn."
 
-        base64_image = base64_image_encoder(conversation.conversation[first_user_turn_idx]["image"])
+        system = conversation.conversation[0]["text"]
 
-        for turn in conversation.conversation[first_user_turn_idx:]:
-            content.append[{"role" : turn["role"], "parts" : [{"type": "text", "text" : turn["text"]}]}]
+        contents = []
+        for i, turn in enumerate(conversation.conversation[1:]):
+            if turn["role"] == "user":
+                user_text = f"Question: {turn['question']}\n\n"
 
+                do_add_options = False
+                # do not add options in previous turns to reserve context length
+                if enable_condensed_chat:
+                    if i == len(conversation.conversation[1:]) - 1:
+                        do_add_options = True
+                else:
+                    do_add_options = True
 
-        content[0]["parts"].append(genai.types.Part.from_bytes(data=base64_image, mime_type='image/png',))
-        response = self.generate(content, system_instruction)
-        return response, 
-    
-    def generate(self, content, system_instruction, **kwargs):
-        
-        response = self.model.models.generate_content(
-            systemInstruction=system_instruction,
-            model=self.model_id,
-            contents=content,
-             config=genai.types.GenerateContentConfig(
-                thinking_config=genai.types.ThinkingConfig(
-                    include_thoughts=True
-                )
-            )
+                if do_add_options:
+                    if i == 0:
+                        user_text += "Options:\n"
+                    elif "select all possible leads" in turn["question"].lower():
+                        user_text += (
+                            "This question may have multiple correct answers from the following options:\n"
+                        )
+                    else:
+                        user_text += "This question has one of the following options as the correct answer:\n"
+                    for option in turn["options"]:
+                        user_text += f"- {option}\n"
+                    user_text += (
+                        "Your response must be **ONLY** the full text of the selected option. Do not "
+                    )
+                    user_text += "include any uncertainty, explanation, reasoning, or extra words."
+
+                if i == 0:
+                    parts = [types.Part.from_bytes(data=turn["image"], mime_type="image/png")]
+                    parts.append(types.Part(text=user_text))
+                else:
+                    parts = [types.Part(text=user_text)]
+                contents.append(types.Content(role="user", parts=parts))
+            elif turn["role"] == "model":
+                parts = [types.Part(text=turn["text"])]
+                contents.append(types.Content(role="model", parts=parts))
+
+        config = types.GenerateContentConfig(
+            system_instruction=system,
+            thinking_config=types.ThinkingConfig(thinking_budget=self.thinking_budget),
+            temperature=0.0,
         )
-        return response.text
 
+        # key = {
+        #     "model": self.model_id,
+        #     "contents": contents,
+        #     "config": config,
+        #     "ecg_image": conversation.conversation[1]['image']
+        # }
+        # serialized_key = json.dumps(key, sort_keys=True, default=str)
+        # hash_key = hashlib.sha256(serialized_key.encode("utf-8")).hexdigest()
 
-    @classmethod
-    def build_model(cls, hf_model_variant="3-flash", is_thinking=False, **kwargs):
-        return cls(
-            hf_model_variant=hf_model_variant,
-            is_thinking=is_thinking
-        )
+        if verbose:
+            print(f"\nQuestion: {conversation.conversation[-1]['question']}")
+
+        try:
+            response = self._call_gemini_api(self.model_id, contents, config)
+            response = response.text.strip()
+        except Exception as e:
+            raise RuntimeError(f"Failed to get response: {e}")
+
+        if verbose:
+            print(f"Response: {response}")
+
+        return response
+
+    def generate(self, **kwargs):
+        raise NotImplementedError("Use get_response method for GeminiModel.")
