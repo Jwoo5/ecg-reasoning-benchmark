@@ -106,7 +106,7 @@ class OpenTSLMModel(BaseModel):
 
         return reasoning, answer_part
 
-    def get_prompt(self, conversation, norm_ecg, means, stds):
+    def get_prompt(self, conversation, norm_ecg, means, stds, enable_condensed_chat: bool = False):
         """
         Constructs the OpenTSLM specific FullPrompt object.
         """
@@ -129,9 +129,13 @@ class OpenTSLMModel(BaseModel):
             )
             for turn in conversation.conversation[1:-1]:
                 if turn["role"] == "user":
-                    clinical_context += f"- {turn['question']} "
+                    clinical_context += f"- Question: {turn['question']}\n"
+                    if not enable_condensed_chat:
+                        clinical_context += " Options:\n"
+                        for option in turn["options"]:
+                            clinical_context += f" - {option}\n"
                 elif turn["role"] == "model":
-                    clinical_context += f"{turn['text']}\n"
+                    clinical_context += f"Assistant: {turn['text']}\n"
         else:
             clinical_context = "12-lead clinical ECG recording."
         pre_prompt += f"Clinical Context: {clinical_context}\n\n"
@@ -184,10 +188,17 @@ class OpenTSLMModel(BaseModel):
         full_prompt = FullPrompt(TextPrompt(pre_prompt), ts_prompts, TextPrompt(post_prompt))
         return full_prompt
 
-    def get_response(self, conversation, target_dx: str, verbose: bool = False, **kwargs) -> str:
+    def get_response(
+        self,
+        conversation,
+        target_dx: str,
+        enable_condensed_chat: bool = False,
+        verbose: bool = False,
+        **kwargs,
+    ) -> str:
         ecg_signal = conversation.conversation[1]["signal"]
         norm_ecg, means, stds = self._process_signal(ecg_signal)
-        prompt = self.get_prompt(conversation, norm_ecg, means, stds)
+        prompt = self.get_prompt(conversation, norm_ecg, means, stds, enable_condensed_chat)
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
@@ -203,7 +214,7 @@ class OpenTSLMModel(BaseModel):
                 response = "no"
 
         if verbose:
-            print(f"Response: {response}\n")
+            print(f"Response: {response}")
 
         return response
 
