@@ -1,19 +1,14 @@
 import getpass
-import hashlib
-import json
 import os
-import pickle
 
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
-
-from utils import get_cache_dir
 
 from .. import BaseModel, register_model
 
 try:
     from google import genai
     from google.genai import errors, types
-except ImportError as e:
+except ImportError:
     pass
 
 
@@ -36,7 +31,7 @@ class GeminiModel(BaseModel):
     def __init__(
         self,
         model_variant: str = "2.5-flash",
-        thinking_budget: int = 1024,
+        thinking_budget: int = 256,
         gemini_api_key: str = None,
     ):
         try:
@@ -61,29 +56,21 @@ class GeminiModel(BaseModel):
                 self.api_key = os.environ["GOOGLE_API_KEY"]
             else:
                 print("Gemini API Key not provided.")
-                self.api_key = getpass.getpass("Please enter your Gemini API Key: ")
+                self.api_key = getpass.getpass(
+                    prompt=(
+                        "Enter your Google Gemini API key (you can also set it via the "
+                        "GOOGLE_API_KEY environment variable): "
+                    )
+                )
 
         try:
             self.model = genai.Client(api_key=self.api_key)
         except Exception as e:
             raise RuntimeError(f"Failed to initialize Gemini client: {e}")
 
-        # XXX hardcode for temporary - should be passed from outside (by argument)
-        # self.dataset = "ptbxl"
-        # self.dataset = "mimic_iv_ecg"
-
-        # cache_dir = get_cache_dir() / "models" / self.model_id
-        # cache_dir.mkdir(parents=True, exist_ok=True)
-        # self.cache_file = cache_dir / f"response_cache_{self.dataset}.pkl"
-        # self.cache = {}
-        # if self.cache_file.exists():
-        #     with open(self.cache_file, "rb") as f:
-        #         self.cache = pickle.load(f)
-        #     print(f"Loaded cache with {len(self.cache)} entries from {self.cache_file}.")
-
     @classmethod
     def build_model(
-        cls, model_variant: str = "3-flash", thinking_budget: int = 0, gemini_api_key: str = None, **kwargs
+        cls, model_variant: str = "3-flash", thinking_budget: int = 256, gemini_api_key: str = None, **kwargs
     ):
         return cls(
             model_variant=model_variant, thinking_budget=thinking_budget, gemini_api_key=gemini_api_key
@@ -92,11 +79,11 @@ class GeminiModel(BaseModel):
     @retry(
         retry=retry_if_exception(is_retryable_error),
         wait=wait_exponential(multiplier=2, min=2, max=60),
-        stop=stop_after_attempt(15),
+        stop=stop_after_attempt(10),
     )
-    def _call_gemini_api(self, model_name, contents, config):
+    def _call_gemini_api(self, contents, config):
         return self.model.models.generate_content(
-            model=model_name,
+            model=self.model_id,
             contents=contents,
             config=config,
         )
@@ -161,20 +148,11 @@ class GeminiModel(BaseModel):
             temperature=0.0,
         )
 
-        # key = {
-        #     "model": self.model_id,
-        #     "contents": contents,
-        #     "config": config,
-        #     "ecg_image": conversation.conversation[1]['image']
-        # }
-        # serialized_key = json.dumps(key, sort_keys=True, default=str)
-        # hash_key = hashlib.sha256(serialized_key.encode("utf-8")).hexdigest()
-
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
 
         try:
-            response = self._call_gemini_api(self.model_id, contents, config)
+            response = self._call_gemini_api(contents, config)
             response = response.text.strip()
         except Exception as e:
             raise RuntimeError(f"Failed to get response: {e}")
