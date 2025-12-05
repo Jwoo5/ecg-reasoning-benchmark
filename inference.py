@@ -4,6 +4,7 @@ import io
 import json
 import logging
 import os
+import random
 import shutil
 from typing import Dict, Optional, Tuple, Union
 
@@ -86,15 +87,19 @@ def get_parser():
     parser.add_argument(
         "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
     )
+    parser.add_argument(
+        "--verbose", action="store_true", help="whether to enable verbose logging during inference"
+    )
 
     return parser
 
 
 class Inferencer:
-    def __init__(self, model: BaseModel, debug: bool = False):
+    def __init__(self, model: BaseModel, debug: bool = False, verbose: bool = False):
         self.model = model
         self.model_name = get_model_name(model)
         self.debug = debug
+        self.verbose = verbose
 
     def get_ecg_signal(
         self,
@@ -250,7 +255,7 @@ class Inferencer:
             return_response=True,
             required_base64_image=required_base64_image,
             enable_condensed_chat=enable_condensed_chat,
-            verbose=self.debug,
+            verbose=self.verbose,
             target_dx=dx,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
@@ -320,7 +325,7 @@ class Inferencer:
 
 def main(args):
     model = build_model(args.model, model_variant=args.model_variant)
-    inferencer = Inferencer(model, debug=args.debug)
+    inferencer = Inferencer(model, debug=args.debug, verbose=args.verbose)
 
     root_dir = args.root
     source_dataset = args.dataset
@@ -345,15 +350,29 @@ def main(args):
     n_path1 = 0
     n_failed = 0
     n_total = 0
+
+    if args.debug:
+        random.seed(42)
+
     with tqdm(total=n, ncols=140) as pbar:
         for dx in sorted(os.listdir(os.path.join(root_dir, source_dataset))):
-            for fname in sorted(glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json"))):
+            fnames = sorted(glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json")))
+            # for debugging, process only 10% of the data
+            if args.debug:
+                subset_len = len(fnames) // 10 if len(fnames) >= 10 else 1
+                fnames = random.sample(fnames, subset_len)
+
+            for fname in fnames:
                 save_path = os.path.join(output_dir, model_name, source_dataset, dx, os.path.basename(fname))
                 if not os.path.exists(os.path.dirname(save_path)):
                     os.makedirs(os.path.dirname(save_path), exist_ok=True)
                 elif os.path.exists(save_path):
                     pbar.update(1)
                     continue
+
+                # write empty file to reserve the spot so that other processes do not process the same file
+                with open(save_path, "w") as f:
+                    f.write("")
 
                 with open(fname, "r") as f:
                     sample = json.load(f)
@@ -371,9 +390,11 @@ def main(args):
                     n_failed += 1
 
                 pbar.set_description(
-                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{n_total-n_failed} | Failed: {n_failed}"
+                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{n_total-n_failed} "
+                    f"| Failed: {n_failed}"
                 )
 
+                # save the actual result
                 with open(save_path, "w") as f:
                     json.dump(result, f, indent=4)
 
