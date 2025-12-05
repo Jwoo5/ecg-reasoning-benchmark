@@ -222,7 +222,7 @@ class OpenTSLMModel(BaseModel):
         with torch.inference_mode():
             output = self.model.eval_prompt(
                 prompt,
-                max_new_tokens=300,
+                max_new_tokens=500,
             )
 
         _, response = self._split_reasoning_and_answer(output)
