@@ -1,67 +1,159 @@
-import logging
-from openai import OpenAI
-from .. import BaseModel
-from .. import register_model
-from utils import base64_image_encoder
-logger = logging.getLogger(__name__)
+import getpass
+import os
 
-@register_model("gemini")
-class GeminiModel(BaseModel):
-    def __init__(
-        self,
-        hf_model_variant: str = "5-mini",
-        is_thinking: bool = False
-    ):
-        self.hf_model_variant = hf_model_variant
-        self.is_thinking = is_thinking
+from openai import (
+    APIConnectionError,
+    BadRequestError,
+    InternalServerError,
+    OpenAI,
+    RateLimitError,
+)
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 
-        self.model_id = f"gpt-{self.hf_model_variant}"
-        self.model = OpenAI()
+from .. import BaseModel, register_model
 
 
-    def get_response(self, conversation):
+@register_model("gpt")
+class GPTModel(BaseModel):
+    def __init__(self, model_variant: str = "5-mini", gpt_api_key: str = None):
+        self.model_variant = model_variant
+        self.gpt_api_key = gpt_api_key
+        if model_variant.startswith("gpt-"):
+            model_variant = model_variant[len("gpt-") :]
 
-        content = []
+        self.model_id = f"gpt-{self.model_variant}"
 
-        first_user_turn_idx = 0
-        if conversation.conversation[0]["role"] == "system":
-            first_user_turn_idx = 1
-            system_instruction = conversation.conversation[0]["text"]
-        else : 
-            system_instruction = "You are an expert cardiologist."
-        
+        self.api_key = gpt_api_key
+        if not self.api_key:
+            if "GPT_API_KEY" in os.environ:
+                self.api_key = os.environ["GPT_API_KEY"]
+            else:
+                self.api_key = getpass.getpass(
+                    prompt="Enter your GPT API key (you can also set it via the GPT_API_KEY environment variable): "
+                )
+
+        # XXX to be moved to model-specific arguments
+        self.enable_reasoning = True
+
+        try:
+            self.model = OpenAI(api_key=self.api_key)
+        except ImportError as e:
+            raise RuntimeError(f"Failed to initialize OpenAI client: {e}")
+
+    @classmethod
+    def build_model(cls, model_variant="5-mini", gpt_api_key=None, **kwargs):
+        return cls(model_variant=model_variant, gpt_api_key=gpt_api_key)
+
+    @retry(
+        retry=retry_if_exception_type(
+            (RateLimitError, APIConnectionError, InternalServerError, BadRequestError)
+        ),
+        wait=wait_exponential(multiplier=2, min=4, max=60),
+        stop=stop_after_attempt(10),
+    )
+    def _call_openai_api(self, contents):
+        if self.enable_reasoning and "gpt-5" in self.model_id:
+            # NOTE turning on reasoning makes it impossible to control the temperature
+            model_kwargs = {"reasoning_effort": "medium"}
+        else:
+            model_kwargs = {
+                "reasoning_effort": "none",
+                "temperature": 0,
+                "frequency_penalty": 0,
+                "presence_penalty": 0,
+            }
+
+        return self.model.chat.completions.create(
+            model=self.model_id,
+            messages=contents,
+            service_tier="flex",
+            **model_kwargs,
+        )
+
+    def get_response(
+        self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
+    ) -> str:
+        assert (
+            conversation.conversation[0]["role"] == "system"
+        ), "The first turn in the conversation must be from the system."
         assert (
             conversation.conversation[-1]["role"] == "user"
         ), "The last turn in the conversation must be from the user."
         assert (
-            "image" in conversation.conversation[first_user_turn_idx]
+            "image" in conversation.conversation[1]
         ), "The conversation must contain an ECG image in the first user turn."
 
-        base64_image = base64_image_encoder(conversation.conversation[first_user_turn_idx]["image"])
+        contents = []
 
-        for turn in conversation.conversation[first_user_turn_idx:]:
+        system = conversation.conversation[0]["text"]
+        contents.append({"role": "system", "content": system})
+
+        for i, turn in enumerate(conversation.conversation[1:]):
             if turn["role"] == "user":
-                content.append[{"role" : "user", "content" : [{"type": "input_text", "text" : turn["text"]}]}]
+                user_text = f"Question: {turn['question']}\n\n"
+
+                do_add_options = False
+                # do not add options in previous turns to reserve context length
+                if enable_condensed_chat:
+                    if i == len(conversation.conversation[1:]) - 1:
+                        do_add_options = True
+                else:
+                    do_add_options = True
+
+                if do_add_options:
+                    if i == 0:
+                        user_text += "Options:\n"
+                    elif "select all possible leads" in turn["question"].lower():
+                        user_text += (
+                            "This question may have multiple correct answers from the following options:\n"
+                        )
+                    else:
+                        user_text += "This question has one of the following options as the correct answer:\n"
+                    for option in turn["options"]:
+                        user_text += f"- {option}\n"
+                    user_text += (
+                        "Your response must be **ONLY** the full text of the selected option. Do not "
+                    )
+                    user_text += "include any uncertainty, explanation, reasoning, or extra words."
+
+                if i == 0:
+                    user = {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/png;base64,{turn['image']}",
+                                    "detail": "high",
+                                },
+                            },
+                            {"type": "text", "text": user_text},
+                        ],
+                    }
+                else:
+                    user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
+                contents.append(user)
             elif turn["role"] == "model":
-                content.append[{"role" : "assistant", "content" : [{"type": "input_text", "text" : turn["text"]}]}]
-                
-        content[0]["content"].append({"type" : "input_image", "image_url": f"data:image/png;base64,{base64_image}"})
-        response = self.generate(content, system_instruction)
-        return response, 
-    
-    def generate(self, content, system_instruction, **kwargs):
-        
-        response = self.model.responses.create(
-            instructions=system_instruction,
-            model=self.model_id,
-            input=content,
-        )
-        return response.output[0].content[0]["text"]
+                contents.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
 
+        if verbose:
+            print(f"\nQuestion: {conversation.conversation[-1]['question']}")
 
-    @classmethod
-    def build_model(cls, hf_model_variant="5-mini", is_thinking=False, **kwargs):
-        return cls(
-            hf_model_variant=hf_model_variant,
-            is_thinking=is_thinking
-        )
+        try:
+            response = self._call_openai_api(contents)
+            response = response.choices[0].message.content.strip()
+        except Exception as e:
+            raise RuntimeError(f"Failed to get response: {e}")
+
+        if verbose:
+            print(f"Response: {response}")
+
+        return response
+
+    def generate(self, **kwargs):
+        raise NotImplementedError("Use get_response method for GPTModel.")
