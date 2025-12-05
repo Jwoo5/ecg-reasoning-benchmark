@@ -373,22 +373,32 @@ class Evaluator:
             # Evaluate stepwise reasoning for path 1
             for loop_idx, loop in enumerate(result["data"]["path_1"]):
                 have_grounding_step = False
+                terminated_early_in_loop = False
                 depth_in_loop = 0
                 for step_name, step in loop.items():
                     if step_name == "grounding":
-                        if len(step) > 0:
-                            have_grounding_step = True
+                        if len(step) == 0:
+                            continue
+
+                        have_grounding_step = True
+                        depth_per_grounding = 0
                         for g_step in step:
                             corrected = _eval_step(g_step, terminated_early, metric_names=["total", dx])
-                            if not terminated_early and not corrected:
+                            if corrected:
+                                if not terminated_early_in_loop:
+                                    depth_per_grounding += 1
+                            else:
                                 terminated_early = True
+                                terminated_early_in_loop = True
+                        depth_in_loop += depth_per_grounding / len(step)
                     else:
                         corrected = _eval_step(step, terminated_early, metric_names=["total", dx])
-                        if not terminated_early and not corrected:
+                        if corrected:
+                            if not terminated_early_in_loop:
+                                depth_in_loop += 1
+                        else:
                             terminated_early = True
-
-                    if not terminated_early:
-                        depth_in_loop += 1
+                            terminated_early_in_loop = True
 
                 self.metrics["total"]["path_1"]["per_loop"]["total"] += 1
                 self.metrics[dx]["path_1"]["per_loop"]["total"] += 1
