@@ -22,11 +22,11 @@
                 "criterion_selection": {
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of right axis deviation",
-                        "Presence of an indeterminate axis",
-                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of extreme axis deviation",
+                        "Prolongation of the QRS duration",
+                        "Presence of a vertical QRS axis",
                         "Presence of left axis deviation",
-                        "Presence of a vertical QRS axis"
+                        "Presence of a normal QRS axis"
                     ],
                     "answer": "Presence of left axis deviation",
                     "answer_idx": 3,
@@ -47,9 +47,9 @@
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
                             "[0.73s - 0.95s]",
-                            "[5.31s - 5.50s]",
+                            "[1.90s - 2.11s]",
                             "[5.65s - 5.81s]",
-                            "[8.56s - 8.66s]"
+                            "[6.46s - 6.56s]"
                         ],
                         "answer": "[5.65s - 5.81s]",
                         "answer_idx": 2,
@@ -83,14 +83,14 @@
                 "criterion_selection": {
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of an rS pattern in leads II, III, and aVF",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of a qR pattern in leads II, III, and aVF",
+                        "Presence of prominent U waves in leads I and aVL",
                         "Presence of pathological Q waves in leads I and aVL",
-                        "Presence of inverted T waves in leads I and aVL",
-                        "Presence of an rS pattern in leads I and aVL",
-                        "Presence of a qR pattern in leads I and aVL"
+                        "Presence of ST-segment elevation in anterior leads"
                     ],
                     "answer": "Presence of a qR pattern in leads I and aVL",
-                    "answer_idx": 4,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -123,13 +123,13 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.47s - 1.64s]",
-                            "[1.71s - 1.93s]",
-                            "[3.33s - 3.54s]",
-                            "[8.56s - 8.66s]"
+                            "[0.32s - 0.42s]",
+                            "[6.63s - 6.79s]",
+                            "[7.26s - 7.47s]",
+                            "[8.97s - 9.19s]"
                         ],
-                        "answer": "[1.47s - 1.64s]",
-                        "answer_idx": 0,
+                        "answer": "[6.63s - 6.79s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -149,14 +149,14 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of tall R waves in leads II, III, and aVF",
                         "Presence of an rS pattern in leads II, III, and aVF",
-                        "Presence of deep QS complexes in leads II, III, and aVF",
-                        "Presence of ST-segment elevation in lateral leads",
-                        "Presence of low voltage QRS complexes in limb leads"
+                        "Presence of a qR pattern in leads II, III, and aVF",
+                        "Presence of a slurred S wave in lateral leads",
+                        "Presence of tall R waves in leads II, III, and aVF",
+                        "Presence of ST elevation in leads II, III, and aVF"
                     ],
                     "answer": "Presence of an rS pattern in leads II, III, and aVF",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -192,13 +192,13 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.84s - 4.11s]",
-                            "[5.65s - 5.81s]",
-                            "[6.86s - 7.09s]",
-                            "[8.56s - 8.66s]"
+                            "[0.86s - 1.05s]",
+                            "[2.77s - 2.99s]",
+                            "[3.59s - 3.76s]",
+                            "[4.42s - 4.52s]"
                         ],
-                        "answer": "[5.65s - 5.81s]",
-                        "answer_idx": 1,
+                        "answer": "[3.59s - 3.76s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],

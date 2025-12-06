@@ -23,10 +23,10 @@
                     "question": "To accurately diagnose complete right bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of low voltage QRS complexes in precordial leads",
-                        "Presence of a dominant S wave (QS complex) in lead V1",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of a Delta wave (slurred upstroke) in precordial leads",
                         "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of a slurred S wave in lateral leads"
+                        "Presence of ST elevation in leads V1 and V2"
                     ],
                     "answer": "Presence of an RSR' pattern in leads V1 and V2",
                     "answer_idx": 3,
@@ -46,13 +46,13 @@
                     {
                         "question": "To verify that leads V1 and V2 do not show an RSR' pattern, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.80s - 1.00s]",
-                            "[4.10s - 4.24s]",
-                            "[7.21s - 7.36s]",
-                            "[9.36s - 9.56s]"
+                            "[1.40s - 1.55s]",
+                            "[6.04s - 6.17s]",
+                            "[6.44s - 6.66s]",
+                            "[7.42s - 7.63s]"
                         ],
-                        "answer": "[7.21s - 7.36s]",
-                        "answer_idx": 2,
+                        "answer": "[1.40s - 1.55s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -73,10 +73,10 @@
                     "question": "Since the typical RSR' pattern was not observed, which alternative diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
                         "Presence of a broad monophasic R wave in lead V1",
-                        "Presence of flattened T waves in inferior leads",
                         "Presence of a QRS pattern in leads V1 and V2",
-                        "Presence of a broad, notched R wave in lead V6",
-                        "Presence of negative concordance in precordial leads"
+                        "Presence of a deep, wide S wave in lead V1",
+                        "Presence of significant ST depression in lead V1",
+                        "Presence of pathological Q waves in inferior leads"
                     ],
                     "answer": "Presence of a broad monophasic R wave in lead V1",
                     "answer_idx": 0,
@@ -96,13 +96,13 @@
                     {
                         "question": "Within the lead V1, in which of the following segments can you observe the QRS complex with broad monophasic R wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.39s - 2.54s]",
-                            "[3.14s - 3.27s]",
-                            "[5.49s - 5.69s]",
-                            "[8.44s - 8.71s]"
+                            "[1.93s - 2.15s]",
+                            "[5.07s - 5.21s]",
+                            "[5.28s - 5.42s]",
+                            "[5.49s - 5.69s]"
                         ],
-                        "answer": "[2.39s - 2.54s]",
-                        "answer_idx": 0,
+                        "answer": "[5.28s - 5.42s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -122,14 +122,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding in lead V1 or V2, which other diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
-                        "Presence of prominent U waves in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
-                        "Presence of a broad monophasic R wave in lateral leads",
-                        "Presence of a slurred S wave in lateral leads",
-                        "Presence of horizontal ST depression in lateral leads"
+                        "Presence of horizontal ST depression in lateral leads",
+                        "Presence of flattened T waves in inferior leads",
+                        "Absence of any S waves in leads I and V6",
+                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of a slurred S wave in lateral leads"
                     ],
                     "answer": "Presence of a slurred S wave in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -168,13 +168,13 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with slurred S wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.20s - 1.33s]",
-                            "[2.39s - 2.54s]",
-                            "[4.70s - 4.87s]",
-                            "[6.46s - 6.65s]"
+                            "[1.40s - 1.55s]",
+                            "[6.04s - 6.17s]",
+                            "[8.39s - 8.60s]",
+                            "[8.70s - 8.89s]"
                         ],
-                        "answer": "[2.39s - 2.54s]",
-                        "answer_idx": 1,
+                        "answer": "[1.40s - 1.55s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -194,14 +194,14 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
+                        "Presence of a normal QRS duration",
                         "Prolongation of the QRS duration",
-                        "Presence of flattened T waves in inferior leads",
-                        "Shortening of the PR interval",
-                        "Prolongation of the QT interval",
-                        "Presence of a normal QRS duration"
+                        "Prolongation of the PR interval",
+                        "Reduction in QRS amplitude in limb leads",
+                        "Prolongation of the QT interval"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -218,12 +218,12 @@
                     {
                         "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.75s - 3.97s]",
-                            "[4.30s - 4.46s]",
-                            "[5.07s - 5.21s]",
-                            "[8.39s - 8.60s]"
+                            "[3.56s - 3.75s]",
+                            "[6.24s - 6.39s]",
+                            "[7.02s - 7.14s]",
+                            "[8.59s - 8.87s]"
                         ],
-                        "answer": "[4.30s - 4.46s]",
+                        "answer": "[6.24s - 6.39s]",
                         "answer_idx": 1,
                         "question_type": "wave_grounding"
                     },

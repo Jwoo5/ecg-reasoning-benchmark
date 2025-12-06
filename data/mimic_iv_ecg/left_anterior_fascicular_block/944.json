@@ -23,10 +23,10 @@
                     "question": "To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of left axis deviation",
-                        "Presence of a vertical QRS axis",
-                        "Presence of an rS pattern in leads II, III, and aVF",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of extreme axis deviation",
                         "Presence of right axis deviation",
-                        "Presence of extreme axis deviation"
+                        "Presence of a vertical QRS axis"
                     ],
                     "answer": "Presence of left axis deviation",
                     "answer_idx": 0,
@@ -46,13 +46,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.71s - 0.90s]",
+                            "[0.13s - 0.25s]",
+                            "[1.23s - 1.41s]",
                             "[2.55s - 2.67s]",
-                            "[5.08s - 5.27s]",
-                            "[9.05s - 9.17s]"
+                            "[6.07s - 6.24s]"
                         ],
                         "answer": "[2.55s - 2.67s]",
-                        "answer_idx": 1,
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -84,9 +84,9 @@
                     "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
                         "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of pathological Q waves in leads I and aVL",
-                        "Presence of an rS pattern in leads I and aVL",
                         "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of prominent U waves in leads I and aVL",
+                        "Presence of an rS pattern in leads I and aVL",
                         "Presence of a qR pattern in leads I and aVL"
                     ],
                     "answer": "Presence of a qR pattern in leads I and aVL",
@@ -123,12 +123,12 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.50s - 0.69s]",
-                            "[8.17s - 8.29s]",
-                            "[8.35s - 8.47s]",
-                            "[8.61s - 8.78s]"
+                            "[0.53s - 0.79s]",
+                            "[0.86s - 0.99s]",
+                            "[1.04s - 1.17s]",
+                            "[5.90s - 6.08s]"
                         ],
-                        "answer": "[8.35s - 8.47s]",
+                        "answer": "[1.04s - 1.17s]",
                         "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
@@ -149,11 +149,11 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose left anterior fascicular block?",
                     "options": [
-                        "Presence of low voltage QRS complexes in limb leads",
+                        "Presence of ST elevation in leads II, III, and aVF",
                         "Presence of an rS pattern in leads II, III, and aVF",
-                        "Presence of deep QS complexes in leads II, III, and aVF",
-                        "Presence of a qR pattern in leads II, III, and aVF",
-                        "Presence of a qR pattern in leads I and aVL"
+                        "Presence of tall R waves in leads II, III, and aVF",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of low voltage QRS complexes in limb leads"
                     ],
                     "answer": "Presence of an rS pattern in leads II, III, and aVF",
                     "answer_idx": 1,
@@ -192,12 +192,12 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[5.08s - 5.27s]",
-                            "[6.42s - 6.54s]",
-                            "[6.60s - 6.72s]",
-                            "[7.89s - 8.10s]"
+                            "[3.94s - 4.05s]",
+                            "[4.30s - 4.48s]",
+                            "[7.46s - 7.58s]",
+                            "[8.71s - 8.89s]"
                         ],
-                        "answer": "[6.60s - 6.72s]",
+                        "answer": "[7.46s - 7.58s]",
                         "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }

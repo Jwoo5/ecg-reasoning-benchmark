@@ -22,13 +22,13 @@
                     "question": "To accurately diagnose complete right bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of ST elevation in leads V1 and V2",
-                        "Presence of pathological Q waves in leads V1 and V2",
-                        "Presence of a qR pattern in leads I and aVL",
-                        "Presence of a dominant S wave (QS complex) in lead V1",
-                        "Presence of an RSR' pattern in leads V1 and V2"
+                        "Presence of a Delta wave (slurred upstroke) in precordial leads",
+                        "Presence of left axis deviation",
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of pathological Q waves in leads V1 and V2"
                     ],
                     "answer": "Presence of an RSR' pattern in leads V1 and V2",
-                    "answer_idx": 4,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -59,13 +59,13 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with RSR' pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.23s - 1.45s]",
-                            "[3.91s - 4.08s]",
+                            "[4.56s - 4.69s]",
                             "[4.74s - 4.87s]",
-                            "[8.28s - 8.37s]"
+                            "[6.87s - 7.13s]",
+                            "[9.27s - 9.44s]"
                         ],
                         "answer": "[4.74s - 4.87s]",
-                        "answer_idx": 2,
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
@@ -85,14 +85,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding in lead V1 or V2, which other diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
-                        "Presence of an RSR' pattern in leads V1 and V2",
-                        "Presence of tall, peaked T waves in lateral leads",
-                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of left axis deviation",
                         "Presence of a slurred S wave in lateral leads",
-                        "Presence of prominent U waves in lateral leads"
+                        "Presence of tall, peaked T waves in lateral leads",
+                        "Presence of a broad monophasic R wave in lateral leads",
+                        "Absence of any S waves in leads I and V6"
                     ],
                     "answer": "Presence of a slurred S wave in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -131,12 +131,12 @@
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with slurred S wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.06s - 3.29s]",
-                            "[4.91s - 5.17s]",
-                            "[5.21s - 5.29s]",
-                            "[8.43s - 8.56s]"
+                            "[1.50s - 1.59s]",
+                            "[2.45s - 2.68s]",
+                            "[7.38s - 7.60s]",
+                            "[7.81s - 7.94s]"
                         ],
-                        "answer": "[8.43s - 8.56s]",
+                        "answer": "[7.81s - 7.94s]",
                         "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
@@ -157,14 +157,14 @@
                 "criterion_selection": {
                     "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose complete right bundle branch block?",
                     "options": [
-                        "Shortening of the PR interval",
                         "Prolongation of the QRS duration",
+                        "Reduction in QRS amplitude in limb leads",
+                        "Presence of left axis deviation",
                         "Beat-to-beat variation in QRS amplitude",
-                        "Prolongation of the QT interval",
-                        "Presence of flattened T waves in lateral leads"
+                        "Prolongation of the QT interval"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -181,10 +181,10 @@
                     {
                         "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.27s - 0.36s]",
+                            "[0.74s - 0.99s]",
                             "[1.05s - 1.17s]",
-                            "[2.48s - 2.66s]",
-                            "[8.10s - 8.26s]"
+                            "[5.82s - 5.91s]",
+                            "[6.14s - 6.36s]"
                         ],
                         "answer": "[1.05s - 1.17s]",
                         "answer_idx": 1,
