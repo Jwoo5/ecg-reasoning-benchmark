@@ -107,13 +107,16 @@
                         "question": "Which of the following leads show the qR pattern? Select all possible leads from the options below.",
                         "options": [
                             "Lead I",
-                            "Lead aVL"
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVL",
+                            "Lead V5"
                         ],
                         "answer": [
                             "Lead aVL"
                         ],
                         "answer_idx": [
-                            1
+                            3
                         ],
                         "question_type": "lead_grounding"
                     },
@@ -170,8 +173,10 @@
                     {
                         "question": "Which of the following leads show the rS pattern? Select all possible leads from the options below.",
                         "options": [
+                            "Lead I",
                             "Lead II",
                             "Lead III",
+                            "Lead aVR",
                             "Lead aVF"
                         ],
                         "answer": [
@@ -180,9 +185,9 @@
                             "Lead aVF"
                         ],
                         "answer_idx": [
-                            0,
                             1,
-                            2
+                            2,
+                            4
                         ],
                         "question_type": "lead_grounding"
                     },
