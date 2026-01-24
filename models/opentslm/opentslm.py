@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 @register_model("opentslm")
 class OpenTSLMModel(BaseModel):
     def __init__(self):
+        self.ecg_modality_base = "signal"
+
         # Configuration matches the provided working script
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.base_llm_id = "meta-llama/Llama-3.2-3B"
@@ -208,10 +210,23 @@ class OpenTSLMModel(BaseModel):
         # For the initial diagnostic question, we specifically post-process to extract the final
         # answer as this model tends to phrase the option rather than select it directly.
         if len(conversation.conversation) == 2:
-            if response == target_dx:
+            if response.lower() == target_dx:
                 response = "yes"
-            elif response == "none":
+            elif response.lower() == "none":
                 response = "no"
+            # case by case handling for known variations specifically in this model's outputs
+            elif response.lower().startswith("cannot be determined"):
+                response = "no"
+            elif target_dx == "complete left bundle branch block" and response.lower() == "left bundle branch block":
+                response = "yes"
+            elif target_dx == "first degree av block":
+                if response.lower() in [
+                    "first-degree av block",
+                    "consistent with a first-degree av block",
+                ]:
+                    response = "yes"
+            elif target_dx == "premature atrial complex" and response.lower() == "premature atrial complexes":
+                response = "yes"
 
         if verbose:
             print(f"Response: {response}")

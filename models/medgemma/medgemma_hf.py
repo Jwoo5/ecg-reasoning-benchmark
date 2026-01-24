@@ -41,6 +41,10 @@ class MedGemmaHFModel(BaseModel):
         self.model = AutoModelForImageTextToText.from_pretrained(model_id, **model_kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
+        self.pad_token_id = self.processor.tokenizer.pad_token_id
+        if self.pad_token_id is None:
+            self.pad_token_id = self.processor.tokenizer.eos_token_id
+
     def get_response(
         self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
     ) -> str:
@@ -127,6 +131,7 @@ class MedGemmaHFModel(BaseModel):
                 num_beams=1,
                 top_p=None,
                 use_cache=True,
+                pad_token_id=self.pad_token_id,
             )
             output = output[0][input_len:]
 

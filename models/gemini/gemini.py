@@ -47,7 +47,8 @@ class GeminiModel(BaseModel):
         self.model_variant = model_variant
         self.thinking_budget = thinking_budget
         self.model_id = f"gemini-{self.model_variant}"
-        if self.model_id not in ["gemini-2.5-pro", "gemini-3.0-pro"]:
+        # only enable thinking mode for pro models
+        if self.model_id not in ["gemini-2.5-pro", "gemini-3-pro", "gemini-3-pro-preview"]:
             self.thinking_budget = 0
 
         self.api_key = gemini_api_key
@@ -153,6 +154,15 @@ class GeminiModel(BaseModel):
 
         try:
             response = self._call_gemini_api(contents, config)
+            # it seems a bug that response.text can be None, which seems something to do with:
+            # https://discuss.ai.google.dev/t/gemini-2-5-pro-with-empty-response-text/81175
+            # as of now, we just re-try until we get a non-empty response
+            retry_count = 0
+            while response.text is None:
+                response = self._call_gemini_api(contents, config)
+                retry_count += 1
+            if retry_count > 0:
+                print(f"\n**Note: had to retry {retry_count} times to get a non-empty response.**\n")
             response = response.text.strip()
         except Exception as e:
             raise RuntimeError(f"Failed to get response: {e}")
@@ -164,3 +174,7 @@ class GeminiModel(BaseModel):
 
     def generate(self, **kwargs):
         raise NotImplementedError("Use get_response method for GeminiModel.")
+
+    def require_base64_image(self) -> bool:
+        """Indicate if the model requires ECG images in base64 format."""
+        return True

@@ -136,3 +136,7 @@ class Qwen3VLHFModel(BaseModel):
     @classmethod
     def build_model(cls, model_variant="32B-Instruct", **kwargs):
         return cls(model_variant=model_variant)
+
+    def require_base64_image(self) -> bool:
+        """Indicate if the model requires ECG images in base64 format."""
+        return True

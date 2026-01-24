@@ -22,8 +22,8 @@ from utils import Conversation, base64_image_encoder
 logger = logging.getLogger(__name__)
 
 # number of samples in each source-dataset
-N_MIMIC_IV_ECG = 3355
-N_PTBXL = 3076
+N_MIMIC_IV_ECG = 3359
+N_PTBXL = 3084
 
 system_prompt = """You are an expert cardiologist assistant evaluating a specific ECG case.
 
@@ -89,6 +89,16 @@ def get_parser():
     )
     parser.add_argument(
         "--verbose", action="store_true", help="whether to enable verbose logging during inference"
+    )
+    parser.add_argument(
+        "--do-not-skip-empty-output",
+        action="store_true",
+        help=(
+            "whether to NOT skip samples that already have empty output files, which indicates "
+            "(1) previous run was interrupted during processing the sample, or (2) another process "
+            "is currently processing the same sample concurrently. Enabling this option forces "
+            "re-processing such samples to handle (1) case."
+        )
     )
 
     return parser
@@ -184,7 +194,7 @@ class Inferencer:
         ecg_signal: Optional[torch.Tensor] = None,
         ecg_image: Optional[Image.Image] = None,
         return_response: bool = False,
-        required_base64_image: bool = False,
+        require_base64_image: bool = False,
         enable_condensed_chat: bool = False,
         verbose: bool = False,
         target_dx: Optional[str] = None,
@@ -193,7 +203,7 @@ class Inferencer:
         # indexed_options = make_letter_indexed(step["options"])
         indexed_options = step["options"]
 
-        if required_base64_image and ecg_image is not None:
+        if require_base64_image and ecg_image is not None:
             ecg_image = base64_image_encoder(ecg_image)
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
@@ -232,20 +242,12 @@ class Inferencer:
 
         conversation = Conversation(system_prompt)
 
-        sample["data"]["initial_diagnostic_question"]["question"] += (
-            " If you don't know how to analyze the ECG to answer this question, choose "
-            "'I don't know'. Then, you will receive guidance on how to systematically "
-            # "analyze the ECG to improve your decision-making skills. NEVER choose 'I don't know' "
-            # "because you want to avoid answering the question. "
-            "analyze the ECG to improve your decision-making skills."
-        )
-        required_base64_image = False
-        if (
-            self.model_name.startswith("qwen3-vl-hf")
-            or self.model_name.startswith("gemini")
-            or self.model_name.startswith("gpt")
-        ):
-            required_base64_image = True
+        if self.model.ecg_modality_base == "image":
+            sample["data"]["initial_diagnostic_question"]["question"] += (
+                " Note that the red grid in the provided ECG image follows standard calibration: "
+                "one large square (5 mm) represents 0.2 seconds on the horizontal axis and 0.5 mV "
+                "on the vertical axis."
+            )
 
         response = self.proceed_step(
             step=sample["data"]["initial_diagnostic_question"],
@@ -253,7 +255,7 @@ class Inferencer:
             ecg_signal=ecg_tensor,
             ecg_image=ecg_image,
             return_response=True,
-            required_base64_image=required_base64_image,
+            require_base64_image=self.model.require_base64_image(),
             enable_condensed_chat=enable_condensed_chat,
             verbose=self.verbose,
             target_dx=dx,
@@ -270,38 +272,13 @@ class Inferencer:
             or response.strip(".").lower().endswith("no")
             or response.strip(".").lower().endswith("**no**")
         ):
-            eval_path = 1
-        elif (
-            response.strip(".").lower() == "i don't know"
-            or response.strip(".").lower().startswith("i don't know")
-            or response.strip(".").lower().startswith("**i don't know**")
-            or response.strip(".").lower().endswith("i don't know")
-            or response.strip(".").lower().endswith("**i don't know**")
-        ):
-            eval_path = 2
+            pass
         else:
             logger.warning(f"Could not parse response: {response}")
-            sample_result["data"]["initial_diagnostic_question"]["eval_path"] = -1
             sample_result["metadata"]["parsing_error"] = True
             return sample_result
 
-        if eval_path == 1:
-            pass
-            # del sample_result["data"]["path_2"]
-        elif eval_path == 2:
-            del sample_result["data"]["path_1"]
-
-        sample_result["data"]["initial_diagnostic_question"]["eval_path"] = eval_path
-
-        if eval_path == 2:
-            logger.info(
-                "Model responded with 'I don't know' for initial diagnosis question. "
-                "Stop further questioning for this sample as the path 2 (guided reasoning) "
-                "is not implemented yet."
-            )
-            return sample_result
-
-        for stage in sample_result["data"][f"path_{eval_path}"]:
+        for stage in sample_result["data"]["reasoning"]:
             for step in stage.values():
                 if isinstance(step, list):
                     # it is hit for grounding steps
@@ -367,8 +344,12 @@ def main(args):
                 if not os.path.exists(os.path.dirname(save_path)):
                     os.makedirs(os.path.dirname(save_path), exist_ok=True)
                 elif os.path.exists(save_path):
-                    pbar.update(1)
-                    continue
+                    if args.do_not_skip_empty_output and os.path.getsize(save_path) == 0:
+                        # re-process the sample if the existing output file is empty
+                        pass
+                    else:
+                        pbar.update(1)
+                        continue
 
                 # write empty file to reserve the spot so that other processes do not process the same file
                 with open(save_path, "w") as f:
@@ -384,13 +365,11 @@ def main(args):
                 )
 
                 n_total += 1
-                if result["data"]["initial_diagnostic_question"]["eval_path"] == 1:
-                    n_path1 += 1
-                elif result["data"]["initial_diagnostic_question"]["eval_path"] == -1:
+                if "parsing_error" in result["metadata"] and result["metadata"]["parsing_error"]:
                     n_failed += 1
 
                 pbar.set_description(
-                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_path1}/{n_total-n_failed} "
+                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_total-n_failed}/{n_total} "
                     f"| Failed: {n_failed}"
                 )
 
