@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "11686",
+        "ecg_id": "16962",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": false,
         "path_idx": 1
@@ -11,24 +11,23 @@
             "question": "Does this ECG suggest the presence of right ventricular hypertrophy?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
-                        "Presence of left axis deviation",
-                        "Presence of left bundle branch block",
                         "Presence of right bundle branch block",
-                        "Presence of ventricular pre-excitation (Delta wave)",
+                        "Evidence of atrioventricular dissociation",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of left anterior fascicular block",
                         "Presence of left posterior fascicular block"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -43,7 +42,7 @@
                 },
                 "grounding": [],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have right ventricular hypertrophy?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
                         "No",
@@ -58,14 +57,14 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of extreme axis deviation",
-                        "Presence of an indeterminate axis (no dominant vector)",
                         "QRS axis > +60 degrees",
                         "Presence of a normal QRS axis between -30 and 0 degrees",
-                        "Presence of atrial fibrillation"
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of extreme axis deviation",
+                        "Presence of left axis deviation"
                     ],
                     "answer": "QRS axis > +60 degrees",
-                    "answer_idx": 2,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -82,13 +81,12 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[3.01s - 3.11s]",
-                            "[3.96s - 4.16s]",
-                            "[5.06s - 5.25s]",
-                            "[7.34s - 7.53s]",
-                            "[8.25s - 8.43s]"
+                            "[1.28s - 1.44s]",
+                            "[1.47s - 1.70s]",
+                            "[2.14s - 2.25s]",
+                            "[3.74s - 4.00s]"
                         ],
-                        "answer": "[3.01s - 3.11s]",
+                        "answer": "[1.28s - 1.44s]",
                         "answer_idx": 0,
                         "question_type": "wave_grounding"
                     },
@@ -100,13 +98,13 @@
                             "[-30 degrees - 0 degrees]",
                             "[0 degrees - 60 degrees]"
                         ],
-                        "answer": "[-90 degrees - -30 degrees]",
-                        "answer_idx": 1,
+                        "answer": "[-30 degrees - 0 degrees]",
+                        "answer_idx": 2,
                         "question_type": "measurement_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have right ventricular hypertrophy?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
                         "No",
@@ -121,14 +119,14 @@
                 "criterion_selection": {
                     "question": "Since the axis criterion was not met, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
+                        "R amplitude in lead aVL > 1.1mV",
                         "Sum of R amplitude in lead I and S amplitude in lead III > 2.5mV",
+                        "Presence of ST-segment elevation in lateral leads",
                         "Sum of S amplitude in V1 and R amplitude in V5 > 3.5mV",
-                        "R wave amplitude in V1 > 1.5mV",
-                        "Presence of low voltage QRS complexes (< 0.5mV) in limb leads",
-                        "Presence of a slurred S wave in lateral leads"
+                        "R wave amplitude in V1 > 1.5mV"
                     ],
                     "answer": "R wave amplitude in V1 > 1.5mV",
-                    "answer_idx": 2,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -145,14 +143,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave to measure the R amplitude in lead V1? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.53s - 2.70s]",
-                            "[3.21s - 3.38s]",
-                            "[3.96s - 4.16s]",
-                            "[8.10s - 8.34s]",
-                            "[8.53s - 8.63s]"
+                            "[1.47s - 1.70s]",
+                            "[4.22s - 4.34s]",
+                            "[7.81s - 8.01s]",
+                            "[9.44s - 9.61s]"
                         ],
-                        "answer": "[8.53s - 8.63s]",
-                        "answer_idx": 4,
+                        "answer": "[9.44s - 9.61s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -163,13 +160,13 @@
                             "[0.6mV - 0.9mV]",
                             "[0.9mV - 1.2mV]"
                         ],
-                        "answer": "Below 0.3mV",
-                        "answer_idx": 0,
+                        "answer": "[0.9mV - 1.2mV]",
+                        "answer_idx": 3,
                         "question_type": "measurement_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have right ventricular hypertrophy?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
                         "No",

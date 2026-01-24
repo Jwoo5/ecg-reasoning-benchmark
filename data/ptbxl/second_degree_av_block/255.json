@@ -11,24 +11,23 @@
             "question": "Does this ECG suggest the presence of second degree AV block?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose second degree AV block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Pattern of alternating long and short RR intervals",
                         "Occurrence of intermittent dropped beats",
                         "Presence of consistently regular RR intervals",
-                        "Presence of compensatory pauses following premature beats",
-                        "Gradual cycle length variation coincident with respiration"
+                        "Chaotic and completely irregular ventricular rhythm",
+                        "Rapid, regular ventricular response",
+                        "Presence of compensatory pauses following premature beats"
                     ],
                     "answer": "Occurrence of intermittent dropped beats",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -43,7 +42,7 @@
                 },
                 "grounding": [],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have second degree AV block?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of second degree AV block?",
                     "options": [
                         "Yes",
                         "No",

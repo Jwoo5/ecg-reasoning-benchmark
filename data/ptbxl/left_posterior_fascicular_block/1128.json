@@ -1,34 +1,70 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "18963",
+        "ecg_id": "133",
         "target_dx": "left_posterior_fascicular_block",
         "dx_label": false,
-        "path_idx": 2
+        "path_idx": 3
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of left posterior fascicular block?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose left posterior fascicular block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of left bundle branch block",
+                        "Presence of ventricular pre-excitation",
+                        "Presence of right bundle branch block",
+                        "Presence of right ventricular hypertrophy",
+                        "Presence of flattened T waves in lateral leads"
+                    ],
+                    "answer": "Presence of left bundle branch block",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is left bundle branch block present on this ECG, including incomplete and complete LBBB?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, can this patient be diagnosed with left posterior fascicular block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "Given that left bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnoses left posterior fascicular block?",
+                    "options": [
+                        "Presence of a normal QRS axis",
                         "Presence of a horizontal QRS axis",
-                        "Presence of left axis deviation",
                         "Presence of right axis deviation",
-                        "Presence of extreme axis deviation"
+                        "Presence of left axis deviation",
+                        "Presence of flattened T waves in anterior leads"
                     ],
                     "answer": "Presence of right axis deviation",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -45,13 +81,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.37s - 0.50s]",
-                            "[0.55s - 0.70s]",
-                            "[3.11s - 3.31s]",
-                            "[5.73s - 5.89s]"
+                            "[0.73s - 0.99s]",
+                            "[2.37s - 2.48s]",
+                            "[4.55s - 4.66s]",
+                            "[5.02s - 5.22s]"
                         ],
-                        "answer": "[0.55s - 0.70s]",
-                        "answer_idx": 1,
+                        "answer": "[4.55s - 4.66s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -62,13 +98,13 @@
                             "[-30 degrees - 0 degrees]",
                             "[0 degrees - 75 degrees]"
                         ],
-                        "answer": "[-180 degrees - -90 degrees]",
-                        "answer_idx": 0,
+                        "answer": "[0 degrees - 75 degrees]",
+                        "answer_idx": 3,
                         "question_type": "measurement_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have left posterior fascicular block?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of left posterior fascicular block?",
                     "options": [
                         "Yes",
                         "No",

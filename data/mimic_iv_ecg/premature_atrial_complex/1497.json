@@ -1,35 +1,34 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "49041273",
+        "ecg_id": "48839557",
         "target_dx": "premature_atrial_complex",
         "dx_label": false,
-        "path_idx": 1,
-        "subject_id": "13696494"
+        "path_idx": 0,
+        "subject_id": "15333183"
     },
     "data": {
         "initial_diagnostic_question": {
-            "question": "Does this ECG suggest the presence of premature atrial complexes?",
+            "question": "Does this ECG suggest the presence of typical premature atrial complex(es)?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
-                    "question": "To accurately diagnose premature atrial complexes, which of the following diagnostic criteria should be evaluated?",
+                    "question": "To accurately diagnose typical premature atrial complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of flattened T waves in lateral leads",
                         "Presence of a fixed, rigid heart rate without variability",
                         "Presence of premature beats",
-                        "Presence of gradual acceleration and deceleration of the heart rate",
-                        "Presence of intermittent ventricular pauses (dropped beats)"
+                        "Presence of intermittent ventricular pauses (dropped beats)",
+                        "Presence of pathological Q waves in inferior leads",
+                        "Presence of an irregularly irregular ventricular rhythm"
                     ],
                     "answer": "Presence of premature beats",
-                    "answer_idx": 2,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -38,13 +37,77 @@
                         "Yes",
                         "No"
                     ],
-                    "answer": "No",
-                    "answer_idx": 1,
+                    "answer": "Yes",
+                    "answer_idx": 0,
                     "question_type": "finding"
                 },
-                "grounding": [],
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.71s - 0.84s]",
+                            "[2.44s - 2.53s]",
+                            "[5.10s - 5.19s]",
+                            "[7.60s - 7.79s]"
+                        ],
+                        "answer": "[0.71s - 0.84s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have premature atrial complex(es)?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of typical premature atrial complex(es)?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose typical premature atrial complexes?",
+                    "options": [
+                        "Presence of a prolonged QRS duration in the premature beat compared to normal beats",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Presence of a Delta wave (slurred upstroke) on the premature beat",
+                        "Presence of ST elevation in the premature beat"
+                    ],
+                    "answer": "Absence of significant QRS prolongation in the premature beat compared to normal beats",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, for the QRS complex in the selected segment, is the QRS duration prolonged significantly compared to the normal beats on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which range does the measured QRS duration for the premature beat fall into?",
+                        "options": [
+                            "Below 130ms",
+                            "[130ms - 140ms]",
+                            "[140ms - 150ms]",
+                            "[150ms - 160ms]",
+                            "Above 160ms"
+                        ],
+                        "answer": "[130ms - 140ms]",
+                        "answer_idx": 1,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of typical premature atrial complex(es)?",
                     "options": [
                         "Yes",
                         "No",

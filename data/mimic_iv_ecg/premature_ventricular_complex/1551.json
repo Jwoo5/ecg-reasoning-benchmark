@@ -1,35 +1,34 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "49741967",
+        "ecg_id": "44352654",
         "target_dx": "premature_ventricular_complex",
         "dx_label": true,
         "path_idx": 0,
-        "subject_id": "16787799"
+        "subject_id": "13760745"
     },
     "data": {
         "initial_diagnostic_question": {
-            "question": "Does this ECG suggest the presence of premature ventricular complexes?",
+            "question": "Does this ECG suggest the presence of typical premature ventricular complex(es)?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
-                    "question": "To accurately diagnose premature ventricular complexes, which of the following diagnostic criteria should be evaluated?",
+                    "question": "To accurately diagnose typical premature ventricular complexes, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of premature beats",
                         "Presence of grouped beating patterns separated by pauses",
-                        "Presence of a fixed, rigid heart rate without variability",
-                        "Presence of pathological Q waves in anterior leads",
-                        "Presence of intermittent ventricular pauses (dropped beats)"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of intermittent ventricular pauses (dropped beats)",
+                        "Presence of premature beats",
+                        "Presence of an irregularly irregular ventricular rhythm"
                     ],
                     "answer": "Presence of premature beats",
-                    "answer_idx": 0,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -46,18 +45,18 @@
                     {
                         "question": "In which of the following segments can you observe the premature beat? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.97s - 3.18s]",
-                            "[5.15s - 5.25s]",
-                            "[6.83s - 6.97s]",
-                            "[8.90s - 9.05s]"
+                            "[2.40s - 2.51s]",
+                            "[6.44s - 6.56s]",
+                            "[6.85s - 6.94s]",
+                            "[7.19s - 7.37s]"
                         ],
-                        "answer": "[6.83s - 6.97s]",
-                        "answer_idx": 2,
+                        "answer": "[6.44s - 6.56s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have premature ventricular complex(es)?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of typical premature ventricular complex(es)?",
                     "options": [
                         "Yes",
                         "No",
@@ -70,16 +69,16 @@
             },
             {
                 "criterion_selection": {
-                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose premature ventricular complexes?",
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose typical premature ventricular complexes?",
                     "options": [
-                        "Presence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Absence of significant QRS prolongation in the premature beat compared to normal beats",
-                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of flattened T waves in anterior leads",
                         "Presence of a Delta wave (slurred upstroke) on the premature beat",
-                        "Similarity of QRS morphology between the premature beat and normal beats"
+                        "Presence of ST elevation in the premature beat",
+                        "Presence of significant QRS prolongation in the premature beat compared to normal beats",
+                        "Absence of significant QRS prolongation in the premature beat compared to normal beats"
                     ],
                     "answer": "Presence of significant QRS prolongation in the premature beat compared to normal beats",
-                    "answer_idx": 0,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -102,13 +101,13 @@
                             "[150ms - 160ms]",
                             "Above 160ms"
                         ],
-                        "answer": "[130ms - 140ms]",
-                        "answer_idx": 1,
+                        "answer": "Below 130ms",
+                        "answer_idx": 0,
                         "question_type": "measurement_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have premature ventricular complex(es)?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of typical premature ventricular complex(es)?",
                     "options": [
                         "Yes",
                         "No",

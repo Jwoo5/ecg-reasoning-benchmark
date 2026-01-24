@@ -1,39 +1,38 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "41754713",
+        "ecg_id": "42807876",
         "target_dx": "anterior_ischemia",
         "dx_label": true,
         "path_idx": 0,
-        "subject_id": "18228787"
+        "subject_id": "13718304"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of anterior ischemia?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of J-point elevation in anterior leads",
-                        "Presence of ST-segment depression in anterior leads",
-                        "Prolongation of the PR interval",
                         "Presence of diffuse concave ST-segment elevation in anterior leads",
+                        "Presence of ST-segment elevation in anterior leads",
+                        "Presence of inverted T waves in lateral leads",
+                        "Presence of ST-segment depression in anterior leads",
                         "Presence of ST-segment depression in leads II, III, and aVF"
                     ],
                     "answer": "Presence of ST-segment depression in anterior leads",
-                    "answer_idx": 1,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the anterior leads, including leads V2, V3, V4, and V5?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the anterior leads, including leads V2, V3, and V4? Note that ST depression is defined as a depression of the J-point greater than 0.1mV (1mm) in lead V2, and greater than 0.07mV (0.7mm) in leads V3 and V4.",
                     "options": [
                         "Yes",
                         "No"
@@ -46,16 +45,16 @@
                     {
                         "question": "Which of the following leads show ST-segment depression? Select all possible leads from the options below.",
                         "options": [
-                            "Lead aVR",
+                            "Lead II",
+                            "Lead V1",
                             "Lead V2",
                             "Lead V3",
-                            "Lead V4",
-                            "Lead V5"
+                            "Lead V4"
                         ],
                         "answer": [
+                            "Lead V2",
                             "Lead V3",
-                            "Lead V4",
-                            "Lead V5"
+                            "Lead V4"
                         ],
                         "answer_idx": [
                             2,
@@ -67,18 +66,18 @@
                     {
                         "question": "Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.50s - 0.68s]",
-                            "[4.88s - 4.98s]",
-                            "[7.44s - 7.72s]",
-                            "[9.18s - 9.25s]"
+                            "[2.00s - 2.11s]",
+                            "[3.01s - 3.17s]",
+                            "[3.95s - 4.03s]",
+                            "[7.09s - 7.24s]"
                         ],
-                        "answer": "[4.88s - 4.98s]",
-                        "answer_idx": 1,
+                        "answer": "[2.00s - 2.11s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have anterior ischemia?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of anterior ischemia?",
                     "options": [
                         "Yes",
                         "No",

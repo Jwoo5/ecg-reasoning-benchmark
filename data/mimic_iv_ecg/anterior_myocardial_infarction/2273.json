@@ -1,31 +1,30 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "47274057",
+        "ecg_id": "47937996",
         "target_dx": "anterior_myocardial_infarction",
         "dx_label": false,
         "path_idx": 0,
-        "subject_id": "10217496"
+        "subject_id": "13404874"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of anterior myocardial infarction?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of ST-segment elevation in anterior leads",
+                        "Presence of spiked pacemaker artifacts preceding the QRS complex",
                         "Presence of ST-segment depression in leads V2, V3, and V4",
-                        "Presence of PR-segment depression in anterior leads",
-                        "Presence of a slurred S wave in lateral leads",
+                        "Presence of flattened T waves in inferior leads",
                         "Presence of scooped ST-segment depression in precordial leads"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
@@ -33,7 +32,7 @@
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the anterior leads, including leads V1, V2, V3, and V4?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the anterior leads, including leads V1, V2, V3, and V4? Note that ST elevation is defined as an elevation of the J-point greater than 0.1mV (1mm) in these leads.",
                     "options": [
                         "Yes",
                         "No"
@@ -46,18 +45,18 @@
                     {
                         "question": "To verify that the anterior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.12s - 1.24s]",
-                            "[4.66s - 4.84s]",
-                            "[6.90s - 7.01s]",
-                            "[8.01s - 8.22s]"
+                            "[3.73s - 3.82s]",
+                            "[6.69s - 6.88s]",
+                            "[6.97s - 7.17s]",
+                            "[7.72s - 7.84s]"
                         ],
-                        "answer": "[6.90s - 7.01s]",
-                        "answer_idx": 2,
+                        "answer": "[3.73s - 3.82s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of anterior myocardial infarction?",
                     "options": [
                         "Yes",
                         "No",
@@ -72,18 +71,18 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose anterior myocardial infarction?",
                     "options": [
-                        "Presence of a Delta wave (slurred upstroke) in anterior leads",
+                        "Presence of an RSR' pattern in lead V1",
+                        "Presence of tall, broad R waves in leads V1 and V2",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of low voltage QRS complexes in precordial leads",
-                        "Prolongation of the PR interval",
-                        "Presence of pathological Q waves in anterior leads",
-                        "Presence of an RSR' pattern in lead V1"
+                        "Presence of pathological Q waves in anterior leads"
                     ],
                     "answer": "Presence of pathological Q waves in anterior leads",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the anterior leads, including leads V1, V2, V3, and V4? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than 0.075mV, or (2) a deep S wave with only a small initial R wave preceding it.",
+                    "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the anterior leads, including leads V1, V2, V3, and V4? Note that a pathological Q wave in these leads is defined as either (1) a QS complex, (2) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than 0.075mV (0.75mm), or (3) a deep S wave with only a small r wave preceding it.",
                     "options": [
                         "Yes",
                         "No"
@@ -96,18 +95,18 @@
                     {
                         "question": "To verify that the anterior leads do not show pathological Q waves, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.75s - 0.99s]",
-                            "[1.54s - 1.73s]",
-                            "[3.90s - 4.05s]",
-                            "[7.80s - 7.92s]"
+                            "[1.14s - 1.35s]",
+                            "[2.35s - 2.45s]",
+                            "[7.72s - 7.84s]",
+                            "[9.49s - 9.68s]"
                         ],
-                        "answer": "[7.80s - 7.92s]",
-                        "answer_idx": 3,
+                        "answer": "[2.35s - 2.45s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have anterior myocardial infarction?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of anterior myocardial infarction?",
                     "options": [
                         "Yes",
                         "No",

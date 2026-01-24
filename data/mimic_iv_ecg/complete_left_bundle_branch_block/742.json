@@ -1,35 +1,34 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "45068945",
+        "ecg_id": "48797883",
         "target_dx": "complete_left_bundle_branch_block",
         "dx_label": false,
         "path_idx": 3,
-        "subject_id": "15679235"
+        "subject_id": "14097505"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of complete left bundle branch block?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Shortening of the PR interval",
-                        "Presence of flattened T waves in inferior leads",
+                        "Presence of a normal QRS duration",
+                        "Variable QRS duration",
+                        "Beat-to-beat variation in QRS amplitude",
                         "Prolongation of the QRS duration",
-                        "Prolongation of the QT interval",
-                        "Variable QRS duration"
+                        "Evidence of consistent 1:1 atrioventricular conduction"
                     ],
                     "answer": "Prolongation of the QRS duration",
-                    "answer_idx": 2,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -46,13 +45,13 @@
                     {
                         "question": "In which of the following segments can you observe a QRS wave that demonstrates a non-prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.55s - 0.84s]",
-                            "[2.74s - 2.85s]",
-                            "[4.78s - 5.03s]",
-                            "[9.45s - 9.55s]"
+                            "[2.12s - 2.23s]",
+                            "[7.12s - 7.36s]",
+                            "[8.75s - 8.87s]",
+                            "[8.94s - 9.13s]"
                         ],
-                        "answer": "[9.45s - 9.55s]",
-                        "answer_idx": 3,
+                        "answer": "[8.75s - 8.87s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -63,13 +62,13 @@
                             "[100ms - 110ms]",
                             "[110ms - 120ms]"
                         ],
-                        "answer": "[90ms - 100ms]",
-                        "answer_idx": 1,
+                        "answer": "[110ms - 120ms]",
+                        "answer_idx": 3,
                         "question_type": "measurement_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have complete left bundle branch block?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of complete left bundle branch block?",
                     "options": [
                         "Yes",
                         "No",

@@ -1,38 +1,37 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "18285",
+        "ecg_id": "15427",
         "target_dx": "lateral_myocardial_infarction",
-        "dx_label": false,
-        "path_idx": 0
+        "dx_label": true,
+        "path_idx": 1
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of lateral myocardial infarction?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment depression in lateral leads",
-                        "Presence of ST-segment elevation in lateral leads",
                         "Presence of ST-segment elevation in lead aVR",
-                        "Presence of ST-segment elevation in leads II, III, and aVF",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Presence of ST-segment depression in lateral leads",
+                        "Presence of flattened T waves in anterior leads",
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of ST-segment elevation in leads II, III, and aVF"
                     ],
                     "answer": "Presence of ST-segment elevation in lateral leads",
-                    "answer_idx": 1,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST-segment elevation in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment elevation in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that ST elevation is defined as an elevation of the J-point greater than 0.1mV (1mm) in these leads.",
                     "options": [
                         "Yes",
                         "No"
@@ -45,18 +44,18 @@
                     {
                         "question": "To verify that the lateral leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.31s - 2.52s]",
-                            "[4.63s - 4.83s]",
-                            "[6.64s - 6.74s]",
-                            "[8.80s - 8.91s]"
+                            "[1.21s - 1.40s]",
+                            "[2.51s - 2.63s]",
+                            "[4.53s - 4.64s]",
+                            "[4.98s - 5.20s]"
                         ],
-                        "answer": "[6.64s - 6.74s]",
-                        "answer_idx": 2,
+                        "answer": "[2.51s - 2.63s]",
+                        "answer_idx": 1,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have lateral myocardial infarction?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of lateral myocardial infarction?",
                     "options": [
                         "Yes",
                         "No",
@@ -71,49 +70,68 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral myocardial infarction?",
                     "options": [
-                        "Presence of a broad monophasic R wave in lateral leads",
-                        "Presence of inverted T waves in lateral leads",
-                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of deep QS complexes in leads V1 and V2",
-                        "Presence of pathological Q waves in lateral leads"
+                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of a broad monophasic R wave in lateral leads",
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of a slurred S wave in lateral leads"
                     ],
                     "answer": "Presence of pathological Q waves in lateral leads",
-                    "answer_idx": 4,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that a pathological Q wave in these leads is defined as (1) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one-fifth of the following R amplitude, or (2) a deep S wave with only a small R wave preceding it.",
+                    "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that a pathological Q wave in these leads is defined as either (1) a QS complex, (2) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one-fifth of the following R amplitude, or (3) a deep S wave with only a small r wave preceding it.",
                     "options": [
                         "Yes",
                         "No"
                     ],
-                    "answer": "No",
-                    "answer_idx": 1,
+                    "answer": "Yes",
+                    "answer_idx": 0,
                     "question_type": "finding"
                 },
                 "grounding": [
                     {
-                        "question": "To verify that the lateral leads do not show pathological Q waves, in which of the following segments can you observe the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
                         "options": [
-                            "[2.37s - 2.56s]",
-                            "[5.92s - 6.11s]",
-                            "[6.64s - 6.74s]",
-                            "[7.64s - 7.74s]"
+                            "Lead I",
+                            "Lead III",
+                            "Lead aVL",
+                            "Lead V5",
+                            "Lead V6"
                         ],
-                        "answer": "[6.64s - 6.74s]",
-                        "answer_idx": 2,
+                        "answer": [
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer_idx": [
+                            3,
+                            4
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with pathological Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.97s - 2.17s]",
+                            "[3.57s - 3.74s]",
+                            "[3.80s - 3.88s]",
+                            "[6.81s - 6.93s]"
+                        ],
+                        "answer": "[6.81s - 6.93s]",
+                        "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have lateral myocardial infarction?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of lateral myocardial infarction?",
                     "options": [
                         "Yes",
                         "No",
                         "Further findings are required to confirm the diagnosis"
                     ],
-                    "answer": "No",
-                    "answer_idx": 1,
+                    "answer": "Yes",
+                    "answer_idx": 0,
                     "question_type": "decision"
                 }
             }

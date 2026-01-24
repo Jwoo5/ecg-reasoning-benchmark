@@ -1,72 +1,34 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "43724621",
+        "ecg_id": "40564426",
         "target_dx": "third_degree_av_block",
         "dx_label": true,
         "path_idx": 1,
-        "subject_id": "13443402"
+        "subject_id": "16683134"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of third degree AV block?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose third degree AV block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Repetitive grouped beating patterns",
-                        "Regularity of the RR intervals",
-                        "Presence of inverted T waves in inferior leads",
-                        "Irregularly irregular RR intervals",
-                        "Pattern of coupled beats"
-                    ],
-                    "answer": "Regularity of the RR intervals",
-                    "answer_idx": 1,
-                    "question_type": "criterion_selection"
-                },
-                "finding": {
-                    "question": "Regarding the criterion you selected, is the ventricular rhythm (the RR intervals) regular on this ECG?",
-                    "options": [
-                        "Yes",
-                        "No"
-                    ],
-                    "answer": "Yes",
-                    "answer_idx": 0,
-                    "question_type": "finding"
-                },
-                "grounding": [],
-                "decision": {
-                    "question": "Based on the finding identified above, does this patient have third degree AV block?",
-                    "options": [
-                        "Yes",
-                        "No",
-                        "Further findings are required to confirm the diagnosis"
-                    ],
-                    "answer": "Further findings are required to confirm the diagnosis",
-                    "answer_idx": 2,
-                    "question_type": "decision"
-                }
-            },
-            {
-                "criterion_selection": {
-                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
-                    "options": [
+                        "Presence of rapid ventricular response",
                         "Presence of bradycardia (slow ventricular rate)",
-                        "Presence of marked heart rate variability with respiration",
+                        "Evidence of normal resting heart rate",
                         "Gradual acceleration and deceleration of the heart rate",
-                        "Presence of an rS pattern in leads I and aVL",
-                        "Evidence of normal resting heart rate"
+                        "Presence of a qR pattern in leads I and aVL"
                     ],
                     "answer": "Presence of bradycardia (slow ventricular rate)",
-                    "answer_idx": 0,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -89,13 +51,13 @@
                             "[50 bpm - 60 bpm]",
                             "[60 bpm - 70 bpm]"
                         ],
-                        "answer": "[30 bpm - 40 bpm]",
-                        "answer_idx": 1,
+                        "answer": "[60 bpm - 70 bpm]",
+                        "answer_idx": 4,
                         "question_type": "measurement_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have third degree AV block?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
                     "options": [
                         "Yes",
                         "No",
@@ -108,57 +70,20 @@
             },
             {
                 "criterion_selection": {
-                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
                     "options": [
-                        "Absence of any atrial activity (isoelectric baseline)",
-                        "Presence of an rS pattern in leads I and aVL",
-                        "Presence of distinct P waves with variable morphology",
-                        "Presence of retrograde P waves in the ST segment",
-                        "Presence of atrial fibrillation"
+                        "Regularity of the RR intervals",
+                        "Phasic variation in RR intervals",
+                        "Pattern of coupled beats",
+                        "Presence of pathological Q waves in anterior leads",
+                        "Repetitive grouped beating patterns"
                     ],
-                    "answer": "Presence of atrial fibrillation",
-                    "answer_idx": 4,
+                    "answer": "Regularity of the RR intervals",
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show fibrillatory waves with no visible P waves, suggesting atrial fibrillation?",
-                    "options": [
-                        "Yes",
-                        "No"
-                    ],
-                    "answer": "No",
-                    "answer_idx": 1,
-                    "question_type": "finding"
-                },
-                "grounding": [],
-                "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have third degree AV block?",
-                    "options": [
-                        "Yes",
-                        "No",
-                        "Further findings are required to confirm the diagnosis"
-                    ],
-                    "answer": "Further findings are required to confirm the diagnosis",
-                    "answer_idx": 2,
-                    "question_type": "decision"
-                }
-            },
-            {
-                "criterion_selection": {
-                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
-                    "options": [
-                        "Presence of right axis deviation",
-                        "Progressive prolongation of the PR interval",
-                        "Fixed PR interval with intermittent conduction failure",
-                        "Presence of non-conducted P waves indicating AV dissociation",
-                        "Evidence of consistent 1:1 P-QRS conduction"
-                    ],
-                    "answer": "Presence of non-conducted P waves indicating AV dissociation",
-                    "answer_idx": 3,
-                    "question_type": "criterion_selection"
-                },
-                "finding": {
-                    "question": "Regarding the criterion you selected, is a non-conducted P wave present on this ECG?",
+                    "question": "Regarding the criterion you selected, is the ventricular rhythm (the RR intervals) regular on this ECG?",
                     "options": [
                         "Yes",
                         "No"
@@ -167,22 +92,46 @@
                     "answer_idx": 0,
                     "question_type": "finding"
                 },
-                "grounding": [
-                    {
-                        "question": "In which of the following segments can you observe a non-conducted P wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
-                        "options": [
-                            "[0.02s - 0.20s]",
-                            "[0.34s - 0.63s]",
-                            "[0.79s - 0.93s]",
-                            "[3.07s - 3.24s]"
-                        ],
-                        "answer": "[0.79s - 0.93s]",
-                        "answer_idx": 2,
-                        "question_type": "wave_grounding"
-                    }
-                ],
+                "grounding": [],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have third degree AV block?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Presence of premature P waves with compensatory pauses",
+                        "Absence of any atrial activity (isoelectric baseline)",
+                        "Presence of distinct P waves with variable morphology",
+                        "Presence of atrial fibrillation",
+                        "Presence of left axis deviation"
+                    ],
+                    "answer": "Presence of atrial fibrillation",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show fibrillatory waves with no visible P waves, suggesting atrial fibrillation?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
                     "options": [
                         "Yes",
                         "No",

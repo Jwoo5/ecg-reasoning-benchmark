@@ -1,39 +1,38 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "40642514",
+        "ecg_id": "42035328",
         "target_dx": "anterior_myocardial_infarction",
         "dx_label": true,
         "path_idx": 0,
-        "subject_id": "11850809"
+        "subject_id": "17833865"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of anterior myocardial infarction?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose anterior myocardial infarction, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of a slurred S wave in lateral leads",
-                        "Presence of diffuse concave ST-segment elevation across precordial leads",
+                        "Presence of scooped ST-segment depression in precordial leads",
+                        "Presence of inverted T waves in lateral leads",
+                        "Presence of spiked pacemaker artifacts preceding the QRS complex",
                         "Presence of ST-segment elevation in anterior leads",
-                        "Presence of PR-segment depression in anterior leads",
                         "Presence of ST-segment depression in leads V2, V3, and V4"
                     ],
                     "answer": "Presence of ST-segment elevation in anterior leads",
-                    "answer_idx": 2,
+                    "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the anterior leads, including leads V1, V2, V3, and V4?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST elevation in at least two of the anterior leads, including leads V1, V2, V3, and V4? Note that ST elevation is defined as an elevation of the J-point greater than 0.1mV (1mm) in these leads.",
                     "options": [
                         "Yes",
                         "No"
@@ -46,39 +45,39 @@
                     {
                         "question": "Which of the following leads show ST elevation? Select all possible leads from the options below.",
                         "options": [
-                            "Lead III",
+                            "Lead aVR",
                             "Lead V1",
                             "Lead V2",
                             "Lead V3",
                             "Lead V4"
                         ],
                         "answer": [
+                            "Lead V1",
                             "Lead V2",
-                            "Lead V3",
-                            "Lead V4"
+                            "Lead V3"
                         ],
                         "answer_idx": [
+                            1,
                             2,
-                            3,
-                            4
+                            3
                         ],
                         "question_type": "lead_grounding"
                     },
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST elevation? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.20s - 0.31s]",
-                            "[4.70s - 4.95s]",
-                            "[6.41s - 6.60s]",
-                            "[7.80s - 7.95s]"
+                            "[1.97s - 2.11s]",
+                            "[3.08s - 3.32s]",
+                            "[3.85s - 4.07s]",
+                            "[5.98s - 6.09s]"
                         ],
-                        "answer": "[7.80s - 7.95s]",
-                        "answer_idx": 3,
+                        "answer": "[1.97s - 2.11s]",
+                        "answer_idx": 0,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have anterior myocardial infarction?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of anterior myocardial infarction?",
                     "options": [
                         "Yes",
                         "No",

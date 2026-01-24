@@ -1,39 +1,38 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "42985421",
+        "ecg_id": "41685636",
         "target_dx": "inferior_ischemia",
         "dx_label": true,
         "path_idx": 0,
-        "subject_id": "12509799"
+        "subject_id": "12871416"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of inferior ischemia?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of ST-segment elevation in inferior leads",
-                        "Presence of ST-segment depression in leads I and aVL",
+                        "Presence of diffuse concave ST-segment elevation in inferior leads",
+                        "Presence of atrial flutter",
                         "Presence of ST-segment depression in inferior leads",
-                        "Presence of flattened T waves in lateral leads",
-                        "Presence of J-point elevation in inferior leads"
+                        "Presence of ST-segment elevation in inferior leads",
+                        "Presence of ST-segment depression in leads I and aVL"
                     ],
                     "answer": "Presence of ST-segment depression in inferior leads",
                     "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the inferior leads, including leads II, III, and aVF?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the inferior leads, including leads II, III, and aVF? Note that ST depression is defined as a depression of the J-point greater than 0.07mV (0.7mm) in these leads.",
                     "options": [
                         "Yes",
                         "No"
@@ -46,11 +45,11 @@
                     {
                         "question": "Which of the following leads show ST-segment depression? Select all possible leads from the options below.",
                         "options": [
+                            "Lead I",
                             "Lead II",
                             "Lead III",
                             "Lead aVF",
-                            "Lead V2",
-                            "Lead V4"
+                            "Lead V6"
                         ],
                         "answer": [
                             "Lead II",
@@ -58,27 +57,28 @@
                             "Lead aVF"
                         ],
                         "answer_idx": [
-                            0,
                             1,
-                            2
+                            2,
+                            3
                         ],
                         "question_type": "lead_grounding"
                     },
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.51s - 0.71s]",
-                            "[6.41s - 6.55s]",
-                            "[7.03s - 7.14s]",
-                            "[9.13s - 9.32s]"
+                            "[1.38s - 1.59s]",
+                            "[2.97s - 3.22s]",
+                            "[4.50s - 4.70s]",
+                            "[5.54s - 5.83s]",
+                            "[7.43s - 7.55s]"
                         ],
-                        "answer": "[6.41s - 6.55s]",
-                        "answer_idx": 1,
+                        "answer": "[7.43s - 7.55s]",
+                        "answer_idx": 4,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have inferior ischemia?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of inferior ischemia?",
                     "options": [
                         "Yes",
                         "No",

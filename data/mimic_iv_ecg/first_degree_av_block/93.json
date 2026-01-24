@@ -1,39 +1,38 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "40602641",
+        "ecg_id": "46833575",
         "target_dx": "first_degree_av_block",
         "dx_label": true,
         "path_idx": 0,
-        "subject_id": "17182619"
+        "subject_id": "15951258"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of first degree AV block?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose first degree AV block, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Presence of flattened T waves in inferior leads",
+                        "Complete dissociation between P waves and QRS complexes",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
                         "Presence of grouped QRS complexes separated by pauses",
-                        "Presence of non-conducted P waves",
-                        "Presence of premature atrial complexes with compensatory pauses",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Presence of flattened T waves in lateral leads",
+                        "Absence of discernible P waves"
                     ],
                     "answer": "Evidence of consistent 1:1 atrioventricular conduction",
-                    "answer_idx": 4,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, looking at the overall rhythm, is every P wave consistently followed by a QRS complex on this ECG?",
+                    "question": "Regarding the criterion you selected, looking at the overall rhythm, is every P wave, excluding those following premature beats, consistently followed by a QRS complex on this ECG?",
                     "options": [
                         "Yes",
                         "No"
@@ -44,7 +43,7 @@
                 },
                 "grounding": [],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have first degree AV block?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of first degree AV block?",
                     "options": [
                         "Yes",
                         "No",
@@ -59,14 +58,14 @@
                 "criterion_selection": {
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose first degree AV block?",
                     "options": [
-                        "Progressive prolongation of the PR interval",
                         "Prolongation of the PR interval",
                         "Prolongation of the QT interval",
-                        "Alternating duration of the PR interval",
-                        "Presence of pathological Q waves in inferior leads"
+                        "Depression of the PR segment",
+                        "Presence of flattened T waves in lateral leads",
+                        "Beat-to-beat variability in the PR interval"
                     ],
                     "answer": "Prolongation of the PR interval",
-                    "answer_idx": 1,
+                    "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -83,13 +82,13 @@
                     {
                         "question": "In which of the following segments can you observe a P wave that demonstrates the prolonged PR interval? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[1.85s - 1.95s]",
-                            "[2.80s - 3.04s]",
-                            "[6.58s - 6.78s]",
-                            "[9.15s - 9.28s]"
+                            "[2.35s - 2.45s]",
+                            "[3.24s - 3.43s]",
+                            "[4.19s - 4.33s]",
+                            "[5.80s - 6.03s]"
                         ],
-                        "answer": "[9.15s - 9.28s]",
-                        "answer_idx": 3,
+                        "answer": "[4.19s - 4.33s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -107,7 +106,7 @@
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have first degree AV block?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of first degree AV block?",
                     "options": [
                         "Yes",
                         "No",

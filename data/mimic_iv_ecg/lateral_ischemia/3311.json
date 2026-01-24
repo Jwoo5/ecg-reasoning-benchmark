@@ -1,39 +1,38 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "46290478",
+        "ecg_id": "44893014",
         "target_dx": "lateral_ischemia",
         "dx_label": false,
         "path_idx": 0,
-        "subject_id": "14008877"
+        "subject_id": "18651091"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of lateral ischemia?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
                         "Presence of diffuse concave ST-segment elevation in lateral leads",
-                        "Presence of J-point elevation in lateral leads",
-                        "Presence of ST-segment depression in leads II, III, and aVF",
                         "Presence of ST-segment depression in lateral leads",
-                        "Presence of flattened T waves in inferior leads"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of ST-segment elevation in lateral leads",
+                        "Presence of J-point elevation in lateral leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that ST depression is defined as a depression of the J-point greater than 0.07mV (0.7mm) in these leads.",
                     "options": [
                         "Yes",
                         "No"
@@ -46,18 +45,18 @@
                     {
                         "question": "To verify that the lateral leads do not show ST depression, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[4.35s - 4.46s]",
-                            "[7.45s - 7.60s]",
-                            "[8.59s - 8.85s]",
-                            "[9.23s - 9.42s]"
+                            "[1.78s - 2.00s]",
+                            "[2.72s - 2.94s]",
+                            "[3.54s - 3.64s]",
+                            "[4.36s - 4.46s]"
                         ],
-                        "answer": "[4.35s - 4.46s]",
-                        "answer_idx": 0,
+                        "answer": "[3.54s - 3.64s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have lateral ischemia?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of lateral ischemia?",
                     "options": [
                         "Yes",
                         "No",
@@ -73,13 +72,13 @@
                     "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose lateral ischemia?",
                     "options": [
                         "Presence of tall, peaked T waves in lateral leads",
-                        "Presence of inverted T waves in lateral leads",
-                        "Presence of inverted T waves in leads V1 - V4",
                         "Presence of flattened T waves in lateral leads",
-                        "Prolongation of the PR interval"
+                        "Presence of inverted T waves in leads V1 - V4",
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of inverted T waves in lateral leads"
                     ],
                     "answer": "Presence of inverted T waves in lateral leads",
-                    "answer_idx": 1,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -96,18 +95,18 @@
                     {
                         "question": "To verify that the lateral leads do not show inverted T waves, in which of the following segments can you locate the T wave in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[0.97s - 1.08s]",
-                            "[2.46s - 2.66s]",
-                            "[4.09s - 4.27s]",
-                            "[7.55s - 7.82s]"
+                            "[2.05s - 2.32s]",
+                            "[2.39s - 2.49s]",
+                            "[2.74s - 2.98s]",
+                            "[4.53s - 4.62s]"
                         ],
-                        "answer": "[2.46s - 2.66s]",
-                        "answer_idx": 1,
+                        "answer": "[2.74s - 2.98s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have lateral ischemia?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of lateral ischemia?",
                     "options": [
                         "Yes",
                         "No",

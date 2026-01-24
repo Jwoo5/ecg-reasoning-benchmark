@@ -1,7 +1,7 @@
 {
     "metadata": {
         "data_source": "ptbxl",
-        "ecg_id": "15423",
+        "ecg_id": "15408",
         "target_dx": "right_ventricular_hypertrophy",
         "dx_label": false,
         "path_idx": 2
@@ -11,24 +11,23 @@
             "question": "Does this ECG suggest the presence of right ventricular hypertrophy?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To determine which set of diagnostic criteria for right ventricular hypertrophy should be applied, which underlying conduction abnormality must be evaluated first?",
                     "options": [
+                        "Evidence of atrioventricular dissociation",
                         "Presence of left anterior fascicular block",
                         "Presence of ventricular pre-excitation (Delta wave)",
-                        "Presence of left posterior fascicular block",
-                        "Presence of right bundle branch block",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of right bundle branch block"
                     ],
                     "answer": "Presence of right bundle branch block",
-                    "answer_idx": 3,
+                    "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
@@ -43,7 +42,7 @@
                 },
                 "grounding": [],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have right ventricular hypertrophy?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
                         "No",
@@ -58,11 +57,11 @@
                 "criterion_selection": {
                     "question": "Given that right bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnose right ventricular hypertrophy?",
                     "options": [
-                        "Presence of left axis deviation",
-                        "Presence of a superior axis deviation",
-                        "Presence of right axis deviation",
                         "Presence of an indeterminate axis",
-                        "Evidence of consistent 1:1 atrioventricular conduction"
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of right axis deviation",
+                        "Presence of left axis deviation",
+                        "Presence of a superior axis deviation"
                     ],
                     "answer": "Presence of right axis deviation",
                     "answer_idx": 2,
@@ -82,13 +81,13 @@
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.72s - 2.93s]",
-                            "[4.22s - 4.32s]",
-                            "[4.91s - 5.01s]",
-                            "[7.81s - 8.08s]"
+                            "[3.45s - 3.63s]",
+                            "[6.56s - 6.68s]",
+                            "[7.59s - 7.70s]",
+                            "[8.64s - 8.87s]"
                         ],
-                        "answer": "[4.22s - 4.32s]",
-                        "answer_idx": 1,
+                        "answer": "[7.59s - 7.70s]",
+                        "answer_idx": 2,
                         "question_type": "wave_grounding"
                     },
                     {
@@ -105,7 +104,7 @@
                     }
                 ],
                 "decision": {
-                    "question": "Based on all the findings identified so far, does this patient have right ventricular hypertrophy?",
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
                         "No",

@@ -1,39 +1,38 @@
 {
     "metadata": {
         "data_source": "mimic_iv_ecg",
-        "ecg_id": "47352729",
+        "ecg_id": "42542581",
         "target_dx": "lateral_ischemia",
         "dx_label": true,
         "path_idx": 0,
-        "subject_id": "18122533"
+        "subject_id": "12895214"
     },
     "data": {
         "initial_diagnostic_question": {
             "question": "Does this ECG suggest the presence of lateral ischemia?",
             "options": [
                 "Yes",
-                "No",
-                "I don't know"
+                "No"
             ],
             "question_type": "initial_diagnostic_question"
         },
-        "path_1": [
+        "reasoning": [
             {
                 "criterion_selection": {
                     "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
                     "options": [
-                        "Prolongation of the PR interval",
                         "Presence of diffuse concave ST-segment elevation in lateral leads",
-                        "Presence of J-point elevation in lateral leads",
+                        "Presence of an RSR' pattern in leads V1 and V2",
                         "Presence of ST-segment depression in lateral leads",
-                        "Presence of ST-segment depression in leads II, III, and aVF"
+                        "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of J-point elevation in lateral leads"
                     ],
                     "answer": "Presence of ST-segment depression in lateral leads",
-                    "answer_idx": 3,
+                    "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
                 "finding": {
-                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the lateral leads, including leads I, aVL, V5, and V6?",
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that ST depression is defined as a depression of the J-point greater than 0.07mV (0.7mm) in these leads.",
                     "options": [
                         "Yes",
                         "No"
@@ -47,36 +46,41 @@
                         "question": "Which of the following leads show ST-segment depression? Select all possible leads from the options below.",
                         "options": [
                             "Lead I",
-                            "Lead III",
+                            "Lead aVR",
                             "Lead aVL",
                             "Lead V5",
                             "Lead V6"
                         ],
                         "answer": [
                             "Lead I",
-                            "Lead aVL"
+                            "Lead aVL",
+                            "Lead V5",
+                            "Lead V6"
                         ],
                         "answer_idx": [
                             0,
-                            2
+                            2,
+                            3,
+                            4
                         ],
                         "question_type": "lead_grounding"
                     },
                     {
                         "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
-                            "[2.66s - 2.94s]",
-                            "[3.19s - 3.29s]",
-                            "[5.27s - 5.55s]",
-                            "[6.61s - 6.72s]"
+                            "[1.03s - 1.30s]",
+                            "[2.86s - 3.14s]",
+                            "[2.88s - 3.10s]",
+                            "[5.14s - 5.26s]",
+                            "[5.31s - 5.58s]"
                         ],
-                        "answer": "[6.61s - 6.72s]",
+                        "answer": "[5.14s - 5.26s]",
                         "answer_idx": 3,
                         "question_type": "wave_grounding"
                     }
                 ],
                 "decision": {
-                    "question": "Based on the finding identified above, does this patient have lateral ischemia?",
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of lateral ischemia?",
                     "options": [
                         "Yes",
                         "No",
