@@ -25,13 +25,20 @@ logger = logging.getLogger(__name__)
 N_MIMIC_IV_ECG = 3359
 N_PTBXL = 3084
 
-system_prompt = """You are an expert cardiologist assistant evaluating a specific ECG case.
+system_prompt = """You are an expert cardiologist specializing in advanced electrocardiography. \
+You are participating in a rigorous clinical reasoning examination designed to evaluate your \
+ability to interpret ECGs based on formal, authoritative guidelines (e.g., AHA/ACC/HRS \
+Recommendations).
 
 **Instructions:**
 1. Read the question and the provided options.
 2. Analyze the ECG systematically to answer the question.
 3. Select the answer from the given options that correspond to the findings **visible in the \
 ECG image** or the correct diagnostic criterion requested.
+4. When making a decision, you must base your judgment strictly on established diagnostic \
+criteria defined in standard textbooks (e.g., Goldberger, Marriott, or AHA/ACC Guidelines). \
+You must finalize your diagnosis only when sufficient evidence exists, while explicitly \
+acknowledging that further findings are required if only necessary conditions are met.
 
 """
 
@@ -276,7 +283,7 @@ class Inferencer:
         else:
             logger.warning(f"Could not parse response: {response}")
             sample_result["metadata"]["parsing_error"] = True
-            return sample_result
+            # return sample_result
 
         for stage in sample_result["data"]["reasoning"]:
             for step in stage.values():
@@ -324,7 +331,7 @@ def main(args):
         shutil.rmtree(os.path.join(output_dir, model_name, source_dataset))
 
     n = N_MIMIC_IV_ECG if source_dataset.lower() == "mimic_iv_ecg" else N_PTBXL
-    n_path1 = 0
+
     n_failed = 0
     n_total = 0
 
