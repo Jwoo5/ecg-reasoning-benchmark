@@ -59,11 +59,11 @@ def main():
     parser = get_parser()
     args, remaining_args = parser.parse_known_args()
 
-    output_dir = os.path.join(args.save_dir, args.evaluator)
 
     evaluator_cls = get_evaluator_cls(args.evaluator)
     evaluator_args = evaluator_cls.parse_arguments(remaining_args)
     evaluator = evaluator_cls(evaluator_args)
+    output_dir = os.path.join(args.save_dir, evaluator.name)
 
     is_dry_run = getattr(evaluator.args, "estimate_cost", False)
 
@@ -85,8 +85,11 @@ def main():
                         )
                         pbar.update(1)
 
-                        with open(fname, "r") as f:
-                            result = json.load(f)
+                        try:
+                            with open(fname, "r") as f:
+                                result = json.load(f)
+                        except json.decoder.JSONDecodeError:
+                            continue
 
                         # XXX to be activated
                         # assert result["metadata"]["model"] == model, (
@@ -117,31 +120,32 @@ def main():
                 row["idq_total"] = idq_metric["total"]
                 row["idq_correct"] = idq_metric["correct"]
                 row["idq_accuracy"] = idq_metric["accuracy"]
-                row["path_1_total"] = reduced_metrics["path_1"]["total"]
-                row["path_1_ratio"] = idq_metric["path_1_ratio"]
-                row["path_2_total"] = reduced_metrics["path_2"]["total"]
-                row["path_2_ratio"] = idq_metric["path_2_ratio"]
-                row["failed_total"] = reduced_metrics["failed"]["total"]
-                row["failed_ratio"] = idq_metric["failed_ratio"]
 
-                # save metrics for path 1
-                for key in reduced_metrics["path_1"]:
+                # save metrics for gt-reasoning-based diagnosis
+                gtd_metric = reduced_metrics["gt_reasoning_based_diagnosis"]
+                row["gt_reasoning_based_diagnosis_total"] = gtd_metric["total"]
+                row["gt_reasoning_based_diagnosis_correct"] = gtd_metric["correct"]
+                row["gt_reasoning_based_diagnosis_accuracy"] = gtd_metric["accuracy"]
+
+                # save metrics for reasoning
+                row["reasoning_total"] = reduced_metrics["reasoning"]["total"]
+                for key in reduced_metrics["reasoning"]:
                     if key in ["total", "per_loop"]:
                         continue
 
-                    row[key] = reduced_metrics["path_1"][key]
-
-                # save per-loop metrics for path 1
-                row["depth"] = reduced_metrics["path_1"]["per_loop"]["depth_avg"]
-                row["per_loop_total"] = reduced_metrics["path_1"]["per_loop"]["total"]
-                row["per_loop_depth_total"] = reduced_metrics["path_1"]["per_loop"]["depth_total"]
-                row["per_loop_depth_sum"] = reduced_metrics["path_1"]["per_loop"]["depth_sum"]
-                for step in reduced_metrics["path_1"]["per_loop"]:
+                    row[key] = reduced_metrics["reasoning"][key]
+                # save per-loop metrics for reasoning
+                row["per_loop_total"] = reduced_metrics["reasoning"]["per_loop"]["total"]
+                row["per_loop_depth_total"] = reduced_metrics["reasoning"]["per_loop"]["depth_total"]
+                row["per_loop_depth_sum"] = reduced_metrics["reasoning"]["per_loop"]["depth_sum"]
+                row["depth"] = reduced_metrics["reasoning"]["per_loop"]["depth_avg"]
+                for step in reduced_metrics["reasoning"]["per_loop"]:
                     if step in ["total", "depth_total", "depth_sum", "depth_avg"]:
                         continue
 
-                    for key in reduced_metrics["path_1"]["per_loop"][step]:
-                        row[f"{step}_{key}"] = reduced_metrics["path_1"]["per_loop"][step][key]
+                    for key in reduced_metrics["reasoning"]["per_loop"][step]:
+                        row[f"{step}_{key}"] = reduced_metrics["reasoning"]["per_loop"][step][key]
+
 
                 rows[dataset][name].append(row)
 
@@ -153,7 +157,6 @@ def main():
                 if not os.path.exists(os.path.join(output_dir, dataset)):
                     os.makedirs(os.path.join(output_dir, dataset))
                 df.to_csv(os.path.join(output_dir, dataset, f"{name}.csv"), index=False)
-
 
 if __name__ == "__main__":
     main()

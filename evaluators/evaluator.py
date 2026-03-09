@@ -37,6 +37,8 @@ class Evaluator:
     def __init__(self, args):
         self.args = args
 
+        self.name = None
+
         if args.use_builtin_metrics:
             # if there is no custom implementation of init_metrics, we don't need to wrap it
             # because the built-in one will be used directly
@@ -80,22 +82,22 @@ class Evaluator:
         if reset and name in self.metrics:
             self.metrics[name] = None
 
-        initial_diagnostic_question_metrics = {
-            "total": 0,
-            "correct": 0,
-        }
         stepwise_metrics = {
             "total_w_gt": 0,
             "correct_w_gt": 0,
-            "total_wo_gt": 0,
-            "correct_wo_gt": 0,
         }
         metrics = {
-            "initial_diagnostic_question": initial_diagnostic_question_metrics,
-            "path_1": {
+            "initial_diagnostic_question": {
+                "total": 0,
+                "correct": 0,
+            },
+            "gt_reasoning_based_diagnosis": {
+                "total": 0,
+                "correct": 0,
+            },
+            "reasoning": {
                 "total": 0,
                 "completed": 0,
-                "aligned": 0,
                 "per_loop": {
                     "total": 0,
                     "depth_total": 0,  # depth should be computed only for those having grounding steps
@@ -107,13 +109,6 @@ class Evaluator:
                     "measurement_grounding": stepwise_metrics.copy(),
                     "decision": stepwise_metrics.copy(),
                 },
-            },
-            "path_2": {
-                "total": 0,
-                # TODO add more detailed metrics for path 2 when it is implemented
-            },
-            "failed": {
-                "total": 0,
             },
         }
 
@@ -147,111 +142,63 @@ class Evaluator:
             if reduced_metrics["initial_diagnostic_question"]["total"] > 0
             else 0.0
         )
-        reduced_metrics["initial_diagnostic_question"]["path_1_ratio"] = (
-            reduced_metrics["path_1"]["total"] / reduced_metrics["initial_diagnostic_question"]["total"]
-            if reduced_metrics["initial_diagnostic_question"]["total"] > 0
-            else 0.0
-        )
-        reduced_metrics["initial_diagnostic_question"]["path_2_ratio"] = (
-            reduced_metrics["path_2"]["total"] / reduced_metrics["initial_diagnostic_question"]["total"]
-            if reduced_metrics["initial_diagnostic_question"]["total"] > 0
-            else 0.0
-        )
-        reduced_metrics["initial_diagnostic_question"]["failed_ratio"] = (
-            reduced_metrics["failed"]["total"] / reduced_metrics["initial_diagnostic_question"]["total"]
-            if reduced_metrics["initial_diagnostic_question"]["total"] > 0
+
+        # compute accuracy for final diagnostic question with gt reasoning
+        reduced_metrics["gt_reasoning_based_diagnosis"]["accuracy"] = (
+            reduced_metrics["gt_reasoning_based_diagnosis"]["correct"]
+            / reduced_metrics["gt_reasoning_based_diagnosis"]["total"]
+            if reduced_metrics["gt_reasoning_based_diagnosis"]["total"] > 0
             else 0.0
         )
 
-        # compute completion and alignment for path 1
-        reduced_metrics["path_1"]["completion"] = (
-            reduced_metrics["path_1"]["completed"] / reduced_metrics["path_1"]["total"]
-            if reduced_metrics["path_1"]["total"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["alignment"] = (
-            reduced_metrics["path_1"]["aligned"] / reduced_metrics["path_1"]["total"]
-            if reduced_metrics["path_1"]["total"] > 0
+        # compute completion
+        reduced_metrics["reasoning"]["completion"] = (
+            reduced_metrics["reasoning"]["completed"] / reduced_metrics["reasoning"]["total"]
+            if reduced_metrics["reasoning"]["total"] > 0
             else 0.0
         )
 
-        # compute per loop metrics for path 1
-        reduced_metrics["path_1"]["per_loop"]["depth_avg"] = (
-            reduced_metrics["path_1"]["per_loop"]["depth_sum"]
-            / reduced_metrics["path_1"]["per_loop"]["depth_total"]
-            if reduced_metrics["path_1"]["per_loop"]["depth_total"] > 0
+        # compute per loop metrics
+        reduced_metrics["reasoning"]["per_loop"]["depth_avg"] = (
+            reduced_metrics["reasoning"]["per_loop"]["depth_sum"]
+            / reduced_metrics["reasoning"]["per_loop"]["depth_total"]
+            if reduced_metrics["reasoning"]["per_loop"]["depth_total"] > 0
             else 0.0
         )
-        reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["accuracy_w_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["correct_w_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["total_w_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["total_w_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["criterion_selection"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["criterion_selection"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["criterion_selection"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["criterion_selection"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["accuracy_wo_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["correct_wo_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["total_wo_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["criterion_selection"]["total_wo_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["finding"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["finding"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["finding"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["finding"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["path_1"]["per_loop"]["finding"]["accuracy_w_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["finding"]["correct_w_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["finding"]["total_w_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["finding"]["total_w_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["lead_grounding"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["lead_grounding"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["lead_grounding"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["lead_grounding"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["path_1"]["per_loop"]["finding"]["accuracy_wo_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["finding"]["correct_wo_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["finding"]["total_wo_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["finding"]["total_wo_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["wave_grounding"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["wave_grounding"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["wave_grounding"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["wave_grounding"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["accuracy_w_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["correct_w_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["total_w_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["total_w_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["measurement_grounding"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["measurement_grounding"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["measurement_grounding"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["measurement_grounding"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["accuracy_wo_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["correct_wo_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["total_wo_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["lead_grounding"]["total_wo_gt"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["accuracy_w_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["correct_w_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["total_w_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["total_w_gt"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["accuracy_wo_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["correct_wo_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["total_wo_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["wave_grounding"]["total_wo_gt"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["accuracy_w_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["correct_w_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["total_w_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["total_w_gt"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["accuracy_wo_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["correct_wo_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["total_wo_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["measurement_grounding"]["total_wo_gt"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["per_loop"]["decision"]["accuracy_w_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["decision"]["correct_w_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["decision"]["total_w_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["decision"]["total_w_gt"] > 0
-            else 0.0
-        )
-        reduced_metrics["path_1"]["per_loop"]["decision"]["accuracy_wo_gt"] = (
-            reduced_metrics["path_1"]["per_loop"]["decision"]["correct_wo_gt"]
-            / reduced_metrics["path_1"]["per_loop"]["decision"]["total_wo_gt"]
-            if reduced_metrics["path_1"]["per_loop"]["decision"]["total_wo_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["decision"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["decision"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["decision"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["decision"]["total_w_gt"] > 0
             else 0.0
         )
 
@@ -281,24 +228,23 @@ class Evaluator:
                 model_response=result["data"]["initial_diagnostic_question"]["model_response"],
                 question_type="initial_diagnostic_question",
             )
-            if "path_1" in result["data"]:
-                for loop_idx, loop in enumerate(result["data"]["path_1"]):
-                    for step_name, step in loop.items():
-                        if step_name == "grounding":
-                            for g_step in step:
-                                total_input_tokens += self.validate(
-                                    question=g_step["question"],
-                                    gt=g_step["answer"],
-                                    model_response=g_step["model_response"],
-                                    question_type=g_step["question_type"],
-                                )
-                        else:
+            for loop_idx, loop in enumerate(result["data"]["reasoning"]):
+                for step_name, step in loop.items():
+                    if step_name == "grounding":
+                        for g_step in step:
                             total_input_tokens += self.validate(
-                                question=step["question"],
-                                gt=step["answer"],
-                                model_response=step["model_response"],
-                                question_type=step_name,
+                                question=g_step["question"],
+                                gt=g_step["answer"],
+                                model_response=g_step["model_response"],
+                                question_type=g_step["question_type"],
                             )
+                    else:
+                        total_input_tokens += self.validate(
+                            question=step["question"],
+                            gt=step["answer"],
+                            model_response=step["model_response"],
+                            question_type=step_name,
+                        )
             return total_input_tokens
 
         if not hasattr(self, "metrics") or self.metrics is None:
@@ -321,113 +267,105 @@ class Evaluator:
         self.metrics["total"]["initial_diagnostic_question"]["total"] += 1
         self.metrics[dx]["initial_diagnostic_question"]["total"] += 1
 
-        eval_path = initial_diagnostic_question_result["eval_path"]
-        if eval_path == -1:
-            self.metrics["total"]["failed"]["total"] += 1
-            self.metrics[dx]["failed"]["total"] += 1
-            return
-        elif eval_path == 2:
-            self.metrics["total"]["path_2"]["total"] += 1
-            self.metrics[dx]["path_2"]["total"] += 1
-            # TODO add more detailed metrics for path 2 when it is implemented
-            return
-        else:
+        def _eval_step(step, terminated_early, metric_names) -> bool:
+            question = step["question"]
+            gt = step["answer"]
+            model_response = step["model_response"]
+            step_name = step["question_type"]
 
-            def _eval_step(step, terminated_early, metric_names) -> bool:
-                question = step["question"]
-                gt = step["answer"]
-                model_response = step["model_response"]
-                step_name = step["question_type"]
-
-                corrected = self.validate(
-                    question=question, gt=gt, model_response=model_response, question_type=step_name
-                )
-                for name in metric_names:
-                    self.metrics[name]["path_1"]["per_loop"][step_name]["total_w_gt"] += 1
-                    if not terminated_early:
-                        self.metrics[name]["path_1"]["per_loop"][step_name]["total_wo_gt"] += 1
-
-                    if corrected:
-                        self.metrics[name]["path_1"]["per_loop"][step_name]["correct_w_gt"] += 1
-                        if not terminated_early:
-                            self.metrics[name]["path_1"]["per_loop"][step_name]["correct_wo_gt"] += 1
-
-                return corrected
-
-            self.metrics["total"]["path_1"]["total"] += 1
-            self.metrics[dx]["path_1"]["total"] += 1
-            question = initial_diagnostic_question_result["question"]
-            model_response = initial_diagnostic_question_result["model_response"]
-            initial_dx_correct = self.validate(
-                question=question,
-                gt=dx_label_str,
-                model_response=model_response,
-                question_type="initial_diagnostic_question",
+            corrected = self.validate(
+                question=question, gt=gt, model_response=model_response, question_type=step_name
             )
-            if initial_dx_correct:
-                self.metrics["total"]["initial_diagnostic_question"]["correct"] += 1
-                self.metrics[dx]["initial_diagnostic_question"]["correct"] += 1
+            for name in metric_names:
+                self.metrics[name]["reasoning"]["per_loop"][step_name]["total_w_gt"] += 1
+                if corrected:
+                    self.metrics[name]["reasoning"]["per_loop"][step_name]["correct_w_gt"] += 1
 
-            terminated_early = False
-            final_dx_correct = False
-            # Evaluate stepwise reasoning for path 1
-            for loop_idx, loop in enumerate(result["data"]["path_1"]):
-                have_grounding_step = False
-                terminated_early_in_loop = False
-                depth_in_loop = 0
-                for step_name, step in loop.items():
-                    if step_name == "grounding":
-                        if len(step) == 0:
-                            continue
+            return corrected
 
-                        have_grounding_step = True
-                        depth_per_grounding = 0
-                        for g_step in step:
-                            corrected = _eval_step(g_step, terminated_early, metric_names=["total", dx])
-                            if corrected:
-                                if not terminated_early_in_loop:
-                                    depth_per_grounding += 1
-                            else:
-                                terminated_early = True
-                                terminated_early_in_loop = True
-                        depth_in_loop += depth_per_grounding / len(step)
-                    else:
-                        corrected = _eval_step(step, terminated_early, metric_names=["total", dx])
+        self.metrics["total"]["reasoning"]["total"] += 1
+        self.metrics[dx]["reasoning"]["total"] += 1
+        question = initial_diagnostic_question_result["question"]
+        model_response = initial_diagnostic_question_result["model_response"]
+        initial_dx_correct = self.validate(
+            question=question,
+            gt=dx_label_str,
+            model_response=model_response,
+            question_type="initial_diagnostic_question",
+        )
+        if initial_dx_correct:
+            self.metrics["total"]["initial_diagnostic_question"]["correct"] += 1
+            self.metrics[dx]["initial_diagnostic_question"]["correct"] += 1
+
+        terminated_early = False
+        final_dx_correct = False
+        final_dx_correct_w_gt_reasoning = False
+        # Evaluate stepwise in reasoning
+        for loop_idx, loop in enumerate(result["data"]["reasoning"]):
+            have_grounding_step = False
+            terminated_early_in_loop = False
+            depth_in_loop = 0
+            for step_name, step in loop.items():
+                if step_name == "grounding":
+                    if len(step) == 0:
+                        continue
+
+                    have_grounding_step = True
+                    depth_per_grounding = 0
+                    for g_step in step:
+                        corrected = _eval_step(g_step, terminated_early, metric_names=["total", dx])
                         if corrected:
                             if not terminated_early_in_loop:
-                                depth_in_loop += 1
+                                depth_per_grounding += 1
                         else:
                             terminated_early = True
                             terminated_early_in_loop = True
+                    depth_in_loop += depth_per_grounding / len(step)
+                else:
+                    corrected = _eval_step(step, terminated_early, metric_names=["total", dx])
+                    if corrected:
+                        if not terminated_early_in_loop:
+                            depth_in_loop += 1
+                    else:
+                        terminated_early = True
+                        terminated_early_in_loop = True
 
-                self.metrics["total"]["path_1"]["per_loop"]["total"] += 1
-                self.metrics[dx]["path_1"]["per_loop"]["total"] += 1
-                if have_grounding_step:
-                    self.metrics["total"]["path_1"]["per_loop"]["depth_total"] += 1
-                    self.metrics["total"]["path_1"]["per_loop"]["depth_sum"] += depth_in_loop
-                    self.metrics[dx]["path_1"]["per_loop"]["depth_total"] += 1
-                    self.metrics[dx]["path_1"]["per_loop"]["depth_sum"] += depth_in_loop
+            self.metrics["total"]["reasoning"]["per_loop"]["total"] += 1
+            self.metrics[dx]["reasoning"]["per_loop"]["total"] += 1
+            # we only count depth for those having grounding steps so that the depth metric is ranged
+            # from 0 to 4 (criterion_selection, finding_identification, grounding, decision)
+            if have_grounding_step:
+                self.metrics["total"]["reasoning"]["per_loop"]["depth_total"] += 1
+                self.metrics["total"]["reasoning"]["per_loop"]["depth_sum"] += depth_in_loop
+                self.metrics[dx]["reasoning"]["per_loop"]["depth_total"] += 1
+                self.metrics[dx]["reasoning"]["per_loop"]["depth_sum"] += depth_in_loop
 
-                    if not terminated_early and loop_idx == len(result["data"]["path_1"]) - 1:
-                        if hasattr(self, "_validate_decision"):
-                            final_dx_correct = self._validate_decision(
-                                loop["decision"]["answer"], loop["decision"]["model_response"]
-                            )
-                        else:
-                            final_dx_correct = self.validate(
-                                question=loop["decision"]["question"],
-                                gt=loop["decision"]["answer"],
-                                model_response=loop["decision"]["model_response"],
-                                question_type="decision",
-                            )
+            if loop_idx == len(result["data"]["reasoning"]) - 1:
+                if hasattr(self, "_validate_decision"):
+                    final_dx_correct_w_gt_reasoning = self._validate_decision(
+                        loop["decision"]["answer"], loop["decision"]["model_response"]
+                    )
+                else:
+                    final_dx_correct_w_gt_reasoning = self.validate(
+                        question=loop["decision"]["question"],
+                        gt=loop["decision"]["answer"],
+                        model_response=loop["decision"]["model_response"],
+                        question_type="decision",
+                    )
+                
+                if not terminated_early and final_dx_correct_w_gt_reasoning:
+                    final_dx_correct = True
 
-            if not terminated_early:
-                self.metrics["total"]["path_1"]["completed"] += 1
-                self.metrics[dx]["path_1"]["completed"] += 1
+        # gt-reasoning-based diagnosis
+        self.metrics["total"]["gt_reasoning_based_diagnosis"]["total"] += 1
+        self.metrics[dx]["gt_reasoning_based_diagnosis"]["total"] += 1
+        if final_dx_correct_w_gt_reasoning:
+            self.metrics["total"]["gt_reasoning_based_diagnosis"]["correct"] += 1
+            self.metrics[dx]["gt_reasoning_based_diagnosis"]["correct"] += 1
 
-                if initial_dx_correct and final_dx_correct:
-                    self.metrics["total"]["path_1"]["aligned"] += 1
-                    self.metrics[dx]["path_1"]["aligned"] += 1
+        if not terminated_early:
+            self.metrics["total"]["reasoning"]["completed"] += 1
+            self.metrics[dx]["reasoning"]["completed"] += 1
 
     def validate(
         self, question: str, gt: Union[str, List[str]], model_response: str, question_type: str, **kwargs

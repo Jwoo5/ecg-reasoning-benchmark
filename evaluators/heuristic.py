@@ -15,6 +15,8 @@ class HeuristicEvaluator(Evaluator):
     def __init__(self, args: argparse.Namespace):
         super().__init__(args)
 
+        self.name = "heuristic"
+
     def validate(
         self, gt: Union[str, List[str]], model_response: str, question_type: str, **kwargs
     ) -> bool:
