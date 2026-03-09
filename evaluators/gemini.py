@@ -100,7 +100,7 @@ class GeminiEvaluator(Evaluator):
         parser.add_argument(
             "--save-cache-interval",
             type=int,
-            default=100,
+            default=10,
             help="Interval (in number of entries) to save the cache to disk.",
         )
         parser.add_argument(
@@ -117,6 +117,7 @@ class GeminiEvaluator(Evaluator):
         self.api_key = args.api_key
         self.model_name = args.gemini_model
         self.estimate_cost = args.estimate_cost
+        self.name = self.model_name
 
         if not self.api_key:
             if "GOOGLE_API_KEY" in os.environ:
@@ -209,8 +210,9 @@ class GeminiEvaluator(Evaluator):
                 )
                 return token_info.total_tokens
 
-            if self.use_cache and prompt_text in self.cache:
-                return self.cache[prompt_text]
+            cache_key = (gt, model_response)
+            if self.use_cache and cache_key in self.cache:
+                return self.cache[cache_key]
 
             # generate content with deterministic configuration
             result = self._generate_with_retry(prompt_text)
@@ -234,14 +236,14 @@ class GeminiEvaluator(Evaluator):
 
             if self.use_cache:
                 if self.cache_size == -1 or len(self.cache) < self.cache_size:
-                    self.cache[prompt_text] = is_aligned
+                    self.cache[cache_key] = is_aligned
                     if self.save_cache and len(self.cache) % self.save_cache_interval == 0:
                         with open(os.path.join(self.cache_dir, self.cache_file), "wb") as f:
                             pickle.dump(self.cache, f)
                 else:
                     # remove the the oldest entry from the cache
                     self.cache.pop(next(iter(self.cache)))
-                    self.cache[prompt_text] = is_aligned
+                    self.cache[cache_key] = is_aligned
 
             return is_aligned
 
