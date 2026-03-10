@@ -96,12 +96,12 @@ These model implementations include the following models:
 * [Gemini](https://arxiv.org/abs/2312.11805)
 * [GPT](https://arxiv.org/abs/2601.03267)
 
-We also provide the Python environment configuration files for these models in the root directory of this repository as these models require different versions of `torch`, `transformers`, or `accelerate` library.
+We also provide the Python environment configuration files for these models in the [`envs/`](./envs) directory of this repository as these models require different versions of `torch`, `transformers`, or `accelerate` library.
 This includes:
-* `env_legacy.yaml`: for PULSE and GEM.
-* `env_opentslm.yaml`: for OpenTSLM.
-* `env_hulumed.yaml`: for Hulu-Med.
-* `env_hf.yaml`: for other models implemented by the huggingface model hub or API endpoints, including ECG-R1, MedGemma, Qwen3-VL, Llama-3.2-Vision-Instruct, Gemini, and GPT.
+* [`env_legacy.yaml`](./envs/env_legacy.yaml): for PULSE and GEM.
+* [`env_opentslm.yaml`](./envs/env_opentslm.yaml): for OpenTSLM.
+* [`env_hulumed.yaml`](./envs/env_hulumed.yaml): for Hulu-Med.
+* [`env_hf.yaml`](./envs/env_hf.yaml): for other models implemented by the huggingface model hub or API endpoints, including ECG-R1, MedGemma, Qwen3-VL, Llama-3.2-Vision-Instruct, Gemini, and GPT.
 
 Of these models, some models are implemented by loading the whole processing pipeline from the huggingface model hub or specific endpoints, while some models are implemented locally in this repository.
 Therefore, we provide running scripts for both types of models.
@@ -115,7 +115,7 @@ python inference.py /path/to/data/ \
     --output-dir $output_dir \
     --enable-condensed-chat
 ```
-* `/path/to/data` should be consistent with the `data` directory that contains the benchmark dataset (e.g., `./data` in this repository).
+* `/path/to/data` should be consistent with the `data` directory that contains the benchmark dataset (e.g., [`./data`](./data) in this repository).
 * `$dataset`: the name of the source dataset, which can be either `mimic_iv_ecg` or `ptbxl`.
 * `$model_name`: the name of the model to be evaluated, which can be one of the following: (`pulse`, `gem`, `opentslm`).
 * `$ecg_base_dir`: the base directory containing the actual ECG signal files for the samples in the benchmark dataset, which is required for the models to process the ECG signals along with the questions, as the benchmark dataset does not provide the ECG signal files itself.
