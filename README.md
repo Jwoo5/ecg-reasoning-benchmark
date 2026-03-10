@@ -78,7 +78,6 @@ For the detailed usage of `inference.py`, see the instructions below.
 > [!NOTE]
 > When we process a sample in `inference.py`, we record the model response for each question step in the sample, and then proceed with the next question step by appending the current question and the ***GT answer*** to the prompt history regardless of the correctness of the model response for the current question step.
 > This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding` (i.e., `finding_identification`), `grounding` (i.e., `ecg_grounding`), and `decision` (i.e., `diagnostic_decision`)), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.
-
 > Note that these GT-Prompt-based accuracy for each stage will be reported as `_w_gt` appended to the stage name (e.g., `criterion_selection_accuracy_w_gt`), while other metrics such as `Completion` are still calculated based on the principle that the evaluation terminates upon the first incorrect response in the model's sequential predictions.
 
 ### Using Existing Models With the Default Prompt
