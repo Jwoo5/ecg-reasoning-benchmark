@@ -172,9 +172,6 @@ class GeminiModel(BaseModel):
 
         return response
 
-    def generate(self, **kwargs):
-        raise NotImplementedError("Use get_response method for GeminiModel.")
-
     def require_base64_image(self) -> bool:
         """Indicate if the model requires ECG images in base64 format."""
         return True
