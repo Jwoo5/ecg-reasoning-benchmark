@@ -77,7 +77,8 @@ For the detailed usage of `inference.py`, see the instructions below.
 
 > [!NOTE]
 > When we process a sample in `inference.py`, we record the model response for each question step in the sample, and then proceed with the next question step by appending the current question and the ***GT answer*** to the prompt history regardless of the correctness of the model response for the current question step.
-> This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding` (i.e., `finding_identification`), `grounding` (i.e., `ecg_grounding`), and `decision` (i.e., `diagnostic_decision`)), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.  
+> This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding` (i.e., `finding_identification`), `grounding` (i.e., `ecg_grounding`), and `decision` (i.e., `diagnostic_decision`)), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.
+
 > Note that these GT-Prompt-based accuracy for each stage will be reported as `_w_gt` appended to the stage name (e.g., `criterion_selection_accuracy_w_gt`), while other metrics such as `Completion` are still calculated based on the principle that the evaluation terminates upon the first incorrect response in the model's sequential predictions.
 
 ### Using Existing Models With the Default Prompt
@@ -94,6 +95,13 @@ These model implementations include the following models:
 * [Llama-3.2-Vision-Instruct](https://arxiv.org/abs/2407.21783)
 * [Gemini](https://arxiv.org/abs/2312.11805)
 * [GPT](https://arxiv.org/abs/2601.03267)
+
+We also provide the Python environment configuration files for these models in the root directory of this repository as these models require different versions of `torch`, `transformers`, or `accelerate` library.
+This includes:
+* `env_legacy.yaml`: for PULSE and GEM.
+* `env_opentslm.yaml`: for OpenTSLM.
+* `env_hulumed.yaml`: for Hulu-Med.
+* `env_hf.yaml`: for other models implemented by the huggingface model hub or API endpoints, including ECG-R1, MedGemma, Qwen3-VL, Llama-3.2-Vision-Instruct, Gemini, and GPT.
 
 Of these models, some models are implemented by loading the whole processing pipeline from the huggingface model hub or specific endpoints, while some models are implemented locally in this repository.
 Therefore, we provide running scripts for both types of models.
@@ -154,10 +162,9 @@ Follow the instructions below to implement a new model class:
         * `options`: the list of options for the question.
         * `signal` (optional): the ECG signal input, which is a 500Hz 12-lead 1D signal array. Only provided for the signal-based models, and for the very first question turn (i.e., the `initial_diagnostic_question` step) in the conversation history.
         * `image` (optional): the ECG image input, which is a 12-lead ECG chart image as a PIL image object or base64-encoded string depending on the model requirement. Only provided for the image-based models, and for the very first question turn (i.e., the `initial_diagnostic_question` step) in the conversation history.
-
-    > [!NOTE]
-    > Note that the first turn of the conversation history (`Conversation.conversation`) is always the system prompt, and the final turn is always the current user question turn asking for the model response. As aforementioned, the very first user question turn (i.e., `Conversation.conversation[1]`) contains `image` or `signal` field for the ECG input.  
-    > We strongly recommend you to refer to other pre-existing model implementations for this method to see how to process the conversation history to make the full prompt for the model input.
+> [!NOTE]
+> Note that the first turn of the conversation history (`Conversation.conversation`) is always the system prompt, and the final turn is always the current user question turn asking for the model response. As aforementioned, the very first user question turn (i.e., `Conversation.conversation[1]`) contains `image` or `signal` field for the ECG input.  
+> We strongly recommend you to refer to other pre-existing model implementations for this method to see how to process the conversation history to make the full prompt for the model input.
 7. You can also implement any other methods for the model class as needed, such as additional helper methods for processing the ECG input or generating the model response.
 
 ### Modifying the Prompt Design
