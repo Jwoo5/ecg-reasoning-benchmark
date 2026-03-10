@@ -14,6 +14,7 @@
                 "Yes",
                 "No"
             ],
+            "answer": "Yes",
             "question_type": "initial_diagnostic_question"
         },
         "reasoning": [
@@ -31,7 +32,7 @@
                     "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, does this ECG show any possibility of dropped beats, where an RR interval is significantly longer than the preceding RR intervals?",
                     "options": [
                         "Yes",
@@ -39,9 +40,9 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "Which of the following intervals between two consecutive QRS waves represents this significantly longer interval? To ensure clear indexing, the '1st QRS wave' refers to the QRS wave located at [0.70s - 0.80s] in the ECG signal.",
                         "options": [
@@ -55,7 +56,7 @@
                         "question_type": "wave_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on the finding identified above, does this ECG suggest the presence of second degree AV block?",
                     "options": [
                         "Yes",
@@ -64,7 +65,7 @@
                     ],
                     "answer": "Further findings are required to confirm the diagnosis",
                     "answer_idx": 2,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             },
             {
@@ -81,7 +82,7 @@
                     "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, is a non-conducted P wave, which is not caused by a premature beat, visible within the prolonged RR interval that you identified?",
                     "options": [
                         "Yes",
@@ -89,9 +90,9 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "In which of the following segments can you observe the non-conducted P wave, specifically within the prolonged RR interval? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
@@ -105,7 +106,7 @@
                         "question_type": "wave_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on all the findings identified so far, does this ECG suggest the presence of second degree AV block?",
                     "options": [
                         "Yes",
@@ -114,7 +115,7 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             }
         ]

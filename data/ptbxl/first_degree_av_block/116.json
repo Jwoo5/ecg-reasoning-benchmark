@@ -13,6 +13,7 @@
                 "Yes",
                 "No"
             ],
+            "answer": "No",
             "question_type": "initial_diagnostic_question"
         },
         "reasoning": [
@@ -30,7 +31,7 @@
                     "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, looking at the overall rhythm, is every P wave, excluding those following premature beats, consistently followed by a QRS complex on this ECG?",
                     "options": [
                         "Yes",
@@ -38,9 +39,9 @@
                     ],
                     "answer": "No",
                     "answer_idx": 1,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "In which of the following segments can you observe a non-conducted P wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
@@ -54,7 +55,7 @@
                         "question_type": "wave_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on the finding identified above, does this ECG suggest the presence of first degree AV block?",
                     "options": [
                         "Yes",
@@ -63,7 +64,7 @@
                     ],
                     "answer": "No",
                     "answer_idx": 1,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             }
         ]

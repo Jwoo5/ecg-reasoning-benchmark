@@ -13,6 +13,7 @@
                 "Yes",
                 "No"
             ],
+            "answer": "Yes",
             "question_type": "initial_diagnostic_question"
         },
         "reasoning": [
@@ -30,7 +31,7 @@
                     "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, does this ECG show ST-segment elevation in at least two of the inferior leads, including leads II, III, and aVF? Note that ST elevation is defined as an elevation of the J-point greater than 0.1mV (1mm) in these leads.",
                     "options": [
                         "Yes",
@@ -38,9 +39,9 @@
                     ],
                     "answer": "No",
                     "answer_idx": 1,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "To verify that the inferior leads do not show ST elevation, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
@@ -54,7 +55,7 @@
                         "question_type": "wave_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on the finding identified above, does this ECG suggest the presence of inferior myocardial infarction?",
                     "options": [
                         "Yes",
@@ -63,7 +64,7 @@
                     ],
                     "answer": "Further findings are required to confirm the diagnosis",
                     "answer_idx": 2,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             },
             {
@@ -80,7 +81,7 @@
                     "answer_idx": 3,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, does this ECG show pathological Q waves in at least two of the inferior leads, including leads II, III, and aVF? Note that a pathological Q wave in these leads is defined as either (1) a QS complex, (2) a Q wave with a duration greater than 30 milliseconds and an amplitude greater than one-fifth of the following R amplitude, or (3) a deep S wave with only a small r wave preceding it.",
                     "options": [
                         "Yes",
@@ -88,9 +89,9 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "Which of the following leads show the pathological Q waves? Select all possible leads from the options below.",
                         "options": [
@@ -123,7 +124,7 @@
                         "question_type": "wave_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on all the findings identified so far, does this ECG suggest the presence of inferior myocardial infarction?",
                     "options": [
                         "Yes",
@@ -132,7 +133,7 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             }
         ]
