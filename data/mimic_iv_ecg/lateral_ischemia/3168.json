@@ -1,0 +1,93 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "45633907",
+        "target_dx": "lateral_ischemia",
+        "dx_label": true,
+        "path_idx": 0,
+        "subject_id": "17891255"
+    },
+    "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of lateral ischemia?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
+        "reasoning": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose lateral ischemia, which of the following diagnostic criteria should be evaluated?",
+                    "options": [
+                        "Presence of ST-segment depression in leads II, III, and aVF",
+                        "Presence of J-point elevation in lateral leads",
+                        "Presence of ST-segment depression in lateral leads",
+                        "Presence of diffuse concave ST-segment elevation in lateral leads",
+                        "Presence of flattened T waves in inferior leads"
+                    ],
+                    "answer": "Presence of ST-segment depression in lateral leads",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the lateral leads, including leads I, aVL, V5, and V6? Note that ST depression is defined as a depression of the J-point greater than 0.07mV (0.7mm) in these leads.",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show ST-segment depression? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead I",
+                            "Lead aVL",
+                            "Lead V2",
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer": [
+                            "Lead I",
+                            "Lead V5",
+                            "Lead V6"
+                        ],
+                        "answer_idx": [
+                            0,
+                            3,
+                            4
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[6.11s - 6.34s]",
+                            "[6.47s - 6.58s]",
+                            "[6.60s - 6.71s]",
+                            "[7.67s - 7.93s]"
+                        ],
+                        "answer": "[6.60s - 6.71s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of lateral ischemia?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

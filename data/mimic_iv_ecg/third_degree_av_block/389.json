@@ -1,0 +1,198 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "41508683",
+        "target_dx": "third_degree_av_block",
+        "dx_label": true,
+        "path_idx": 0,
+        "subject_id": "18138859"
+    },
+    "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of third degree AV block?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
+        "reasoning": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose third degree AV block, which of the following diagnostic criteria should be evaluated?",
+                    "options": [
+                        "Presence of rapid ventricular response",
+                        "Presence of tachycardia-bradycardia syndrome",
+                        "Gradual acceleration and deceleration of the heart rate",
+                        "Presence of bradycardia (slow ventricular rate)",
+                        "Presence of marked heart rate variability with respiration"
+                    ],
+                    "answer": "Presence of bradycardia (slow ventricular rate)",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show a slow heart rate? Note that a heart rate is considered to be slow if it is less than 70 beats per minute (bpm).",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which range does the measured heart rate fall into?",
+                        "options": [
+                            "Below 30 bpm",
+                            "[30 bpm - 40 bpm]",
+                            "[40 bpm - 50 bpm]",
+                            "[50 bpm - 60 bpm]",
+                            "[60 bpm - 70 bpm]"
+                        ],
+                        "answer": "[40 bpm - 50 bpm]",
+                        "answer_idx": 2,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Regularity of the RR intervals",
+                        "Irregularly irregular RR intervals",
+                        "Phasic variation in RR intervals",
+                        "Intermittent pauses disrupting a regular rhythm",
+                        "Repetitive grouped beating patterns"
+                    ],
+                    "answer": "Regularity of the RR intervals",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is the ventricular rhythm (the RR intervals) regular on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Presence of atrial fibrillation",
+                        "Presence of premature P waves with compensatory pauses",
+                        "Presence of retrograde P waves in the ST segment",
+                        "Absence of any atrial activity (isoelectric baseline)",
+                        "Presence of distinct P waves with variable morphology"
+                    ],
+                    "answer": "Presence of atrial fibrillation",
+                    "answer_idx": 0,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show fibrillatory waves with no visible P waves, suggesting atrial fibrillation?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose third degree AV block?",
+                    "options": [
+                        "Presence of retrograde P wave conduction",
+                        "Presence of AV dissociation",
+                        "Presence of a Delta wave (Slurred upstroke)",
+                        "Fixed PR interval with intermittent conduction failure",
+                        "Progressive prolongation of the PR interval"
+                    ],
+                    "answer": "Presence of AV dissociation",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is the atrial rhythm independent from the ventricular rhythm on this ECG?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following ranges does the measured atrial rate fall into?",
+                        "options": [
+                            "[60 bpm - 75 bpm]",
+                            "[75 bpm - 90 bpm]",
+                            "[90 bpm - 105 bpm]",
+                            "[105 bpm - 120 bpm]",
+                            "[120 bpm - 135 bpm]"
+                        ],
+                        "answer": "[90 bpm - 105 bpm]",
+                        "answer_idx": 2,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

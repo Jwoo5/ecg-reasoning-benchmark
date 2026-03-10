@@ -1,0 +1,261 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "45066853",
+        "target_dx": "left_posterior_fascicular_block",
+        "dx_label": true,
+        "path_idx": 0,
+        "subject_id": "13358134"
+    },
+    "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of left posterior fascicular block?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
+        "reasoning": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose left posterior fascicular block, which of the following diagnostic criteria should be evaluated?",
+                    "options": [
+                        "Prolongation of the QRS duration",
+                        "Presence of left bundle branch block",
+                        "Presence of first degree AV block",
+                        "Presence of right bundle branch block",
+                        "Presence of left ventricular hypertrophy"
+                    ],
+                    "answer": "Presence of left bundle branch block",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is left bundle branch block present on this ECG, including incomplete and complete LBBB?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, can this patient be diagnosed with left posterior fascicular block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "Given that left bundle branch block is not present, which of the following diagnostic criteria should be evaluated to diagnoses left posterior fascicular block?",
+                    "options": [
+                        "Evidence of consistent 1:1 atrioventricular conduction",
+                        "Presence of an indeterminate axis",
+                        "Presence of right axis deviation",
+                        "Presence of a normal QRS axis",
+                        "Presence of a horizontal QRS axis"
+                    ],
+                    "answer": "Presence of right axis deviation",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show right axis deviation, where the QRS axis is between +90 and +180 degrees?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.44s - 0.66s]",
+                            "[1.12s - 1.36s]",
+                            "[4.52s - 4.67s]",
+                            "[6.15s - 6.30s]"
+                        ],
+                        "answer": "[4.52s - 4.67s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    },
+                    {
+                        "question": "For the selected segment, which range does the measured QRS axis fall into? ",
+                        "options": [
+                            "[75 degrees - 90 degrees]",
+                            "[90 degrees - 120 degrees]",
+                            "[120 degrees - 150 degrees]",
+                            "[150 degrees - 180 degrees]"
+                        ],
+                        "answer": "[120 degrees - 150 degrees]",
+                        "answer_idx": 2,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of left posterior fascicular block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the axis deviation, which diagnostic criterion should be evaluated to diagnose left posterior fascicular block?",
+                    "options": [
+                        "Presence of an rS pattern in leads II, III, and aVF",
+                        "Presence of a qR pattern in leads I and aVL",
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of tall R waves without S waves in leads I and aVL",
+                        "Presence of an rS pattern in leads I and aVL"
+                    ],
+                    "answer": "Presence of an rS pattern in leads I and aVL",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show an rS pattern in any of leads I and aVL?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show the rS pattern? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead I",
+                            "Lead II",
+                            "Lead aVL",
+                            "Lead aVF",
+                            "Lead V3"
+                        ],
+                        "answer": [
+                            "Lead I",
+                            "Lead aVL"
+                        ],
+                        "answer_idx": [
+                            0,
+                            2
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with rS pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.00s - 2.11s]",
+                            "[2.18s - 2.39s]",
+                            "[2.43s - 2.63s]",
+                            "[4.95s - 5.10s]"
+                        ],
+                        "answer": "[2.00s - 2.11s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of left posterior fascicular block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose left posterior fascicular block?",
+                    "options": [
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of deep QS complexes in leads II, III, and aVF",
+                        "Presence of low voltage QRS complexes in limb leads",
+                        "Presence of tall R waves in leads II, III, and aVF",
+                        "Presence of a qR pattern in leads II, III, and aVF"
+                    ],
+                    "answer": "Presence of a qR pattern in leads II, III, and aVF",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show a qR pattern in any of leads II, III, and aVF?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show the qR pattern? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVF",
+                            "Lead V1",
+                            "Lead V2"
+                        ],
+                        "answer": [
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVF"
+                        ],
+                        "answer_idx": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with qR pattern? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.70s - 2.81s]",
+                            "[3.03s - 3.23s]",
+                            "[5.53s - 5.68s]",
+                            "[7.15s - 7.39s]"
+                        ],
+                        "answer": "[2.70s - 2.81s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of left posterior fascicular block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

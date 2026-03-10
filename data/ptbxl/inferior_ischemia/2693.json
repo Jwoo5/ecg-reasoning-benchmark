@@ -1,0 +1,92 @@
+{
+    "metadata": {
+        "data_source": "ptbxl",
+        "ecg_id": "4840",
+        "target_dx": "inferior_ischemia",
+        "dx_label": true,
+        "path_idx": 0
+    },
+    "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of inferior ischemia?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
+        "reasoning": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose inferior ischemia, which of the following diagnostic criteria should be evaluated?",
+                    "options": [
+                        "Presence of ST-segment elevation in inferior leads",
+                        "Presence of ST-segment depression in lateral leads",
+                        "Presence of J-point elevation in inferior leads",
+                        "Presence of diffuse concave ST-segment elevation in inferior leads",
+                        "Presence of ST-segment depression in inferior leads"
+                    ],
+                    "answer": "Presence of ST-segment depression in inferior leads",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the inferior leads, including leads II, III, and aVF? Note that ST depression is defined as a depression of the J-point greater than 0.07mV (0.7mm) in these leads.",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show ST-segment depression? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVL",
+                            "Lead aVF",
+                            "Lead V3"
+                        ],
+                        "answer": [
+                            "Lead II",
+                            "Lead III",
+                            "Lead aVF"
+                        ],
+                        "answer_idx": [
+                            0,
+                            1,
+                            3
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[0.73s - 0.92s]",
+                            "[1.79s - 1.89s]",
+                            "[2.37s - 2.47s]",
+                            "[5.69s - 5.89s]"
+                        ],
+                        "answer": "[1.79s - 1.89s]",
+                        "answer_idx": 1,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of inferior ischemia?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

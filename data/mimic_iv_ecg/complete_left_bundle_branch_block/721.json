@@ -1,0 +1,309 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "48809038",
+        "target_dx": "complete_left_bundle_branch_block",
+        "dx_label": false,
+        "path_idx": 2,
+        "subject_id": "17154182"
+    },
+    "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of complete left bundle branch block?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
+        "reasoning": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose complete left bundle branch block, which of the following diagnostic criteria should be evaluated?",
+                    "options": [
+                        "Presence of a normal QRS duration",
+                        "Variable QRS duration",
+                        "Prolongation of the QRS duration",
+                        "Prolongation of the QT interval",
+                        "Presence of atrial fibrillation"
+                    ],
+                    "answer": "Prolongation of the QRS duration",
+                    "answer_idx": 2,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, is the QRS duration prolonged on this ECG? Note that a QRS duration is considered to be prolonged if it is greater than 120 milliseconds.",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "In which of the following segments can you observe a QRS wave that demonstrates the prolonged QRS duration? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.45s - 2.66s]",
+                            "[3.06s - 3.33s]",
+                            "[3.58s - 3.76s]",
+                            "[7.59s - 7.71s]",
+                            "[8.49s - 8.68s]"
+                        ],
+                        "answer": "[7.59s - 7.71s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    },
+                    {
+                        "question": "For the selected segment, which range does the measured QRS duration fall into?",
+                        "options": [
+                            "[120ms - 130ms]",
+                            "[130ms - 140ms]",
+                            "[140ms - 150ms]",
+                            "[150ms - 160ms]",
+                            "Above 160ms"
+                        ],
+                        "answer": "[120ms - 130ms]",
+                        "answer_idx": 0,
+                        "question_type": "measurement_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of complete left bundle branch block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
+                    "options": [
+                        "Presence of a Delta wave (Slurred upstroke)",
+                        "Presence of a dominant S wave in leads V1 and V2",
+                        "Presence of a tall, broad R wave in leads V1 and V2",
+                        "Presence of atrial fibrillation",
+                        "Presence of a dominant R wave in leads V1 and V2"
+                    ],
+                    "answer": "Presence of a dominant S wave in leads V1 and V2",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show dominant S waves in leads V1 and V2, where the amplitude of the negative deflection in the QRS complex is greater than the amplitude of the positive deflection?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Within the leads V1 and V2, in which of the following segments can you observe the QRS complex with dominant S wave? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.55s - 1.67s]",
+                            "[3.68s - 3.89s]",
+                            "[4.71s - 4.88s]",
+                            "[6.78s - 6.96s]",
+                            "[7.23s - 7.45s]"
+                        ],
+                        "answer": "[1.55s - 1.67s]",
+                        "answer_idx": 0,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of complete left bundle branch block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
+                    "options": [
+                        "Presence of negative QRS complexes in lateral leads",
+                        "Presence of a positive monophasic QRS complex without a Q wave in lateral leads",
+                        "Presence of low voltage QRS complexes in lateral leads",
+                        "Presence of an RSR' pattern in leads V1 and V2",
+                        "Presence of deep S waves in lateral leads"
+                    ],
+                    "answer": "Presence of a positive monophasic QRS complex without a Q wave in lateral leads",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show positive monophasic QRS complexes without Q waves in at least two of leads I, aVL, and V6?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "Yes",
+                    "answer_idx": 0,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "Which of the following leads show the positive monophasic QRS complexes without Q waves? Select all possible leads from the options below.",
+                        "options": [
+                            "Lead I",
+                            "Lead II",
+                            "Lead aVL",
+                            "Lead V3",
+                            "Lead V6"
+                        ],
+                        "answer": [
+                            "Lead I",
+                            "Lead aVL"
+                        ],
+                        "answer_idx": [
+                            0,
+                            2
+                        ],
+                        "question_type": "lead_grounding"
+                    },
+                    {
+                        "question": "Within the selected leads, in which of the following segments can you observe the positive monophasic QRS complexes without Q waves? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[5.10s - 5.33s]",
+                            "[5.98s - 6.16s]",
+                            "[6.65s - 6.90s]",
+                            "[8.33s - 8.45s]",
+                            "[8.49s - 8.69s]"
+                        ],
+                        "answer": "[8.33s - 8.45s]",
+                        "answer_idx": 3,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of complete left bundle branch block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "In addition to the findings you have identified so far, which other diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
+                    "options": [
+                        "Presence of biphasic T waves in lateral leads",
+                        "Presence of a notched R wave in lateral leads",
+                        "Presence of pathological Q waves in lateral leads",
+                        "Presence of atrial fibrillation",
+                        "Presence of a slurred S wave in lateral leads"
+                    ],
+                    "answer": "Presence of a notched R wave in lateral leads",
+                    "answer_idx": 1,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show notched QRS complexes in any of the lateral leads, including leads I, aVL, V5, and V6?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "To verify that the lateral leads do not show a notched R wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[2.45s - 2.66s]",
+                            "[4.23s - 4.46s]",
+                            "[4.94s - 5.06s]",
+                            "[5.98s - 6.16s]",
+                            "[6.20s - 6.45s]"
+                        ],
+                        "answer": "[4.94s - 5.06s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of complete left bundle branch block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "Further findings are required to confirm the diagnosis",
+                    "answer_idx": 2,
+                    "question_type": "decision"
+                }
+            },
+            {
+                "criterion_selection": {
+                    "question": "Since a notched R wave was not observed in any of the lateral leads, which alternative diagnostic criterion should be evaluated to diagnose complete left bundle branch block?",
+                    "options": [
+                        "Presence of atrial fibrillation",
+                        "Presence of horizontal ST depression in leads V5 and V6",
+                        "Presence of pathological Q waves in leads V5 and V6",
+                        "Presence of tall, peaked T waves in leads V5 and V6",
+                        "Presence of a broad monophasic R wave with a prolonged R wave peak time in leads V5 and V6"
+                    ],
+                    "answer": "Presence of a broad monophasic R wave with a prolonged R wave peak time in leads V5 and V6",
+                    "answer_idx": 4,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, does this ECG show broad monophasic R waves, with an R wave peak time of at least 55 ms, in any of leads V5 and V6?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [
+                    {
+                        "question": "To verify that leads V5 and V6 do not show a broad monophasic R wave, in which of the following segments can you locate the QRS complex in these leads? The options below refer to time ranges on the ECG signal, provided in seconds.",
+                        "options": [
+                            "[1.76s - 2.01s]",
+                            "[4.24s - 4.41s]",
+                            "[4.53s - 4.65s]",
+                            "[6.65s - 6.90s]",
+                            "[7.28s - 7.54s]"
+                        ],
+                        "answer": "[4.53s - 4.65s]",
+                        "answer_idx": 2,
+                        "question_type": "wave_grounding"
+                    }
+                ],
+                "decision": {
+                    "question": "Based on all the findings identified so far, does this ECG suggest the presence of complete left bundle branch block?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}

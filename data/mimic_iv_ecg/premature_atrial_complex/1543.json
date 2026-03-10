@@ -1,0 +1,59 @@
+{
+    "metadata": {
+        "data_source": "mimic_iv_ecg",
+        "ecg_id": "42053260",
+        "target_dx": "premature_atrial_complex",
+        "dx_label": false,
+        "path_idx": 1,
+        "subject_id": "19977310"
+    },
+    "data": {
+        "initial_diagnostic_question": {
+            "question": "Does this ECG suggest the presence of typical premature atrial complex(es)?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "question_type": "initial_diagnostic_question"
+        },
+        "reasoning": [
+            {
+                "criterion_selection": {
+                    "question": "To accurately diagnose typical premature atrial complexes, which of the following diagnostic criteria should be evaluated?",
+                    "options": [
+                        "Presence of intermittent ventricular pauses (dropped beats)",
+                        "Presence of gradual acceleration and deceleration of the heart rate",
+                        "Presence of flattened T waves in inferior leads",
+                        "Presence of premature beats",
+                        "Presence of grouped beating patterns separated by pauses"
+                    ],
+                    "answer": "Presence of premature beats",
+                    "answer_idx": 3,
+                    "question_type": "criterion_selection"
+                },
+                "finding": {
+                    "question": "Regarding the criterion you selected, are there any premature beats on this ECG, where a QRS complex occurs earlier than expected time based on the preceding normal cycles?",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "finding"
+                },
+                "grounding": [],
+                "decision": {
+                    "question": "Based on the finding identified above, does this ECG suggest the presence of typical premature atrial complex(es)?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Further findings are required to confirm the diagnosis"
+                    ],
+                    "answer": "No",
+                    "answer_idx": 1,
+                    "question_type": "decision"
+                }
+            }
+        ]
+    }
+}
