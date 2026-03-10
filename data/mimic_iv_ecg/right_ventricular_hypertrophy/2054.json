@@ -14,6 +14,7 @@
                 "Yes",
                 "No"
             ],
+            "answer": "Yes",
             "question_type": "initial_diagnostic_question"
         },
         "reasoning": [
@@ -31,7 +32,7 @@
                     "answer_idx": 2,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, is right bundle branch block present on this ECG, including incomplete and complete RBBB?",
                     "options": [
                         "Yes",
@@ -39,10 +40,10 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [],
-                "decision": {
+                "ecg_grounding": [],
+                "diagnostic_decision": {
                     "question": "Based on the finding identified above, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
@@ -51,7 +52,7 @@
                     ],
                     "answer": "Further findings are required to confirm the diagnosis",
                     "answer_idx": 2,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             },
             {
@@ -68,7 +69,7 @@
                     "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, is the QRS axis greater than +60 degrees on this ECG?",
                     "options": [
                         "Yes",
@@ -76,9 +77,9 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "In which of the following segments can you locate a QRS wave that would be used to calculate the QRS axis? The options below refer to time ranges on the ECG signal, provided in seconds.",
                         "options": [
@@ -104,7 +105,7 @@
                         "question_type": "measurement_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on all the findings identified so far, does this ECG suggest the presence of right ventricular hypertrophy?",
                     "options": [
                         "Yes",
@@ -113,7 +114,7 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             }
         ]

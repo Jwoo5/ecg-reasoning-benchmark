@@ -13,6 +13,7 @@
                 "Yes",
                 "No"
             ],
+            "answer": "No",
             "question_type": "initial_diagnostic_question"
         },
         "reasoning": [
@@ -30,7 +31,7 @@
                     "answer_idx": 4,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, does this ECG show a slow heart rate? Note that a heart rate is considered to be slow if it is less than 70 beats per minute (bpm).",
                     "options": [
                         "Yes",
@@ -38,9 +39,9 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [
+                "ecg_grounding": [
                     {
                         "question": "Which range does the measured heart rate fall into?",
                         "options": [
@@ -55,7 +56,7 @@
                         "question_type": "measurement_grounding"
                     }
                 ],
-                "decision": {
+                "diagnostic_decision": {
                     "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
                     "options": [
                         "Yes",
@@ -64,7 +65,7 @@
                     ],
                     "answer": "Further findings are required to confirm the diagnosis",
                     "answer_idx": 2,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             },
             {
@@ -81,7 +82,7 @@
                     "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, is the ventricular rhythm (the RR intervals) regular on this ECG?",
                     "options": [
                         "Yes",
@@ -89,10 +90,10 @@
                     ],
                     "answer": "Yes",
                     "answer_idx": 0,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [],
-                "decision": {
+                "ecg_grounding": [],
+                "diagnostic_decision": {
                     "question": "Based on the finding identified above, does this ECG suggest the presence of third degree AV block?",
                     "options": [
                         "Yes",
@@ -101,7 +102,7 @@
                     ],
                     "answer": "Further findings are required to confirm the diagnosis",
                     "answer_idx": 2,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             },
             {
@@ -118,7 +119,7 @@
                     "answer_idx": 0,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, does this ECG show fibrillatory waves with no visible P waves, suggesting atrial fibrillation?",
                     "options": [
                         "Yes",
@@ -126,10 +127,10 @@
                     ],
                     "answer": "No",
                     "answer_idx": 1,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [],
-                "decision": {
+                "ecg_grounding": [],
+                "diagnostic_decision": {
                     "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
                     "options": [
                         "Yes",
@@ -138,7 +139,7 @@
                     ],
                     "answer": "Further findings are required to confirm the diagnosis",
                     "answer_idx": 2,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             },
             {
@@ -155,7 +156,7 @@
                     "answer_idx": 1,
                     "question_type": "criterion_selection"
                 },
-                "finding": {
+                "finding_identification": {
                     "question": "Regarding the criterion you selected, is the atrial rhythm independent from the ventricular rhythm on this ECG?",
                     "options": [
                         "Yes",
@@ -163,10 +164,10 @@
                     ],
                     "answer": "No",
                     "answer_idx": 1,
-                    "question_type": "finding"
+                    "question_type": "finding_identification"
                 },
-                "grounding": [],
-                "decision": {
+                "ecg_grounding": [],
+                "diagnostic_decision": {
                     "question": "Based on all the findings identified so far, does this ECG suggest the presence of third degree AV block?",
                     "options": [
                         "Yes",
@@ -175,7 +176,7 @@
                     ],
                     "answer": "No",
                     "answer_idx": 1,
-                    "question_type": "decision"
+                    "question_type": "diagnostic_decision"
                 }
             }
         ]

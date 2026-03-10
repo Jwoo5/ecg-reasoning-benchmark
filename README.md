@@ -1,5 +1,11 @@
 # ECG-Reasoning-Benchmark: A Benchmark for Evaluating Clinical Reasoning Capabilities in ECG Interpretation
 
+<!-- <p align="center">
+   <a href="https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/dataset-HuggingFace-yellow.svg" alt="dataset">
+  </a>
+</p> -->
+
 This is the official repository for distributing ECG-Reasoning-Benchmark.
 
 > While Multimodal Large Language Models (MLLMs) show promising performance in automated electrocardiogram interpretation, it remains unclear whether they genuinely perform actual step-by-step reasoning or just rely on superficial visual cues. To investigate this, we introduce \textbf{ECG-Reasoning-Benchmark}, a novel multi-turn evaluation framework comprising over 6,400 samples to systematically assess step-by-step reasoning across 17 core ECG diagnoses. Our comprehensive evaluation of state-of-the-art models reveals a critical failure in executing multi-step logical deduction. Although models possess the medical knowledge to retrieve clinical criteria for a diagnosis, they exhibit near-zero success rates ($< 6\%$ Completion) in maintaining a complete reasoning chain, primarily failing to ground the corresponding ECG findings to the actual visual evidence in the ECG signal. These results demonstrate that current MLLMs bypass actual visual interpretation, exposing a critical flaw in existing training paradigms and underscoring the necessity for robust, reasoning-centric medical AI.
@@ -34,6 +40,7 @@ data
         * `initial_diagnostic_question`: the initial diagnostic question for the sample:
             * `question`: a question asking for the target diagnosis (e.g., `"Does this ECG suggest the presence of anterior ischemia?"`).
             * `options`: a list of possible answer options for the question, which is `["Yes", "No"]` for all samples.
+            * `answer`: the correct answer for the question, which is either `"Yes"` or `"No"`.
             * `question_type`: the type of the question, which is `"initial_diagnostic_question"` for all samples.
 
             \* Note that the GT answer for the initial diagnostic question is determined by the `dx_label` field in the `metadata`, where `true` corresponds to `"Yes"` and `false` corresponds to `"No"`.
@@ -44,13 +51,13 @@ data
                 * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
                 * `answer_idx`: the index of the correct answer in the `options` list, starting from `0`.
                 * `question_type`: the type of the question, which is `"criterion_selection"` for all samples of this reasoning step.
-            * `finding`
+            * `finding_identification`
                 * `question`: a question asking for the identification of a specific ECG finding related to the selected criterion (e.g., `"Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the anterior leads, including leads V2, V3, and V4? Note that ST depression is defined as a depression of the J-point greater than 0.1mV (1mm) in lead V2, and greater than 0.07mV (0.7mm) in leads V3 and V4."`).
                 * `options`: a list of possible answer options for the question, which is `["Yes", "No"]` for all samples of this reasoning step.
                 * `answer`: the correct answer for the question, which is either `"Yes"` or `"No"`.
                 * `answer_idx`: the index of the correct answer in the `options` list, where `0` corresponds to `"Yes"` and `1` corresponds to `"No"`.
-                * `question_type`: the type of the question, which is `"finding"` for all samples of this reasoning step.
-            * `grounding`: a ***list*** of grounding questions where the number of grounding questions depends on the specific criterion being evaluated. Note that this `grounding` step can be ***empty*** if there is no corresponding grounding question for the criterion being evaluated. Each grounding question is a dictionary containing:
+                * `question_type`: the type of the question, which is `"finding_identification"` for all samples of this reasoning step.
+            * `ecg_grounding`: a ***list*** of grounding questions where the number of grounding questions depends on the specific criterion being evaluated. Note that this `ecg_grounding` step can be ***empty*** if there is no corresponding grounding question for the criterion being evaluated. Each grounding question is a dictionary containing:
                 * `question`: a question asking for the grounding of a specific ECG finding to the actual visual evidence in the ECG signal (e.g., `"Which of the following leads show ST-segment depression? Select all possible leads from the options below."`).
                 * `options`: a list of possible answer options for the question, depending on the type of the grounding question (i.e., `"lead_grounding"`, `"wave_grounding"`, and `"measurement_grounding"` that will be described below).
                 * `answer`: the correct answer for the question. For `"lead_grounding"` type, the answer is a list of leads that show the specific ECG finding. Otherwise, the answer is a single option (string) from the `options` list.
@@ -59,25 +66,25 @@ data
                     * `"lead_grounding"`: a question asking for the grounding of a specific ECG finding to the actual leads in the ECG signal (e.g., `"Which of the following leads show ST-segment depression? Select all possible leads from the options below."`).
                     * `"wave_grounding"`: a question asking for the grounding of a specific ECG finding to the actual waveforms in the ECG signal (e.g., `"Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds."`).
                     * `"measurement_grounding"`: a question asking for the grounding of a specific ECG finding to the actual measurements in the ECG signal (e.g., `"For the selected segment, which range does the measured QRS duration fall into?"`).
-            * `decision`
+            * `diagnostic_decision`
                 * `question`: a question asking for the decision of the diagnosis based on the identified ECG findings (e.g., `"Based on the finding identified above, does this ECG suggest the presence of anterior ischemia?"`).
                 * `options`: a list of possible answer options for the question, which is `["Yes", "No", "Further findings are required to confirm the diagnosis"]` for all samples of this reasoning step.
                 * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
                 * `answer_idx`: the index of the correct answer in the `options` list.
-                * `question_type`: the type of the question, which is `"decision"` for all samples of this reasoning step.
+                * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
 
 # Experiments
 
 ## Curating Responses From Models for Evaluation
 
 To evaluate the performance of the models on **ECG-Reasoning-Benchmark**, we first need to curate the responses from the models for each sample in the benchmark dataset.
-The responses should be curated in the same format as the original samples in the dataset, with only the additional field `model_response` added to each question step (i.e., the same level with the steps including `question` and `answer` fields, such as `initial_diagnostic_question`, `criterion_selection`, `finding`, `grounding`, and `decision`).
+The responses should be curated in the same format as the original samples in the dataset, with only the additional field `model_response` added to each question step (i.e., the same level with the steps including `question` and `answer` fields, such as `initial_diagnostic_question`, `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`).
 This curation process can be done by running `inference.py` in this repository, which will automatically generate the model responses for each question step and save the curated responses in a new JSON file for each sample in the provided output directory with the same structure as the original dataset.
 For the detailed usage of `inference.py`, see the instructions below.
 
 > [!NOTE]
 > When we process a sample in `inference.py`, we record the model response for each question step in the sample, and then proceed with the next question step by appending the current question and the ***GT answer*** to the prompt history regardless of the correctness of the model response for the current question step.
-> This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding` (i.e., `finding_identification`), `grounding` (i.e., `ecg_grounding`), and `decision` (i.e., `diagnostic_decision`)), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.  
+> This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.  
 > Note that these GT-Prompt-based accuracy for each stage will be reported as `_w_gt` appended to the stage name (e.g., `criterion_selection_accuracy_w_gt`), while other metrics such as `Completion` are still calculated based on the principle that the evaluation terminates upon the first incorrect response in the model's sequential predictions.
 
 ### Using Existing Models With the Default Prompt
