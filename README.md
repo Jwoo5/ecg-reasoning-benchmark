@@ -1,6 +1,9 @@
 # ECG-Reasoning-Benchmark: A Benchmark for Evaluating Clinical Reasoning Capabilities in ECG Interpretation
 
 <p align="center">
+    <a href="https://arxiv.org/abs/2603.14326" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/paper-arXiv_2603.14326-red.svg" alt="arXiv">
+    </a>
     <a>
         <img src="https://img.shields.io/badge/-Python_3.12-blue?logo=python&logoColor=white">
     </a>
