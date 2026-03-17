@@ -21,63 +21,135 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
 The dataset is organized as follows:
 ```
 data
-├── mimic_iv_ecg
-│   ├── anterior_ischemia
-│   │   └── (*.json)
-│   ├── anterior_myocardial_infarction
-│   │   └── (*.json)
-│   ├── (14 more diagnoses...)
-│   └── third_degree_av_block
-│       └── (*.json)
-└── ptbxl
-    ├── ...
-    └── (similar with the above)
+├── mimic_iv_ecg.jsonl
+└── ptbxl.jsonl
 ```
-* Each multi-turn QA reasoning sample is stored in a separate JSON file, divided into 17 subfolders corresponding to different diagnoses.
-* Each JSON file contains the following fields in a hierarchical structure:
-    * `metadata`: contains metadata information about the sample:
-        * `data_source`: indicates the source of the data (i.e., `"mimic_iv_ecg"` or `"ptbxl"`).
-        * `ecg_id`: a unique identifier for the ECG sample, having different formats depending on the data source (e.g., `"41720298"` for MIMIC-IV-ECG and `"21472"` for PTB-XL).
-        * `target_dx`: the target diagnosis for the sample, which is one of the defined 17 core ECG diagnoses (e.g., `"anterior_ischemia"`).
-        * `dx_label`: the GT label for the target diagnosis, where `false` indicates the absence of the diagnosis and `true` indicates its presence.
-        * `path_idx`: the index of the reasoning path, which is used to distinguish different reasoning paths for the same target diagnosis and label. For example, for `third_degree_av_block` with `dx_label` as `false`, there are 3 different reasoning paths, where `path_idx` ranges from `0` to `2`.
-        * `subject_id` (only for MIMIC-IV-ECG): the subject ID of the patient, which can be used to retrieve the corresponding EHR data for the patient from the MIMIC-IV database.
-    * `data`: contains the actual multi-turn QA reasoning sample, which is structured as:
-        * `initial_diagnostic_question`: the initial diagnostic question for the sample:
-            * `question`: a question asking for the target diagnosis (e.g., `"Does this ECG suggest the presence of anterior ischemia?"`).
-            * `options`: a list of possible answer options for the question, which is `["Yes", "No"]` for all samples.
-            * `answer`: the correct answer for the question, which is either `"Yes"` or `"No"`.
-            * `question_type`: the type of the question, which is `"initial_diagnostic_question"` for all samples.
+* Each `.jsonl` file contains the full set of multi-turn QA reasoning samples for its respective data source (i.e., MIMIC-IV-ECG and PTB-XL).
+* Each line in the `.jsonl` file represents a single JSON object containing the `metadata` and `data` for one reasoning sample:
+> * `metadata`: contains metadata information about the sample:
+>   * `id`: a unique integer identifier for **the data sample** (e.g., `0`, `1`, `2`, etc.), **which is used to distinguish different samples in the dataset and can be used as part of the filename for saving the curated model responses for each sample.**
+>   * `data_source`: indicates the source of the data (i.e., `"mimic_iv_ecg"` or `"ptbxl"`).
+>   * `ecg_id`: a unique identifier for **the ECG sample**, having different formats depending on the data source (e.g., `"41720298"` for MIMIC-IV-ECG and `"21472"` for PTB-XL).
+>   * `target_dx`: the target diagnosis for the sample, which is one of the defined 17 core ECG diagnoses (e.g., `"anterior_ischemia"`).
+>   * `dx_label`: the GT label for the target diagnosis, where `false` indicates the absence of the diagnosis and `true` indicates its presence.
+>   * `path_idx`: the index of the reasoning path, which is used to distinguish different reasoning paths for the same target diagnosis and label. For example, for `third_degree_av_block` with `dx_label` as `false`, there are 3 different reasoning paths, where `path_idx` ranges from `0` to `2`.
+>   * `subject_id` **(only for MIMIC-IV-ECG)**: the subject ID of the patient, which can be used to retrieve the corresponding EHR data for the patient from the MIMIC-IV database.
+> * `data`: contains the actual multi-turn QA reasoning sample, which is structured as:
+>   * `initial_diagnostic_question`: the initial diagnostic question for the sample:
+>       * `question`: a question asking for the target diagnosis (e.g., `"Does this ECG suggest the presence of anterior ischemia?"`).
+>       * `options`: a list of possible answer options for the question, which is `["Yes", "No"]` for all samples.
+>       * `answer`: the correct answer for the question, which is either `"Yes"` or `"No"`.
+>       * `question_type`: the type of the question, which is `"initial_diagnostic_question"` for all samples.
+>   * `reasoning`: a list of reasoning steps, where each step is a dictionary containing:
+>       *  `criterion_selection`
+>           * `question`: a question asking for the selection of a specific diagnostic criterion (e.g., `"To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?"`).
+>           * `options`: a list of possible answer options for the question, where 5 options are provided for this type of question, including 1 correct criterion and 4 distractors.
+>           * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
+>           * `answer_idx`: the index of the correct answer in the `options` list, starting from `0`.
+>           * `question_type`: the type of the question, which is `"criterion_selection"` for all samples of this reasoning step.
+>       * `finding_identification`
+>           * `question`: a question asking for the identification of a specific ECG finding related to the selected criterion (e.g., `"Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the anterior leads, including leads V2, V3, and V4? Note that ST depression is defined as a depression of the J-point greater than 0.1mV (1mm) in lead V2, and greater than 0.07mV (0.7mm) in leads V3 and V4."`).
+>           * `options`: a list of possible answer options for the question, which is `["Yes", "No"]` for all samples of this reasoning step.
+>           * `answer`: the correct answer for the question, which is either `"Yes"` or `"No"`.
+>           * `answer_idx`: the index of the correct answer in the `options` list, where `0` corresponds to `"Yes"` and `1` corresponds to `"No"`.
+>           * `question_type`: the type of the question, which is `"finding_identification"` for all samples of this reasoning step.
+>       * `ecg_grounding`: a ***list*** of grounding questions where the number of grounding questions depends on the specific criterion being evaluated. Note that this `ecg_grounding` step can be ***empty*** if there is no corresponding grounding question for the criterion being evaluated. Each grounding question is a dictionary containing:
+>           * `question`: a question asking for the grounding of a specific ECG finding to the actual visual evidence in the ECG signal (e.g., `"Which of the following leads show ST-segment depression? Select all possible leads from the options below."`).
+>           * `options`: a list of possible answer options for the question, depending on the type of the grounding question (i.e., `"lead_grounding"`, `"wave_grounding"`, and `"measurement_grounding"` that will be described below).
+>           * `answer`: a ***list*** of the correct answers for the question. **Note: For structural consistency across all grounding types, this field is always formatted as a *list*, even for single-answer questions. However, only `lead_grounding` questions may have multiple correct answers.**
+>           * `answer_idx`: a ***list*** of the indices for the correct answers in the `options` list. **Similarly, this is always formatted as a *list* of integers.**
+>           * `question_type`: the type of the ECG grounding question, which can be one of the following:
+>               * `"lead_grounding"`: a question asking for the grounding of a specific ECG finding to the actual leads in the ECG signal (e.g., `"Which of the following leads show ST-segment depression? Select all possible leads from the options below."`).
+>               * `"wave_grounding"`: a question asking for the grounding of a specific ECG finding to the actual waveforms in the ECG signal (e.g., `"Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds."`).
+>               * `"measurement_grounding"`: a question asking for the grounding of a specific ECG finding to the actual measurements in the ECG signal (e.g., `"For the selected segment, which range does the measured QRS duration fall into?"`).
+>       * `diagnostic_decision`
+>           * `question`: a question asking for the decision of the diagnosis based onthe identified ECG findings (e.g., `"Based onthe finding identified above, does this ECG suggestthe presence of anterior ischemia?"`).
+>           * `options`: a list of possible answer options forthe question, which is `["Yes", "No", "Further findings are required to confirmthe diagnosis"]` for all samples of this reasoning step.
+>           * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
+>           * `answer_idx`: the index of the correct answer in the `options` list.
+>           * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
 
-            \* Note that the GT answer for the initial diagnostic question is determined by the `dx_label` field in the `metadata`, where `true` corresponds to `"Yes"` and `false` corresponds to `"No"`.
-        * `reasoning`: a list of reasoning steps, where each step is a dictionary containing:
-            *  `criterion_selection`
-                * `question`: a question asking for the selection of a specific diagnostic criterion (e.g., `"To accurately diagnose anterior ischemia, which of the following diagnostic criteria should be evaluated?"`).
-                * `options`: a list of possible answer options for the question, where 5 options are provided for this type of question, including 1 correct criterion and 4 distractors.
-                * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
-                * `answer_idx`: the index of the correct answer in the `options` list, starting from `0`.
-                * `question_type`: the type of the question, which is `"criterion_selection"` for all samples of this reasoning step.
-            * `finding_identification`
-                * `question`: a question asking for the identification of a specific ECG finding related to the selected criterion (e.g., `"Regarding the criterion you selected, does this ECG show ST-segment depression in at least two of the anterior leads, including leads V2, V3, and V4? Note that ST depression is defined as a depression of the J-point greater than 0.1mV (1mm) in lead V2, and greater than 0.07mV (0.7mm) in leads V3 and V4."`).
-                * `options`: a list of possible answer options for the question, which is `["Yes", "No"]` for all samples of this reasoning step.
-                * `answer`: the correct answer for the question, which is either `"Yes"` or `"No"`.
-                * `answer_idx`: the index of the correct answer in the `options` list, where `0` corresponds to `"Yes"` and `1` corresponds to `"No"`.
-                * `question_type`: the type of the question, which is `"finding_identification"` for all samples of this reasoning step.
-            * `ecg_grounding`: a ***list*** of grounding questions where the number of grounding questions depends on the specific criterion being evaluated. Note that this `ecg_grounding` step can be ***empty*** if there is no corresponding grounding question for the criterion being evaluated. Each grounding question is a dictionary containing:
-                * `question`: a question asking for the grounding of a specific ECG finding to the actual visual evidence in the ECG signal (e.g., `"Which of the following leads show ST-segment depression? Select all possible leads from the options below."`).
-                * `options`: a list of possible answer options for the question, depending on the type of the grounding question (i.e., `"lead_grounding"`, `"wave_grounding"`, and `"measurement_grounding"` that will be described below).
-                * `answer`: the correct answer for the question. For `"lead_grounding"` type, the answer is a list of leads that show the specific ECG finding. Otherwise, the answer is a single option (string) from the `options` list.
-                * `answer_idx`: the index of the correct answer in the `options` list. For `"lead_grounding"` type, the `answer_idx` is a list of indices corresponding to the correct leads in the `options` list. Otherwise, the `answer_idx` is a single index corresponding to the correct option in the `options` list.
-                * `question_type`: the type of the ECG grounding question, which can be one of the following:
-                    * `"lead_grounding"`: a question asking for the grounding of a specific ECG finding to the actual leads in the ECG signal (e.g., `"Which of the following leads show ST-segment depression? Select all possible leads from the options below."`).
-                    * `"wave_grounding"`: a question asking for the grounding of a specific ECG finding to the actual waveforms in the ECG signal (e.g., `"Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds."`).
-                    * `"measurement_grounding"`: a question asking for the grounding of a specific ECG finding to the actual measurements in the ECG signal (e.g., `"For the selected segment, which range does the measured QRS duration fall into?"`).
-            * `diagnostic_decision`
-                * `question`: a question asking for the decision of the diagnosis based on the identified ECG findings (e.g., `"Based on the finding identified above, does this ECG suggest the presence of anterior ischemia?"`).
-                * `options`: a list of possible answer options for the question, which is `["Yes", "No", "Further findings are required to confirm the diagnosis"]` for all samples of this reasoning step.
-                * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
-                * `answer_idx`: the index of the correct answer in the `options` list.
-                * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
+## How to Use (Quick Start)
+
+You can easily load the dataset using the Hugging Face Hub or from the local `.jsonl` files provided in this repository.
+
+### Option 1: Loading from Hugging Face Hub
+The easiest way to load the dataset is using the Hugging Face `datasets` library.
+The dataset is organized into two configurations (`mimic_iv_ecg` and `ptbxl`) and is available under the `test` split.
+
+```python
+from datasets import load_dataset
+
+# Load MIMIC-IV-ECG-sourced samples
+mimic_dataset = load_dataset("Jwoo5/ECG-Reasoning-Benchmark", "mimic_iv_ecg", split="test")
+
+# Load PTB-XL-sourced samples
+ptbxl_dataset = load_dataset("Jwoo5/ECG-Reasoning-Benchmark", "ptbxl", split="test")
+```
+
+### Option 2: Loading Local Files Directly
+
+If you cloned this repository and want to load the data locally, you can use the provided `.jsonl` files in the `data/` directory by parsing them line by line as JSON objects.
+
+```python
+import json
+
+def load_jsonl(file_path):
+    data = []
+    with open(file_path, "r") as f:
+        for line in f:
+            data.append(json.loads(line))
+    return data
+
+# Load MIMIC-IV-ECG-sourced samples
+mimic_dataset = load_jsonl("data/mimic_iv_ecg.jsonl")
+
+# Load PTB-XL-sourced samples
+ptbxl_dataset = load_jsonl("data/ptbxl.jsonl")
+```
+
+### Example for accessing the first sample in the MIMIC-IV-ECG-sourced dataset
+
+```python
+sample = mimic_dataset[0]
+
+print(f"Q: {sample['data']['initial_diagnostic_question']['question']}")
+print(f"A: {sample['data']['initial_diagnostic_question']['answer']}")
+
+# Iterate through the reasoning steps
+for step in sample["data"]["reasoning"]:
+    for q_type in step:
+        if q_type == "ecg_grounding":
+            for grounding_q in step["ecg_grounding"]:
+                print(f"Q: {grounding_q['question']}")
+                # Note: 'answer' in ecg_grounding is consistently formatted as a list
+                print(f"A: {', '.join(grounding_q['answer'])}")
+        else:
+            print(f"Q: {step[q_type]['question']}")
+            print(f"A: {step[q_type]['answer']}")
+```
+
+#### Output:
+```
+Q: Does this ECG suggest the presence of first degree AV block?
+A: Yes
+Q: To accurately diagnose first degree AV block, which of the following diagnostic criteria should be evaluated?
+A: Evidence of consistent 1:1 atrioventricular conduction
+Q: Regarding the criterion you selected, looking at the overall rhythm, is every P wave, excluding those following premature beats, consistently followed by a QRS complex on this ECG?
+A: Yes
+Q: Based on the finding identified above, does this ECG suggest the presence of first degree AV block?
+A: Further findings are required to confirm the diagnosis
+Q: In addition to the finding you just identified, which other diagnostic criterion should be evaluated to diagnose first degree AV block?
+A: Prolongation of the PR interval
+Q: Regarding the criterion you selected, is the PR interval prolonged on this ECG? Note that a PR interval is considered to be prolonged if it is greater than 200 milliseconds.
+A: Yes
+Q: In which of the following segments can you observe a P wave that demonstrates the prolonged PR interval? The options below refer to time ranges on the ECG signal, provided in seconds.
+A: [1.12s - 1.24s]
+Q: For the selected segment, which range does the measured PR interval fall into?
+A: [230ms - 240ms]
+Q: Based on all the findings identified so far, does this ECG suggest the presence of first degree AV block?
+A: Yes
+```
 
 # Experiments
 
@@ -85,8 +157,8 @@ data
 
 To evaluate the performance of the models on **ECG-Reasoning-Benchmark**, we first need to curate the responses from the models for each sample in the benchmark dataset.
 The responses should be curated in the same format as the original samples in the dataset, with only the additional field `model_response` added to each question step (i.e., the same level with the steps including `question` and `answer` fields, such as `initial_diagnostic_question`, `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`).
-This curation process can be done by running `inference.py` in this repository, which will automatically generate the model responses for each question step and save the curated responses in a new JSON file for each sample in the provided output directory with the same structure as the original dataset.
-For the detailed usage of `inference.py`, see the instructions below.
+This curation process can be done by running `inference.py` in this repository, which will automatically generate the model responses for each question step and save the curated responses as **individual `.json` files named by the sample's `id` (e.g., `0.json`, `1.json`, ...)**.
+These files will be organized within the provided output directory following the structure: `$output_dir/$model_name/$dataset/$target_dx/*.json` (e.g., `$output_dir/$model_name/mimic_iv_ecg/first_degree_av_block/0.json`), where further details can be found in the instructions below.
 
 > [!NOTE]
 > When we process a sample in `inference.py`, we record the model response for each question step in the sample, and then proceed with the next question step by appending the current question and the ***GT answer*** to the prompt history regardless of the correctness of the model response for the current question step.
@@ -133,7 +205,7 @@ python inference.py /path/to/data/ \
 * `$ecg_base_dir`: the base directory containing the actual ECG signal files for the samples in the benchmark dataset, which is required for the models to process the ECG signals along with the questions, as the benchmark dataset does not provide the ECG signal files itself.
     * For the `mimic_iv_ecg` source dataset, it should be the directory containing the `files/` directory in the MIMIC-IV-ECG database, which can be downloaded from the [PhysioNet repository for MIMIC-IV-ECG](https://physionet.org/content/mimic-iv-ecg/1.0/).
     * For the `ptbxl` source dataset, it should be the directory containing the `records100/` and `records500/` directories in the PTB-XL database, which can be downloaded from the [PhysioNet repository for PTB-XL](https://physionet.org/content/ptb-xl/1.0.3/).
-* `$output_dir`: the directory to save the curated responses from the model for each sample in the benchmark dataset, with the same structure as the benchmark dataset. The results will be saved in `$output_dir/$model_name/$dataset/` directory.
+* `$output_dir`: the directory to save the curated responses from the model for each sample in the benchmark dataset. The results will be saved in `$output_dir/$model_name/$dataset/$target_dx/` directory, where `$target_dx` is the corresponding target diagnosis for each sample (e.g., `first_degree_av_block`).
 * `--enable-condensed-chat`: an optional flag to enable the condensed chat format, which makes the prompt history include only the answer for each of the previous questions without `option` fields, which is designed to mitigate the potential issue of exceeding the maximum context length for some models when processing the multi-turn questions.
 
 For other models, run:
@@ -154,7 +226,7 @@ python inference.py /path/to/data/ \
     * `llama-3.2-vision-hf`: `11B-Vision-Instruct`, `90B-Vision-Instruct`
     * `gemini`: `2.5-flash`, `2.5-pro`, `3-flash-preview`
     * `gpt`: `5-mini`, `5.2`
-* `$output_dir`: the results will be saved in `$output_dir/{$model_name}_{$model_variant}/$dataset/` directory.
+* `$output_dir`: the results will be saved in `$output_dir/{$model_name}_{$model_variant}/$dataset/$target_dx/` directory.
 
 ### Adding New Models
 
@@ -193,7 +265,7 @@ Therefore, You can design your own question prompts and implement them in the `g
 After curating the model responses, you can evaluate the model performance by running `evaluate.py` in this repository, which will automatically calculate the evaluation metrics and save the evaluation results in a CSV file for each model and dataset.
 The judgment for the correctness of the model response with respect to the GT answer is either done by heuristic string matching or by Gemini from Google, depending on the evaluation settings specified by the user.  
 
-The hueristic string matching is based on the exact string matching between the model response and the GT answer, with handling for some known cases to avoid the issue of minor variations in the model response (e.g., "Yes." vs "Yes", or "Yes" vs "\*\*Yes\*\*").
+The heuristic string matching is based on the exact string matching between the model response and the GT answer, with handling for some known cases to avoid the issue of minor variations in the model response (e.g., "Yes." vs "Yes", or "Yes" vs "\*\*Yes\*\*").
 Note that it only includes some known cases based on the manual analysis of the model responses by the authors, and it may not cover all the possible variations in the model responses, which can potentially lead to some incorrect judgments.
 However, this can be a useful method for a quick evaluation without the need for additional API calls to Gemini, which can be costly and time-consuming when evaluating a large number of samples.
 For using this heuristic string matching method, run:

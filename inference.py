@@ -21,10 +21,6 @@ from utils import Conversation, base64_image_encoder
 
 logger = logging.getLogger(__name__)
 
-# number of samples in each source-dataset
-N_MIMIC_IV_ECG = 3359
-N_PTBXL = 3084
-
 system_prompt = """You are an expert cardiologist specializing in advanced electrocardiography. \
 You are participating in a rigorous clinical reasoning examination designed to evaluate your \
 ability to interpret ECGs based on formal, authoritative guidelines (e.g., AHA/ACC/HRS \
@@ -324,67 +320,69 @@ def main(args):
         os.makedirs(output_dir, exist_ok=True)
 
     assert os.path.exists(
-        os.path.join(root_dir, source_dataset)
-    ), f"Dataset directory not found: {os.path.join(root_dir, source_dataset)}"
+        os.path.join(root_dir, source_dataset + ".jsonl")
+    ), f"Dataset not found: {os.path.join(root_dir, source_dataset + '.jsonl')}"
+
+    # load benchmark data from jsonl file
+    data = []
+    with open(os.path.join(root_dir, source_dataset + ".jsonl"), "r") as f:
+        for line in f:
+            data.append(json.loads(line))
 
     if args.rebase and os.path.exists(os.path.join(output_dir, model_name, source_dataset)):
         shutil.rmtree(os.path.join(output_dir, model_name, source_dataset))
 
-    n = N_MIMIC_IV_ECG if source_dataset.lower() == "mimic_iv_ecg" else N_PTBXL
+    if args.debug:
+        random.seed(42)
+        # for debugging, process only 10% of the data
+        subset_len = len(data) // 10 if len(data) >= 10 else 1
+        data = random.sample(data, subset_len)
 
+    n = len(data)
     n_failed = 0
     n_total = 0
 
-    if args.debug:
-        random.seed(42)
-
     with tqdm(total=n, ncols=140) as pbar:
-        for dx in sorted(os.listdir(os.path.join(root_dir, source_dataset))):
-            fnames = sorted(glob.glob(os.path.join(root_dir, source_dataset, dx, "*.json")))
-            # for debugging, process only 10% of the data
-            if args.debug:
-                subset_len = len(fnames) // 10 if len(fnames) >= 10 else 1
-                fnames = random.sample(fnames, subset_len)
+        for sample in data:
+            sample_id = sample["metadata"]["id"]
+            dx = sample["metadata"]["target_dx"]
 
-            for fname in fnames:
-                save_path = os.path.join(output_dir, model_name, source_dataset, dx, os.path.basename(fname))
-                if not os.path.exists(os.path.dirname(save_path)):
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                elif os.path.exists(save_path):
-                    if args.do_not_skip_empty_output and os.path.getsize(save_path) == 0:
-                        # re-process the sample if the existing output file is empty
-                        pass
-                    else:
-                        pbar.update(1)
-                        continue
 
-                # write empty file to reserve the spot so that other processes do not process the same file
-                with open(save_path, "w") as f:
-                    f.write("")
+            save_path = os.path.join(output_dir, model_name, source_dataset, dx, f"{sample_id}.json")
+            if not os.path.exists(os.path.dirname(save_path)):
+                os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            elif os.path.exists(save_path):
+                if args.do_not_skip_empty_output and os.path.getsize(save_path) == 0:
+                    # re-process the sample if the existing output file is empty
+                    pass
+                else:
+                    pbar.update(1)
+                    continue
 
-                with open(fname, "r") as f:
-                    sample = json.load(f)
+            # write empty file to reserve the spot so that other processes do not process the same file
+            with open(save_path, "w") as f:
+                f.write("")
 
-                result = inferencer.inference(
-                    sample,
-                    ecg_base_dir,
-                    enable_condensed_chat=args.enable_condensed_chat,
-                )
+            result = inferencer.inference(
+                sample,
+                ecg_base_dir,
+                enable_condensed_chat=args.enable_condensed_chat,
+            )
 
-                n_total += 1
-                if "parsing_error" in result["metadata"] and result["metadata"]["parsing_error"]:
-                    n_failed += 1
+            n_total += 1
+            if "parsing_error" in result["metadata"] and result["metadata"]["parsing_error"]:
+                n_failed += 1
 
-                pbar.set_description(
-                    f"Processing {dx} | Sample {os.path.basename(fname)} | {n_total-n_failed}/{n_total} "
-                    f"| Failed: {n_failed}"
-                )
+            pbar.set_description(
+                f"Processing {dx} | Sample {sample_id} | {n_total-n_failed}/{n_total} "
+                f"| Failed: {n_failed}"
+            )
 
-                # save the actual result
-                with open(save_path, "w") as f:
-                    json.dump(result, f, indent=4)
+            # save the actual result
+            with open(save_path, "w") as f:
+                json.dump(result, f, indent=4)
 
-                pbar.update(1)
+            pbar.update(1)
 
 
 if __name__ == "__main__":

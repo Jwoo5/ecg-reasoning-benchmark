@@ -168,7 +168,7 @@ class GeminiEvaluator(Evaluator):
     @retry(
         retry=retry_if_exception(is_retryable_error),
         wait=wait_exponential(multiplier=2, min=2, max=60),
-        stop=stop_after_attempt(10),
+        stop=stop_after_attempt(30),
     )
     def _generate_with_retry(self, prompt_text):
         return self.client.models.generate_content(
@@ -195,8 +195,11 @@ class GeminiEvaluator(Evaluator):
             Union[bool, int]: True if the model response is clinically aligned with the ground truth,
                 False otherwise, or an integer token count if estimating cost.
         """
-        if question_type == "lead_grounding":
-            assert isinstance(gt, list), "Ground truth must be a list for lead_grounding question type."
+        if question_type.endswith("grounding"):
+            assert isinstance(gt, list), (
+                "Ground truth must be a list for ecg_grounding (lead_grounding, wave_grounding, "
+                "measurement_grounding) question type."
+            )
             gt = ", ".join(gt)
 
         prompt_text = self._get_evaluation_prompt(question, gt, model_response)

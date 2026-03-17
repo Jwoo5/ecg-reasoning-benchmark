@@ -56,7 +56,6 @@ class HeuristicEvaluator(Evaluator):
             response = "no"
         else:
             print(f"Unable to parse model response: {response}")
-            breakpoint()
             return False
 
         return gt == response
@@ -374,7 +373,8 @@ class HeuristicEvaluator(Evaluator):
             return False
 
     def _validate_wave_grounding(self, gt: str, response: str) -> bool:
-        gt = gt.strip().lower()
+        # gt is expected to be a list of one element for wave grounding question type
+        gt = gt[0].strip().lower()
         response = response.strip().lower()
 
         if gt == response:
@@ -389,7 +389,8 @@ class HeuristicEvaluator(Evaluator):
             return False
 
     def _validate_measurement_grounding(self, gt: str, response: str) -> bool:
-        gt = gt.strip().lower()
+        # gt is expected to be a list of one element for measurement grounding question type
+        gt = gt[0].strip().lower()
         response = response.strip().lower()
 
         if gt == response:
