@@ -303,4 +303,12 @@ python evaluation.py /path/to/results/ \
 * `--save-cache-interval`: an optional argument to specify the interval for saving the cache to the disk during the evaluation process, which can avoid the potential issue of losing the cache due to unexpected interruption during the evaluation process. For example, when `--save-cache-interval 1` is specified, the cache will be saved to the disk for every single (model response, GT answer) pair.
 
 # Citation
-We will update the citation information soon.
+Please cite this work as:
+```
+@article{oh2026ecg,
+  title={ECG-Reasoning-Benchmark: A Benchmark for Evaluating Clinical Reasoning Capabilities in ECG Interpretation},
+  author={Oh, Jungwoo and Chung, Hyunseung and Lee, Junhee and Kim, Min-Gyu and Yoon, Hangyul and Lee, Ki Seong and Lee, Youngchae and Yeo, Muhan and Choi, Edward},
+  journal={arXiv preprint arXiv:2603.14326},
+  year={2026}
+}
+```
