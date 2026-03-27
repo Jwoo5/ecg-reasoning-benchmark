@@ -103,11 +103,11 @@ class Evaluator:
                     "depth_total": 0,  # depth should be computed only for those having grounding steps
                     "depth_sum": 0,
                     "criterion_selection": stepwise_metrics.copy(),
-                    "finding": stepwise_metrics.copy(),
-                    "lead_grounding": stepwise_metrics.copy(),
+                    "finding_identification": stepwise_metrics.copy(),
+                    "lead_grounding": stepwise_metrics.copy(), 
                     "wave_grounding": stepwise_metrics.copy(),
                     "measurement_grounding": stepwise_metrics.copy(),
-                    "decision": stepwise_metrics.copy(),
+                    "diagnostic_decision": stepwise_metrics.copy(),
                 },
             },
         }
@@ -171,10 +171,10 @@ class Evaluator:
             if reduced_metrics["reasoning"]["per_loop"]["criterion_selection"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["reasoning"]["per_loop"]["finding"]["accuracy_w_gt"] = (
-            reduced_metrics["reasoning"]["per_loop"]["finding"]["correct_w_gt"]
-            / reduced_metrics["reasoning"]["per_loop"]["finding"]["total_w_gt"]
-            if reduced_metrics["reasoning"]["per_loop"]["finding"]["total_w_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["finding_identification"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["finding_identification"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["finding_identification"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["finding_identification"]["total_w_gt"] > 0
             else 0.0
         )
         reduced_metrics["reasoning"]["per_loop"]["lead_grounding"]["accuracy_w_gt"] = (
@@ -195,10 +195,10 @@ class Evaluator:
             if reduced_metrics["reasoning"]["per_loop"]["measurement_grounding"]["total_w_gt"] > 0
             else 0.0
         )
-        reduced_metrics["reasoning"]["per_loop"]["decision"]["accuracy_w_gt"] = (
-            reduced_metrics["reasoning"]["per_loop"]["decision"]["correct_w_gt"]
-            / reduced_metrics["reasoning"]["per_loop"]["decision"]["total_w_gt"]
-            if reduced_metrics["reasoning"]["per_loop"]["decision"]["total_w_gt"] > 0
+        reduced_metrics["reasoning"]["per_loop"]["diagnostic_decision"]["accuracy_w_gt"] = (
+            reduced_metrics["reasoning"]["per_loop"]["diagnostic_decision"]["correct_w_gt"]
+            / reduced_metrics["reasoning"]["per_loop"]["diagnostic_decision"]["total_w_gt"]
+            if reduced_metrics["reasoning"]["per_loop"]["diagnostic_decision"]["total_w_gt"] > 0
             else 0.0
         )
 
@@ -230,7 +230,7 @@ class Evaluator:
             )
             for loop_idx, loop in enumerate(result["data"]["reasoning"]):
                 for step_name, step in loop.items():
-                    if step_name == "grounding":
+                    if step_name == "ecg_grounding":
                         for g_step in step:
                             total_input_tokens += self.validate(
                                 question=g_step["question"],
@@ -306,7 +306,7 @@ class Evaluator:
             terminated_early_in_loop = False
             depth_in_loop = 0
             for step_name, step in loop.items():
-                if step_name == "grounding":
+                if step_name == "ecg_grounding":
                     if len(step) == 0:
                         continue
 
@@ -343,14 +343,15 @@ class Evaluator:
             if loop_idx == len(result["data"]["reasoning"]) - 1:
                 if hasattr(self, "_validate_decision"):
                     final_dx_correct_w_gt_reasoning = self._validate_decision(
-                        loop["decision"]["answer"], loop["decision"]["model_response"]
+                        loop["diagnostic_decision"]["answer"], loop["diagnostic_decision"]["model_response"]
                     )
+                    
                 else:
                     final_dx_correct_w_gt_reasoning = self.validate(
-                        question=loop["decision"]["question"],
-                        gt=loop["decision"]["answer"],
-                        model_response=loop["decision"]["model_response"],
-                        question_type="decision",
+                        question=loop["diagnostic_decision"]["question"],
+                        gt=loop["diagnostic_decision"]["answer"],
+                        model_response=loop["diagnostic_decision"]["model_response"],
+                        question_type="diagnostic_decision",
                     )
                 
                 if not terminated_early and final_dx_correct_w_gt_reasoning:
