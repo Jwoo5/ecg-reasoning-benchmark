@@ -79,9 +79,13 @@ def import_models(models_dir, namespace):
             and (file.endswith(".py") or os.path.isdir(path))
         ):
             model_name = file[: file.find(".py")] if file.endswith(".py") else file
-            importlib.import_module(f"{namespace}.{model_name}")
+            try:
+                importlib.import_module(f"{namespace}.{model_name}")
+            except (ImportError, ModuleNotFoundError):
+                # skip models whose dependencies are not installed
+                pass
 
 
 # automatically import any Python files in the models/ directory
 models_dir = os.path.dirname(__file__)
-import_models(models_dir, "models")
+import_models(models_dir, __name__)

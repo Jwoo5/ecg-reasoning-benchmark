@@ -16,8 +16,8 @@ import wfdb
 from PIL import Image
 from tqdm import tqdm
 
-from models import BaseModel, build_model, get_model_name
-from utils import Conversation, base64_image_encoder
+from .models import BaseModel, build_model, get_model_name
+from .utils import Conversation, base64_image_encoder
 
 logger = logging.getLogger(__name__)
 
@@ -303,6 +303,26 @@ class Inferencer:
         return sample_result
 
 
+def load_data(dataset: str, data_dir: str) -> list:
+    """Load benchmark samples from a JSONL file.
+
+    Args:
+        dataset: Name of the dataset (e.g., "ptbxl", "mimic_iv_ecg").
+        data_dir: Directory containing ``<dataset>.jsonl``.
+
+    Returns:
+        List of sample dicts.
+    """
+    path = os.path.join(data_dir, dataset + ".jsonl")
+    assert os.path.exists(path), f"Dataset not found: {path}"
+
+    data = []
+    with open(path, "r") as f:
+        for line in f:
+            data.append(json.loads(line))
+    return data
+
+
 def main(args):
     model = build_model(args.model, model_variant=args.model_variant)
     inferencer = Inferencer(model, debug=args.debug, verbose=args.verbose)
@@ -319,15 +339,7 @@ def main(args):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 
-    assert os.path.exists(
-        os.path.join(root_dir, source_dataset + ".jsonl")
-    ), f"Dataset not found: {os.path.join(root_dir, source_dataset + '.jsonl')}"
-
-    # load benchmark data from jsonl file
-    data = []
-    with open(os.path.join(root_dir, source_dataset + ".jsonl"), "r") as f:
-        for line in f:
-            data.append(json.loads(line))
+    data = load_data(source_dataset, root_dir)
 
     if args.rebase and os.path.exists(os.path.join(output_dir, model_name, source_dataset)):
         shutil.rmtree(os.path.join(output_dir, model_name, source_dataset))
@@ -385,7 +397,12 @@ def main(args):
             pbar.update(1)
 
 
-if __name__ == "__main__":
+def cli_main():
+    """CLI entry point for ``ecg-reasoning-benchmark-inference``."""
     parser = get_parser()
     args = parser.parse_args()
     main(args)
+
+
+if __name__ == "__main__":
+    cli_main()

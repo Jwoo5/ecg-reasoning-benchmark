@@ -16,7 +16,7 @@ except ImportError as e:
         "Google Gemini SDK is not installed. Please install it with `pip install google-genai`."
     ) from e
 
-from utils import get_cache_dir
+from ..utils import get_cache_dir
 
 from . import Evaluator, register_evaluator
 

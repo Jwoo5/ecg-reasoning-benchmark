@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecg-reasoning-benchmark"
+version = "0.1.0"
+description = "ECG Reasoning Benchmark - evaluation framework for ECG diagnostic reasoning"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "numpy",
+    "wfdb",
+    "matplotlib",
+    "ecg-plot",
+    "pandas",
+    "tqdm",
+    "pillow",
+]
+
+[project.optional-dependencies]
+gemini = ["google-genai"]
+openai = ["openai"]
+
+[project.scripts]
+ecg-reasoning-benchmark-inference = "ecg_reasoning_benchmark.inference:cli_main"
+ecg-reasoning-benchmark-evaluate = "ecg_reasoning_benchmark.evaluation:cli_main"
+
+[tool.setuptools.packages.find]
+include = ["ecg_reasoning_benchmark*"]

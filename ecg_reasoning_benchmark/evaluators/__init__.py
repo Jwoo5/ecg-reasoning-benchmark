@@ -57,10 +57,14 @@ def import_evaluators(evaluators_dir, namespace):
             and not file.startswith(".")
             and (file.endswith(".py") or os.path.isdir(path))
         ):
-            model_name = file[: file.find(".py")] if file.endswith(".py") else file
-            importlib.import_module(f"{namespace}.{model_name}")
+            evaluator_name = file[: file.find(".py")] if file.endswith(".py") else file
+            try:
+                importlib.import_module(f"{namespace}.{evaluator_name}")
+            except (ImportError, ModuleNotFoundError):
+                # skip evaluators whose dependencies are not installed
+                pass
 
 
 # automatically import any Python files in the evaluators/ directory
 evaluators_dir = os.path.dirname(__file__)
-import_evaluators(evaluators_dir, "evaluators")
+import_evaluators(evaluators_dir, __name__)
