@@ -114,24 +114,42 @@ class Inferencer:
         self.debug = debug
         self.verbose = verbose
 
+    def get_ecg_path(
+        self,
+        source_dataset: str,
+        ecg_id: str,
+        base_dir: str,
+        subject_id: Optional[str] = None,
+    ) -> str:
+        """Construct the wfdb record path (without extension) for an ECG sample."""
+        if source_dataset.lower() == "ptbxl":
+            dir_num = int(ecg_id) // 1000 * 1000
+            if self.model_name == "opentslm":
+                return os.path.join(base_dir, "records100", f"{dir_num:05d}", f"{int(ecg_id):05d}_lr")
+            else:
+                return os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
+        elif source_dataset.lower() == "mimic_iv_ecg":
+            return os.path.join(
+                base_dir, "files", f"p{subject_id:.4s}", f"p{subject_id}", f"s{ecg_id}", f"{ecg_id}"
+            )
+        else:
+            raise ValueError(f"Unsupported dataset: {source_dataset}")
+
     def get_ecg_signal(
         self,
         source_dataset: str,
         ecg_id: str,
         base_dir: str,
         subject_id: Optional[str] = None,  # for mimic-iv-ecg
-    ) -> Tuple[torch.Tensor, int]:
+    ) -> Tuple[torch.Tensor, int, str]:
+        """Load ECG signal and return (tensor, sampling_rate, wfdb_path)."""
+        path = self.get_ecg_path(source_dataset, ecg_id, base_dir, subject_id)
+
         if source_dataset.lower() == "ptbxl":
             assert os.path.exists(os.path.join(base_dir, "records500")), (
                 f"PTB-XL dataset directory structure not found in {base_dir}. "
                 "Expected to find 'records500' subdirectory."
             )
-
-            dir_num = int(ecg_id) // 1000 * 1000
-            if self.model_name == "opentslm":
-                path = os.path.join(base_dir, "records100", f"{dir_num:05d}", f"{int(ecg_id):05d}_lr")
-            else:
-                path = os.path.join(base_dir, "records500", f"{dir_num:05d}", f"{int(ecg_id):05d}_hr")
 
             ecg_record, header = wfdb.rdsamp(path)
             sampling_rate = header["fs"]
@@ -141,10 +159,6 @@ class Inferencer:
             assert os.path.exists(os.path.join(base_dir, "files")), (
                 f"MIMIC-IV-ECG dataset directory structure not found in {base_dir}. "
                 "Expected to find 'files' subdirectory."
-            )
-
-            path = os.path.join(
-                base_dir, "files", f"p{subject_id:.4s}", f"p{subject_id}", f"s{ecg_id}", f"{ecg_id}"
             )
 
             ecg_record, header = wfdb.rdsamp(path)
@@ -163,7 +177,7 @@ class Inferencer:
         else:
             raise ValueError(f"Unsupported dataset: {source_dataset}")
 
-        return ecg_tensor, sampling_rate
+        return ecg_tensor, sampling_rate, path
 
     def visualize_ecg(self, ecg_signal: Union[torch.Tensor, np.ndarray], sampling_rate: int) -> Image.Image:
         if isinstance(ecg_signal, torch.Tensor):
@@ -185,9 +199,11 @@ class Inferencer:
         enable_condensed_chat: bool = False,
         verbose: bool = False,
         target_dx: Optional[str] = None,
+        ecg_path: Optional[str] = None,
     ) -> str:
         return self.model.get_response(
-            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose, target_dx=target_dx
+            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose,
+            target_dx=target_dx, ecg_path=ecg_path,
         )
 
     def proceed_step(
@@ -201,6 +217,7 @@ class Inferencer:
         enable_condensed_chat: bool = False,
         verbose: bool = False,
         target_dx: Optional[str] = None,
+        ecg_path: Optional[str] = None,
     ) -> Optional[str]:
         question = step["question"]
         # indexed_options = make_letter_indexed(step["options"])
@@ -211,7 +228,8 @@ class Inferencer:
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
         response = self.get_response(
-            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose, target_dx=target_dx
+            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose,
+            target_dx=target_dx, ecg_path=ecg_path,
         )
         step["model_response"] = response
 
@@ -235,13 +253,23 @@ class Inferencer:
         sample_result = sample.copy()
         sample_result["metadata"]["model"] = self.model_name
 
-        ecg_tensor, sampling_rate = self.get_ecg_signal(
+        ecg_kwargs = dict(
             source_dataset=sample["metadata"]["data_source"],
             ecg_id=sample["metadata"]["ecg_id"],
             base_dir=ecg_base_dir,
             subject_id=sample["metadata"].get("subject_id", None),
         )
-        ecg_image = self.visualize_ecg(ecg_tensor, sampling_rate)
+
+        if self.model.ecg_modality_base == "text":
+            # "text" modality: skip signal loading and visualization;
+            # only provide the wfdb record path so the model handles
+            # ECG processing on its own.
+            ecg_path = self.get_ecg_path(**ecg_kwargs)
+            ecg_tensor = None
+            ecg_image = None
+        else:
+            ecg_tensor, sampling_rate, ecg_path = self.get_ecg_signal(**ecg_kwargs)
+            ecg_image = self.visualize_ecg(ecg_tensor, sampling_rate)
 
         conversation = Conversation(system_prompt)
 
@@ -262,6 +290,7 @@ class Inferencer:
             enable_condensed_chat=enable_condensed_chat,
             verbose=self.verbose,
             target_dx=dx,
+            ecg_path=ecg_path,
         )
         sample_result["data"]["initial_diagnostic_question"]["model_response"] = response
         if (
@@ -291,6 +320,7 @@ class Inferencer:
                             conversation,
                             return_response=False,
                             enable_condensed_chat=enable_condensed_chat,
+                            ecg_path=ecg_path,
                         )
                 else:
                     self.proceed_step(
@@ -298,6 +328,7 @@ class Inferencer:
                         conversation,
                         return_response=False,
                         enable_condensed_chat=enable_condensed_chat,
+                        ecg_path=ecg_path,
                     )
 
         return sample_result

@@ -69,6 +69,28 @@ data
 >           * `answer_idx`: the index of the correct answer in the `options` list.
 >           * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
 
+## Installation
+
+The benchmark can be installed as a Python package for programmatic use:
+
+```bash
+pip install -e .
+```
+
+This enables importing the benchmark modules from external projects:
+
+```python
+from ecg_reasoning_benchmark import Inferencer, load_data, evaluate_results
+from ecg_reasoning_benchmark.models import BaseModel, register_model
+from ecg_reasoning_benchmark.evaluators import get_evaluator_cls
+```
+
+After installation, CLI tools are also available:
+```bash
+ecg-reasoning-benchmark-inference --help
+ecg-reasoning-benchmark-evaluate --help
+```
+
 ## How to Use (Quick Start)
 
 You can easily load the dataset using the Hugging Face Hub or from the local `.jsonl` files provided in this repository.
@@ -234,10 +256,13 @@ To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can impleme
 Follow the instructions below to implement a new model class:
 1. Create a new directory and a new Python file for the model implementation under the `models/` directory. Implement the model class in the new Python file by following the structure of the existing model classes, which should extend the `BaseModel` class defined in `models/model.py`. You also need to create `__init__.py` in that directory to import the new model class for registration.
 2. This new model class should be decorated with `@register_model(model_name)` to register the model with a unique name for loading the model.
-3. If the base modality of the model is not the `"image"` (i.e., Vision-Language model), you should clarify the base modality of the model by setting the `self.ecg_modality_base` field in the `__init__` method of the model class. Note that we only support the base modality of `"signal"` and `"image"` for now, where the former will input the ECG signal as a 500Hz 12-lead 1D signal array, while the latter will input the ECG signal as a 12-lead ECG chart image by converting the 500Hz signal using [`ecg-plot` Python library](https://github.com/dy1901/ecg_plot).
+3. If the base modality of the model is not the `"image"` (i.e., Vision-Language model), you should clarify the base modality of the model by setting the `self.ecg_modality_base` field in the `__init__` method of the model class. The supported modalities are:
+    * `"image"` (default): the ECG signal is converted to a 12-lead ECG chart image using [`ecg-plot`](https://github.com/dy1901/ecg_plot) and passed to the model as a PIL Image or base64-encoded string.
+    * `"signal"`: the ECG signal is passed as a 500Hz 12-lead 1D signal array (torch.Tensor).
+    * `"text"`: the ECG signal loading and visualization are skipped entirely. Instead, only the wfdb record path is passed to the model via `ecg_path` kwarg in `get_response()`. The model is responsible for loading and processing the ECG signal on its own. This is useful for models that have their own ECG analysis pipeline (e.g., signal-processing-based agents).
 4. For the image-based models (i.e., Vision-Language models), you should also clarify if the model requires base64 encoding for the input ECG image by setting the `require_base64_image` method to return `True` in the model class.
 5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method.
-6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. The conversation history (`Conversations.conversation`) is a list of dictionaries, where each dictionary contains the following fields:
+6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. Additional keyword arguments are passed through, including `ecg_path` (the wfdb record path without extension, available for all modalities). The conversation history (`Conversations.conversation`) is a list of dictionaries, where each dictionary contains the following fields:
     * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`.
     * For the `system` or `model` role,
         * `text`: the text content of the conversation turn. In other words, the system prompt for the `system` role, and the model response for the `model` role.
