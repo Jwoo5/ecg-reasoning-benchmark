@@ -63,14 +63,15 @@ class HuluMedHFModel(BaseModel):
 
         system = conversation.conversation[0]["text"]
         messages = [{"role": "system", "content": system}]
-        for i, turn in enumerate(conversation.conversation[1:]):
-            if turn["role"] == "user":
+        turns = conversation.get_turns_for_prompt()
+        for i, turn in enumerate(turns):
+            if turn.get("role") == "user":
                 user_text = f"Question: {turn['question']}\n\n"
 
                 do_add_options = False
                 # do not add options in previous turns to reserve context length
                 if enable_condensed_chat:
-                    if i == len(conversation.conversation[1:]) - 1:
+                    if i == len(turns) - 1:
                         do_add_options = True
                 else:
                     do_add_options = True
@@ -99,13 +100,13 @@ class HuluMedHFModel(BaseModel):
                 else:
                     user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 messages.append(user)
-            elif turn["role"] == "model":
+            elif turn.get("role") == "model":
                 messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
 
-        response = self.generate(messages, conversation.conversation[1]["image"])
+        response = self.generate(messages, turns[0]["image"])
 
         if verbose:
             print(f"Response: {response}")

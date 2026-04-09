@@ -51,14 +51,15 @@ class PulseModel(BaseModel):
         conv = conv_templates["llava_v1"].copy()
         conv.system = conversation.conversation[0]["text"]
 
-        for i, turn in enumerate(conversation.conversation[1:]):
-            if turn["role"] == "user":
+        turns = conversation.get_turns_for_prompt()
+        for i, turn in enumerate(turns):
+            if turn.get("role") == "user":
                 user_text = f"Question: {turn['question']}\n\n"
 
                 do_add_options = False
                 # do not add options in previous turns to reserve context length
                 if enable_condensed_chat:
-                    if i == len(conversation.conversation[1:]) - 1:
+                    if i == len(turns) - 1:
                         do_add_options = True
                 else:
                     do_add_options = True
@@ -83,13 +84,13 @@ class PulseModel(BaseModel):
                     user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text
 
                 conv.append_message(conv.roles[0], user_text)
-            elif turn["role"] == "model":
+            elif turn.get("role") == "model":
                 conv.append_message(conv.roles[1], turn["text"])
         conv.append_message(conv.roles[1], None)
 
         prompt = conv.get_prompt()
 
-        ecg_image = conversation.conversation[1]["image"]
+        ecg_image = turns[0]["image"]
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")

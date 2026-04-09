@@ -105,14 +105,15 @@ class GeminiModel(BaseModel):
         system = conversation.conversation[0]["text"]
 
         contents = []
-        for i, turn in enumerate(conversation.conversation[1:]):
-            if turn["role"] == "user":
+        turns = conversation.get_turns_for_prompt()
+        for i, turn in enumerate(turns):
+            if turn.get("role") == "user":
                 user_text = f"Question: {turn['question']}\n\n"
 
                 do_add_options = False
                 # do not add options in previous turns to reserve context length
                 if enable_condensed_chat:
-                    if i == len(conversation.conversation[1:]) - 1:
+                    if i == len(turns) - 1:
                         do_add_options = True
                 else:
                     do_add_options = True
@@ -139,7 +140,7 @@ class GeminiModel(BaseModel):
                 else:
                     parts = [types.Part(text=user_text)]
                 contents.append(types.Content(role="user", parts=parts))
-            elif turn["role"] == "model":
+            elif turn.get("role") == "model":
                 parts = [types.Part(text=turn["text"])]
                 contents.append(types.Content(role="model", parts=parts))
 

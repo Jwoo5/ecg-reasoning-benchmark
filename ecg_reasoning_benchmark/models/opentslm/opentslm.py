@@ -124,19 +124,20 @@ class OpenTSLMModel(BaseModel):
 
         pre_prompt = "You are an expert cardiologist analyzing an ECG (electrocardiogram).\n\n"
 
-        if len(conversation.conversation) > 2:
+        turns = conversation.get_turns_for_prompt()
+        if len(turns) > 1:
             clinical_context = (
                 "The following is a previous dialogue history between a user and an AI assistant "
                 "about the provided 12-lead clinical ECG recording.\n"
             )
-            for turn in conversation.conversation[1:-1]:
-                if turn["role"] == "user":
+            for turn in turns[:-1]:
+                if turn.get("role") == "user":
                     clinical_context += f"- Question: {turn['question']}\n"
                     if not enable_condensed_chat:
                         clinical_context += " Options:\n"
                         for option in turn["options"]:
                             clinical_context += f" - {option}\n"
-                elif turn["role"] == "model":
+                elif turn.get("role") == "model":
                     clinical_context += f"Assistant: {turn['text']}\n"
         else:
             clinical_context = "12-lead clinical ECG recording."
@@ -198,7 +199,8 @@ class OpenTSLMModel(BaseModel):
         verbose: bool = False,
         **kwargs,
     ) -> str:
-        ecg_signal = conversation.conversation[1]["signal"]
+        turns = conversation.get_turns_for_prompt()
+        ecg_signal = turns[0]["signal"]
         norm_ecg, means, stds = self._process_signal(ecg_signal)
         prompt = self.get_prompt(conversation, norm_ecg, means, stds, enable_condensed_chat)
 

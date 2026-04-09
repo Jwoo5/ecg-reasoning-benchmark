@@ -64,14 +64,15 @@ class MedGemmaHFModel(BaseModel):
             system += "SYSTEM INSTRUCTION: think silently if needed."
 
         messages = [{"role": "system", "content": [{"type": "text", "text": system}]}]
-        for i, turn in enumerate(conversation.conversation[1:]):
-            if turn["role"] == "user":
+        turns = conversation.get_turns_for_prompt()
+        for i, turn in enumerate(turns):
+            if turn.get("role") == "user":
                 user_text = f"Question: {turn['question']}\n\n"
 
                 do_add_options = False
                 # do not add options in previous turns to reserve context length
                 if enable_condensed_chat:
-                    if i == len(conversation.conversation[1:]) - 1:
+                    if i == len(turns) - 1:
                         do_add_options = True
                 else:
                     do_add_options = True
@@ -103,7 +104,7 @@ class MedGemmaHFModel(BaseModel):
                 else:
                     user = {"role": "user", "content": [{"type": "text", "text": user_text}]}
                 messages.append(user)
-            elif turn["role"] == "model":
+            elif turn.get("role") == "model":
                 messages.append({"role": "assistant", "content": [{"type": "text", "text": turn["text"]}]})
 
         if verbose:

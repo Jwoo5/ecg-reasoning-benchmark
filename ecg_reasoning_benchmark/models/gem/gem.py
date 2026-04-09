@@ -28,38 +28,6 @@ class GEMLlavaModel(BaseModel):
     def build_model(cls, device_map="auto", torch_dtype=torch.float16, **kwargs):
         return cls(device_map=device_map, torch_dtype=torch_dtype)
 
-    def get_prompt(self, conversation) -> str:
-        seps = [" ", "</s>"]
-
-        assert (
-            conversation.conversation[0]["role"] == "system"
-        ), "The first turn in the conversation must be from the system."
-        assert (
-            conversation.conversation[-1]["role"] == "user"
-        ), "The last turn in the conversation must be from the user."
-        assert (
-            "image" in conversation.conversation[1]
-        ), "The conversation must contain an ECG image in the first user turn."
-
-        prompt = conversation.conversation[0]["text"] + seps[0]
-        for i, turn in enumerate(conversation.conversation[1:]):
-            if turn["role"] == "user":
-                if i == 0:
-                    prompt += f"USER: {DEFAULT_IMAGE_TOKEN}\n"
-                else:
-                    prompt += "USER: "
-                prompt += f"{turn['question']} "
-                prompt += "Choose from the following options:\n"
-                for option in turn["options"]:
-                    prompt += f"- {option}\n"
-                prompt += "\n" + seps[i % 2]
-            elif turn["role"] == "model":
-                prompt += f"ASSISTANT: {turn['text']}\n\n" + seps[i % 2]
-
-        prompt += "ASSISTANT: "
-
-        return prompt
-
     def get_response(
         self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
     ) -> str:
@@ -76,14 +44,15 @@ class GEMLlavaModel(BaseModel):
         conv = conv_templates["llava_v1"].copy()
         conv.system = conversation.conversation[0]["text"]
 
-        for i, turn in enumerate(conversation.conversation[1:]):
-            if turn["role"] == "user":
+        turns = conversation.get_turns_for_prompt()
+        for i, turn in enumerate(turns):
+            if turn.get("role") == "user":
                 user_text = f"Question: {turn['question']}\n\n"
 
                 do_add_options = False
                 # do not add options in previous turns to reserve context length
                 if enable_condensed_chat:
-                    if i == len(conversation.conversation[1:]) - 1:
+                    if i == len(turns) - 1:
                         do_add_options = True
                 else:
                     do_add_options = True
@@ -108,14 +77,14 @@ class GEMLlavaModel(BaseModel):
                     user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text
 
                 conv.append_message(conv.roles[0], user_text)
-            elif turn["role"] == "model":
+            elif turn.get("role") == "model":
                 conv.append_message(conv.roles[1], turn["text"])
         conv.append_message(conv.roles[1], None)
 
         prompt = conv.get_prompt()
 
-        ecg_signal = conversation.conversation[1]["signal"]
-        ecg_image = conversation.conversation[1]["image"]
+        ecg_signal = turns[0]["signal"]
+        ecg_image = turns[0]["image"]
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
