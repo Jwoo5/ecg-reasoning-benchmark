@@ -179,7 +179,7 @@ A: Yes
 
 To evaluate the performance of the models on **ECG-Reasoning-Benchmark**, we first need to curate the responses from the models for each sample in the benchmark dataset.
 The responses should be curated in the same format as the original samples in the dataset, with only the additional field `model_response` added to each question step (i.e., the same level with the steps including `question` and `answer` fields, such as `initial_diagnostic_question`, `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`).
-This curation process can be done by running `inference.py` in this repository, which will automatically generate the model responses for each question step and save the curated responses as **individual `.json` files named by the sample's `id` (e.g., `0.json`, `1.json`, ...)**.
+This curation process can be done by running the inference CLI, which will automatically generate the model responses for each question step and save the curated responses as **individual `.json` files named by the sample's `id` (e.g., `0.json`, `1.json`, ...)**.
 These files will be organized within the provided output directory following the structure: `$output_dir/$model_name/$dataset/$target_dx/*.json` (e.g., `$output_dir/$model_name/mimic_iv_ecg/first_degree_av_block/0.json`), where further details can be found in the instructions below.
 
 > [!NOTE]
@@ -212,9 +212,14 @@ This includes:
 Of these models, some models are implemented by loading the whole processing pipeline from the huggingface model hub or specific endpoints, while some models are implemented locally in this repository.
 Therefore, we provide running scripts for both types of models.
 
+> [!IMPORTANT]
+> The benchmark is structured as an installable Python package. All internal imports use relative paths (e.g., `from .models import ...`), so modules **cannot** be run directly as standalone scripts (e.g., `python inference.py` will fail with `ImportError`). Instead, use one of the following execution methods:
+> 1. **CLI entry points** (after `pip install -e .`): `ecg-reasoning-benchmark-inference`, `ecg-reasoning-benchmark-evaluate`
+> 2. **Module execution**: `python -m ecg_reasoning_benchmark.inference`, `python -m ecg_reasoning_benchmark.evaluation`
+
 For the locally implemented models (PULSE, GEM, and OpenTSLM), run:
 ```bash
-python inference.py /path/to/data/ \
+ecg-reasoning-benchmark-inference /path/to/data/ \
     --dataset $dataset \
     --model $model_name \
     --ecg-base-dir $ecg_base_dir \
@@ -232,7 +237,7 @@ python inference.py /path/to/data/ \
 
 For other models, run:
 ```bash
-python inference.py /path/to/data/ \
+ecg-reasoning-benchmark-inference /path/to/data/ \
     --dataset $dataset \
     --model $model_name \
     --model-variant $model_variant \
@@ -252,18 +257,22 @@ python inference.py /path/to/data/ \
 
 ### Adding New Models
 
-To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can implement a new model class in `models/` directory by following the structure of the existing model classes, and then run `inference.py` with the corresponding `$model_name` and `$model_variant`.
+To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can implement a new model class in `ecg_reasoning_benchmark/models/` directory by following the structure of the existing model classes, and then run the inference CLI with the corresponding `$model_name` and `$model_variant`.
 Follow the instructions below to implement a new model class:
-1. Create a new directory and a new Python file for the model implementation under the `models/` directory. Implement the model class in the new Python file by following the structure of the existing model classes, which should extend the `BaseModel` class defined in `models/model.py`. You also need to create `__init__.py` in that directory to import the new model class for registration.
+1. Create a new directory and a new Python file for the model implementation under the `ecg_reasoning_benchmark/models/` directory. Implement the model class in the new Python file by following the structure of the existing model classes, which should extend the `BaseModel` class defined in `ecg_reasoning_benchmark/models/model.py`. You also need to create `__init__.py` in that directory to import the new model class for registration.
 2. This new model class should be decorated with `@register_model(model_name)` to register the model with a unique name for loading the model.
 3. If the base modality of the model is not the `"image"` (i.e., Vision-Language model), you should clarify the base modality of the model by setting the `self.ecg_modality_base` field in the `__init__` method of the model class. The supported modalities are:
     * `"image"` (default): the ECG signal is converted to a 12-lead ECG chart image using [`ecg-plot`](https://github.com/dy1901/ecg_plot) and passed to the model as a PIL Image or base64-encoded string.
     * `"signal"`: the ECG signal is passed as a 500Hz 12-lead 1D signal array (torch.Tensor).
     * `"text"`: the ECG signal loading and visualization are skipped entirely. Instead, only the wfdb record path is passed to the model via `ecg_path` kwarg in `get_response()`. The model is responsible for loading and processing the ECG signal on its own. This is useful for models that have their own ECG analysis pipeline (e.g., signal-processing-based agents).
 4. For the image-based models (i.e., Vision-Language models), you should also clarify if the model requires base64 encoding for the input ECG image by setting the `require_base64_image` method to return `True` in the model class.
-5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method.
-6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. Additional keyword arguments are passed through, including `ecg_path` (the wfdb record path without extension, available for all modalities). The conversation history (`Conversations.conversation`) is a list of dictionaries, where each dictionary contains the following fields:
-    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`.
+5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method. All CLI arguments are forwarded as keyword arguments via `build_model(model_name, **vars(args))`, so models can accept additional configuration (e.g., API keys, model-specific parameters) through the CLI without modifying the core inference code.
+6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. Additional keyword arguments are passed through, including `ecg_path` (the wfdb record path without extension, available for all modalities).
+
+    **Accessing conversation turns for prompt construction:** Use `conversation.get_turns_for_prompt()` instead of directly accessing `conversation.conversation[1:]`. This helper method automatically handles the exclusion of the initial diagnostic Q&A from the conversation history in subsequent reasoning turns, while preserving the ECG data (image/signal) from the first user turn. When the conversation has progressed beyond the initial diagnostic question (more than 3 turns including the system prompt), the method returns an ECG-only stub (containing only `image`/`signal` keys, without a `role` key) followed by the remaining turns. Model implementations should use `turn.get("role")` instead of `turn["role"]` to safely handle this stub.
+
+    The conversation turns contain the following fields:
+    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`. Note that the ECG-only stub returned by `get_turns_for_prompt()` does not have a `role` key.
     * For the `system` or `model` role,
         * `text`: the text content of the conversation turn. In other words, the system prompt for the `system` role, and the model response for the `model` role.
     * For the `user` role,
@@ -272,14 +281,15 @@ Follow the instructions below to implement a new model class:
         * `signal` (optional): the ECG signal input, which is a 500Hz 12-lead 1D signal array. Only provided for the signal-based models, and for the very first question turn (i.e., the `initial_diagnostic_question` step) in the conversation history.
         * `image` (optional): the ECG image input, which is a 12-lead ECG chart image as a PIL image object or base64-encoded string depending on the model requirement. Only provided for the image-based models, and for the very first question turn (i.e., the `initial_diagnostic_question` step) in the conversation history.
 > [!NOTE]
-> Note that the first turn of the conversation history (`Conversation.conversation`) is always the system prompt, and the final turn is always the current user question turn asking for the model response. As aforementioned, the very first user question turn (i.e., `Conversation.conversation[1]`) contains `image` or `signal` field for the ECG input.  
+> Note that the first turn of the raw conversation history (`Conversation.conversation`) is always the system prompt, and the final turn is always the current user question turn asking for the model response. The very first user question turn (i.e., `Conversation.conversation[1]`) contains `image` or `signal` field for the ECG input.
+> However, **always use `conversation.get_turns_for_prompt()` for building prompts** rather than accessing `conversation.conversation` directly -- this ensures the initial diagnostic Q&A is properly excluded from subsequent reasoning turns.
 > We strongly recommend you to refer to other pre-existing model implementations for this method to see how to process the conversation history to make the full prompt for the model input.
 7. You can also implement any other methods for the model class as needed, such as additional helper methods for processing the ECG input or generating the model response.
 
 ### Modifying the Prompt Design
 
-The system prompt is defined in the `inference.py` file as a global variable `system_prompt`, which is used as the initial system prompt for all models by default.
-In addition, we also append another default prompt for image-based models in the `initial_diagnostic_question` step to give the information about the ECG paper rate (also known as ECG paper speed), which is defined in the `inference` method of the `Inferencer` class in `inference.py` file.
+The system prompt is defined in `ecg_reasoning_benchmark/inference.py` as a global variable `system_prompt`, which is used as the initial system prompt for all models by default.
+In addition, we also append another default prompt for image-based models in the `initial_diagnostic_question` step to give the information about the ECG paper rate (also known as ECG paper speed), which is defined in the `inference` method of the `Inferencer` class in `ecg_reasoning_benchmark/inference.py`.
 You can modify these prompts as you need to potentially improve the model performance on the benchmark dataset.
 
 For other types of prompts such as the question prompts for each question step to build the prompt history, they are defined in each model class (mainly in `get_response` method for the pre-defined models).
@@ -295,7 +305,7 @@ Note that it only includes some known cases based on the manual analysis of the 
 However, this can be a useful method for a quick evaluation without the need for additional API calls to Gemini, which can be costly and time-consuming when evaluating a large number of samples.
 For using this heuristic string matching method, run:
 ```bash
-python evaluation.py /path/to/results/ \
+ecg-reasoning-benchmark-evaluate /path/to/results/ \
     --dataset $dataset_list \
     --model $model_name_list \
     --evaluator heuristic \
@@ -310,7 +320,7 @@ python evaluation.py /path/to/results/ \
 On the other hand, the Gemini evaluator is based on prompting Gemini to judge the correctness of the model response with respect to the GT answer, which can potentially provide a more accurate judgment by understanding the semantic meaning of the model response and the GT answer, handling the variations in the model responses.
 For using this Gemini evaluator, run:
 ```bash
-python evaluation.py /path/to/results/ \
+ecg-reasoning-benchmark-evaluate /path/to/results/ \
     --dataset $dataset_list \
     --model $model_name_list \
     --evaluator gemini \
