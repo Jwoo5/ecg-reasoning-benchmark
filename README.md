@@ -247,6 +247,7 @@ ecg-reasoning-benchmark-inference /path/to/data/ \
 ```
 * `$model_name`: can be one of the following: (`hulumed-hf`, `medgemma-hf`, `qwen3-vl-hf`, `llama-3.2-vision-hf`, `gemini`, `gpt`)
 * The additional argument `$model_variant` is required for these models, which indicates the specific variant of the model to be evaluated. This identifier will be appended to the predefined `model_id` depending on `$model_name` to load the model from the huggingface model hub or specific endpoints. To check how it works, see `model_id` field in each model implementation class. The example `$model_variant` for each `$model_name` is as follows:
+    * `ecg-r1-hf`: `SFT`, `RL`
     * `hulumed-hf`: `7B`, `32B`
     * `medgemma-hf`: `4b-it`, `27b-it`, `1.5-4b-it`
     * `qwen3-vl-hf`: `8B-Instruct`, `32B-Instruct`
