@@ -104,7 +104,7 @@ class LLaVAMedModel(BaseModel):
                     )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
 
-                if i == 0:
+                if "image" in turn:
                     user_text = image_token + "\n" + user_text
 
                 conv.append_message(conv.roles[0], user_text)
@@ -114,7 +114,7 @@ class LLaVAMedModel(BaseModel):
 
         prompt = conv.get_prompt()
 
-        ecg_image = turns[0]["image"]
+        ecg_image = turns[-1]["image"]
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")

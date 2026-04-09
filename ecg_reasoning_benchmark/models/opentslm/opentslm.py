@@ -200,7 +200,7 @@ class OpenTSLMModel(BaseModel):
         **kwargs,
     ) -> str:
         turns = conversation.get_turns_for_prompt()
-        ecg_signal = turns[0]["signal"]
+        ecg_signal = turns[-1]["signal"]
         norm_ecg, means, stds = self._process_signal(ecg_signal)
         prompt = self.get_prompt(conversation, norm_ecg, means, stds, enable_condensed_chat)
 

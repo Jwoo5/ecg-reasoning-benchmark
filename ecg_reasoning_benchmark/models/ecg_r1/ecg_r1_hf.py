@@ -76,7 +76,7 @@ class ECGR1HFModel(BaseModel):
                     )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words."
 
-                if i == 0:
+                if "image" in turn:
                     user = {
                         "role": "user",
                         "content": [

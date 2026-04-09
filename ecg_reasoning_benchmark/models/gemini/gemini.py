@@ -134,7 +134,7 @@ class GeminiModel(BaseModel):
                     )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words."
 
-                if i == 0:
+                if "image" in turn:
                     parts = [types.Part.from_bytes(data=turn["image"], mime_type="image/png")]
                     parts.append(types.Part(text=user_text))
                 else:

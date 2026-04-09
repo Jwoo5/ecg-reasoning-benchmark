@@ -97,7 +97,7 @@ class Qwen3VLVLLMModel(BaseModel):
                     user_text += "Your response must be **ONLY** the full text of the selected option. Do not "
                     user_text += "include any uncertainty, explanation, reasoning, or extra words."
 
-                if i == 0:
+                if "image" in turn:
                     user = {
                         "role": "user",
                         "content": [

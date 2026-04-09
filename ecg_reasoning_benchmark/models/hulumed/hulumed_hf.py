@@ -92,7 +92,7 @@ class HuluMedHFModel(BaseModel):
                     )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words."
 
-                if i == 0:
+                if "image" in turn:
                     user = {
                         "role": "user",
                         "content": [{"type": "image"}, {"type": "text", "text": user_text}],
@@ -106,7 +106,7 @@ class HuluMedHFModel(BaseModel):
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
 
-        response = self.generate(messages, turns[0]["image"])
+        response = self.generate(messages, turns[-1]["image"])
 
         if verbose:
             print(f"Response: {response}")

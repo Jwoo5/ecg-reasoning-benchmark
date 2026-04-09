@@ -80,7 +80,7 @@ class PulseModel(BaseModel):
                     )
                     user_text += "include any uncertainty, explanation, reasoning, or extra words.\n\n"
 
-                if i == 0:
+                if "image" in turn:
                     user_text = DEFAULT_IMAGE_TOKEN + "\n" + user_text
 
                 conv.append_message(conv.roles[0], user_text)
@@ -90,7 +90,7 @@ class PulseModel(BaseModel):
 
         prompt = conv.get_prompt()
 
-        ecg_image = turns[0]["image"]
+        ecg_image = turns[-1]["image"]
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")

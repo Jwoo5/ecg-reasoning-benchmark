@@ -45,14 +45,15 @@ class Conversation:
         if len(turns) <= 3:
             return turns[1:]
 
-        # Beyond initial: ECG-only stub from turn[1] + turns[3:]
-        ecg_stub = {}
+        # Beyond initial: exclude initial Q&A, attach ECG to last turn
+        result = list(turns[3:])
+        last_turn = dict(result[-1])  # shallow copy to avoid mutating original
         if "signal" in turns[1]:
-            ecg_stub["signal"] = turns[1]["signal"]
+            last_turn["signal"] = turns[1]["signal"]
         if "image" in turns[1]:
-            ecg_stub["image"] = turns[1]["image"]
-
-        return [ecg_stub] + turns[3:] if ecg_stub else turns[3:]
+            last_turn["image"] = turns[1]["image"]
+        result[-1] = last_turn
+        return result
 
 
 def make_letter_indexed(options: List[str]) -> List[str]:
