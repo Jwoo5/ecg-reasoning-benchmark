@@ -172,10 +172,7 @@ class OpenTSLMModel(BaseModel):
             label = f"This is ECG Lead {lead_name}, it has mean {mean_val:.4f} " f"and std {std_val:.4f}:"
             ts_prompts.append(TextTimeSeriesPrompt(label, lead_signal.tolist()))
 
-        # for the very first question (initial diagnostic question)
-        if len(conversation.conversation) == 2:
-            post_prompt = "Options:\n"
-        elif "select all possible leads" in question.lower():
+        if "select all possible leads" in question.lower():
             post_prompt = "This question may have multiple correct answers from the following options:\n"
         else:
             post_prompt = "This question has one of the following options as the correct answer:\n"

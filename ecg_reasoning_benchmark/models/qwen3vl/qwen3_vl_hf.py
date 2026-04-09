@@ -69,9 +69,7 @@ class Qwen3VLHFModel(BaseModel):
                     do_add_options = True
 
                 if do_add_options:
-                    if i == 0:
-                        user_text += "Options:\n"
-                    elif "select all possible leads" in turn["question"].lower():
+                    if "select all possible leads" in turn["question"].lower():
                         user_text += (
                             "This question may have multiple correct answers from the following options:\n"
                         )
