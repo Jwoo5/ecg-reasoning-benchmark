@@ -355,7 +355,7 @@ def load_data(dataset: str, data_dir: str) -> list:
 
 
 def main(args):
-    model = build_model(args.model, model_variant=args.model_variant)
+    model = build_model(args.model, **vars(args))
     inferencer = Inferencer(model, debug=args.debug, verbose=args.verbose)
 
     root_dir = args.root
