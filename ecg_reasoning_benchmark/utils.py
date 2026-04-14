@@ -33,28 +33,10 @@ class Conversation:
         self.conversation.append(turn)
 
     def get_turns_for_prompt(self) -> list:
-        """Return turns for prompt construction.
-
-        If the conversation has progressed beyond the initial diagnostic
-        question (more than system + user + model = 3 turns), the initial
-        Q&A text is excluded from the history while preserving the ECG
-        data (image/signal) from the first user turn.
-        """
+        """Return turns for dialogue history, excluding the initial system prompt"""
         turns = self.conversation
         # [0]=system, [1]=user(initial), [2]=model(initial), [3+]=reasoning
-        if len(turns) <= 3:
-            return turns[1:]
-
-        # Beyond initial: exclude initial Q&A, attach ECG to last turn
-        result = list(turns[3:])
-        last_turn = dict(result[-1])  # shallow copy to avoid mutating original
-        if "signal" in turns[1]:
-            last_turn["signal"] = turns[1]["signal"]
-        if "image" in turns[1]:
-            last_turn["image"] = turns[1]["image"]
-        result[-1] = last_turn
-        return result
-
+        return turns[1:]
 
 def make_letter_indexed(options: List[str]) -> List[str]:
     indexed_options = []
