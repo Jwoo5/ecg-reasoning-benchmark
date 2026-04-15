@@ -81,8 +81,8 @@ class GEMLlavaModel(BaseModel):
 
         prompt = conv.get_prompt()
 
-        ecg_signal = turns[-1]["signal"]
-        ecg_image = turns[-1]["image"]
+        ecg_signal = turns[0]["signal"]
+        ecg_image = turns[0]["image"]
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")

@@ -112,7 +112,7 @@ class LLaVAMedModel(BaseModel):
 
         prompt = conv.get_prompt()
 
-        ecg_image = turns[-1]["image"]
+        ecg_image = turns[0]["image"]
 
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")

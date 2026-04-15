@@ -104,7 +104,7 @@ class HuluMedHFModel(BaseModel):
         if verbose:
             print(f"\nQuestion: {conversation.conversation[-1]['question']}")
 
-        response = self.generate(messages, turns[-1]["image"])
+        response = self.generate(messages, turns[0]["image"])
 
         if verbose:
             print(f"Response: {response}")
