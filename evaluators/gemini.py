@@ -1,21 +1,13 @@
 import argparse
-import getpass
 import hashlib
 import json
 import os
 import pickle
 from typing import List, Union
 
-from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
-
-try:
-    from google import genai
-    from google.genai import errors, types
-except ImportError as e:
-    raise ImportError(
-        "Google Gemini SDK is not installed. Please install it with `pip install google-genai`."
-    ) from e
-
+from openai import (
+    OpenAI,
+)
 from utils import get_cache_dir
 
 from . import Evaluator, register_evaluator
@@ -44,27 +36,13 @@ You must output exactly two lines.
 """
 
 
-def is_retryable_error(exception):
-    """Determines if an exception is 429 (Resource Exhausted) or 5xx (Server Error)."""
-    if isinstance(exception, errors.ClientError):
-        if exception.code == 429 or "RESOURCE_EXHAUSTED" in str(exception):
-            print(f"\n Quota exceeded (429). Retrying... Error: {exception}")
-            return True
-    elif isinstance(exception, errors.ServerError):
-        if exception.code and exception.code >= 500:
-            print(f"\n Server error ({exception.code}). Retrying... Error: {exception}")
-            return True
-
-    return False
-
-
 @register_evaluator("gemini")
 class GeminiEvaluator(Evaluator):
     @staticmethod
     def parse_arguments(args) -> argparse.Namespace:
         parser = Evaluator.add_default_arguments()
 
-        parser.add_argument("--api-key", type=str, default=None, help="Google Gemini API key")
+        parser.add_argument("--api-key", type=str, help="Google Gemini API key")
         parser.add_argument(
             "--gemini-model", type=str, default="gemini-2.0-flash", help="Gemini model to use"
         )
@@ -118,19 +96,7 @@ class GeminiEvaluator(Evaluator):
         self.model_name = args.gemini_model
         self.estimate_cost = args.estimate_cost
         self.name = self.model_name
-
-        if not self.api_key:
-            if "GOOGLE_API_KEY" in os.environ:
-                self.api_key = os.environ["GOOGLE_API_KEY"]
-            else:
-                print("API Key not provided in arguments.")
-                self.api_key = getpass.getpass("Please enter your Google Gemini API Key: ")
-
-        # initialize the Gemini client
-        try:
-            self.client = genai.Client(api_key=self.api_key)
-        except Exception as e:
-            raise RuntimeError(f"Failed to initialize Gemini Client: {e}")
+        self.client = OpenAI(api_key=self.api_key, base_url="https://openrouter.ai/api/v1")
 
         self.use_cache = args.use_cache
         self.cache_size = args.cache_size
@@ -165,18 +131,11 @@ class GeminiEvaluator(Evaluator):
         prompt_text = prompt.format(question, gt_answer, model_response)
         return prompt_text
 
-    @retry(
-        retry=retry_if_exception(is_retryable_error),
-        wait=wait_exponential(multiplier=2, min=2, max=60),
-        stop=stop_after_attempt(30),
-    )
     def _generate_with_retry(self, prompt_text):
-        return self.client.models.generate_content(
+        return self.client.chat.completions.create(
             model=self.model_name,
-            contents=prompt_text,
-            config=types.GenerateContentConfig(
-                temperature=0.0,
-            ),
+            messages=[{"role": "user", "content": prompt_text}],
+            temperature=0.0,
         )
 
     def validate(
@@ -205,14 +164,6 @@ class GeminiEvaluator(Evaluator):
         prompt_text = self._get_evaluation_prompt(question, gt, model_response)
 
         try:
-            if self.estimate_cost:
-                # use count_tokens method to get input token usage
-                token_info = self.client.models.count_tokens(
-                    model=self.model_name,
-                    contents=prompt_text,
-                )
-                return token_info.total_tokens
-
             cache_key = (gt, model_response)
             if self.use_cache and cache_key in self.cache:
                 return self.cache[cache_key]
@@ -220,7 +171,7 @@ class GeminiEvaluator(Evaluator):
             # generate content with deterministic configuration
             result = self._generate_with_retry(prompt_text)
 
-            result_text = result.text.strip()
+            result_text = result.choices[0].message.content.strip()
             lines = result_text.split("\n")
 
             decision_line = lines[0].strip().upper()
