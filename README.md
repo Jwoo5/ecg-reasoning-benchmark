@@ -16,6 +16,109 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
 
 > While Multimodal Large Language Models (MLLMs) show promising performance in automated electrocardiogram interpretation, it remains unclear whether they genuinely perform actual step-by-step reasoning or just rely on superficial visual cues. To investigate this, we introduce **ECG-Reasoning-Benchmark**, a novel multi-turn evaluation framework comprising over 6,400 samples to systematically assess step-by-step reasoning across 17 core ECG diagnoses. Our comprehensive evaluation of state-of-the-art models reveals a critical failure in executing multi-step logical deduction. Although models possess the medical knowledge to retrieve clinical criteria for a diagnosis, they exhibit near-zero success rates (< 6\% Completion) in maintaining a complete reasoning chain, primarily failing to ground the corresponding ECG findings to the actual visual evidence in the ECG signal. These results demonstrate that current MLLMs bypass actual visual interpretation, exposing a critical flaw in existing training paradigms and underscoring the necessity for robust, reasoning-centric medical AI.
 
+# Release Notes
+
+<details open>
+  <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
+
+* **Diagnosis-wide sample updates.** For the following diagnoses, every sample was regenerated to reflect improvements to the underlying question templates or to correct systematic errors present in the previous release:
+  * `left_anterior_fascicular_block` (LAFB) and `left_posterior_fascicular_block` (LPFB): The Criterion Selection question asking about the LBBB-related rule-out condition was reworded for clarity (e.g., _"To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?"_ → _"To accurately diagnose left anterior fascicular block, which of the following conditions must be ruled out before diagnosis?"_).
+  * `left_ventricular_hypertrophy` (LVH): Fixed an error where certain grounding segments were being sampled incorrectly, and re-sampled all samples from scratch. In addition, the Finding Identification question for amplitude-based criteria (e.g., _"Max R amplitude in aVL > 1.1mV"_) now explicitly instructs that premature beats should be excluded from consideration.
+  * `third_degree_av_block` (3AVB): The distractors in the Criterion Selection question concerning _"Presence of atrial fibrillation"_ were refined to be less ambiguous (e.g., distractors such as _"1:1 AV Conduction"_ were replaced with clearer alternatives).
+  * `premature_atrial_complex` (PAC) and `premature_ventricular_complex` (PVC): Fixed an error where the measurement grounding for some samples was being sampled incorrectly, and re-sampled all the samples from scratch.
+* **Dataset-wide manual inspection pass.** To guarantee the best data quality, every sample in the dataset was manually inspected. Individual samples that did not contain outright errors but had any minor concerns were re-sampled while preserving the overall dataset distribution. The affected sample IDs are listed below.
+
+  <blockquote>
+    <details>
+      <summary><b>Re-sampled individual samples from the manual inspection</b></summary>
+      <ul>
+        <li>
+          <code>complete_left_bundle_branch_block</code> (CLBBB)
+        <ul>
+          <li>
+          <b><i>(source: PTB-XL)</i></b> 414, 421, 424, 427, 429, 430, 435, 436, 438, 439, 449, 450, 455, 461, 462, 463, 464, 465, 467, 474, 489, 494, 506, 509, 513, 590, 601, 602, 606, 610
+          </li>
+          <li>
+          <b><i>(source: MIMIC-IV-ECG)</i></b> 553, 554, 555, 559, 565, 566, 567, 571, 575, 581, 585, 589, 593, 602, 604, 614, 620, 628, 636, 638, 641, 644, 728, 730, 738, 746
+          </li>
+        </ul>
+        <li>
+          <code>complete_right_bundle_branch_block</code> (CRBBB)
+        </li>
+        <ul>
+          <li>
+          <b><i>(source: PTB-XL)</i></b> 775, 776, 780, 783, 784, 788, 800, 804, 807, 811
+          </li>
+          <li>
+          <b><i>(source: MIMIC-IV-ECG)</i></b> 928, 929, 930, 934, 938, 942, 946, 950
+          </li>
+        </ul>
+        <li>
+          <code>left_anterior_fascicular_block</code> (LAFB)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 858, 892, 896, 969, 980
+          </li>
+          <li>
+            <b><i>(source: MIMIC-IV-ECG)</i></b> 956, 1010, 1114
+          </li>
+        </ul>
+        <li>
+          <code>`left_posterior_fascicular_block`</code> (LPFB)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 1086
+          </li>
+        </ul>
+        <li>
+          <code>`anterior_ischemia`</code> (ISCAN)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 2548
+          </li>
+        </ul>
+        <li>
+            <code>`inferior_ischemia`</code> (ISCIN)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 2703, 2705, 2706, 2707, 2714, 2715, 2717, 2732, 2733, 2734, 2739, 2741, 2742, 2743, 2746, 2747, 2755, 2759, 2764, 2766, 2776, 2793, 2796, 2823, 2838, 2839, 2841, 2844, 2874, 2882
+          </li>
+          <li>
+            <b><i>(source: MIMIC-IV-ECG)</i></b> 3013, 3022, 3024, 3025, 3030, 3032, 3036, 3039, 3040, 3042, 3045, 3046, 3057, 3065, 3073, 3084, 3103, 3137
+          </li>
+        </ul>
+        <li>
+          <code>`lateral_ischemia`</code> (ISCLA)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 2952, 2981, 3032
+          </li>
+          <li>
+            <b><i>(source: MIMIC-IV-ECG)</i></b> 3224
+          </li>
+        </ul>
+      </ul>
+    </details>
+  </blockquote>
+
+> [!IMPORTANT]
+> If you have already curated model responses against the previous release, please note that re-evaluation is needed to reflect these changes:
+> * For the diagnoses covered by the **diagnosis-wide sample updates** above (LAFB, LPFB, LVH, 3AVB, PAC, PVC), re-evaluation is **required** -- prior results on these diagnoses are no longer comparable under the updated samples.
+> * For the **individually re-sampled samples from the manual inspection pass**, the original samples were not erroneous, so prior results remain technically valid; however, we still **recommend** re-running on the updated samples for consistency with the latest release.
+
+</details>
+
+<details><summary><b><i>0.0.1 (Pre-release)</i></b></summary>
+
+* Initial pre-release of the dataset
+
+</details>
+
 # Dataset Description
 
 The dataset is organized as follows:
@@ -68,6 +171,28 @@ data
 >           * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
 >           * `answer_idx`: the index of the correct answer in the `options` list.
 >           * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
+
+## Installation
+
+The benchmark can be installed as a Python package for programmatic use:
+
+```bash
+pip install -e .
+```
+
+This enables importing the benchmark modules from external projects:
+
+```python
+from ecg_reasoning_benchmark import Inferencer, load_data, evaluate_results
+from ecg_reasoning_benchmark.models import BaseModel, register_model
+from ecg_reasoning_benchmark.evaluators import get_evaluator_cls
+```
+
+After installation, CLI tools are also available:
+```bash
+ecg-reasoning-benchmark-inference --help
+ecg-reasoning-benchmark-evaluate --help
+```
 
 ## How to Use (Quick Start)
 
@@ -157,13 +282,15 @@ A: Yes
 
 To evaluate the performance of the models on **ECG-Reasoning-Benchmark**, we first need to curate the responses from the models for each sample in the benchmark dataset.
 The responses should be curated in the same format as the original samples in the dataset, with only the additional field `model_response` added to each question step (i.e., the same level with the steps including `question` and `answer` fields, such as `initial_diagnostic_question`, `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`).
-This curation process can be done by running `inference.py` in this repository, which will automatically generate the model responses for each question step and save the curated responses as **individual `.json` files named by the sample's `id` (e.g., `0.json`, `1.json`, ...)**.
+This curation process can be done by running the inference CLI, which will automatically generate the model responses for each question step and save the curated responses as **individual `.json` files named by the sample's `id` (e.g., `0.json`, `1.json`, ...)**.
 These files will be organized within the provided output directory following the structure: `$output_dir/$model_name/$dataset/$target_dx/*.json` (e.g., `$output_dir/$model_name/mimic_iv_ecg/first_degree_av_block/0.json`), where further details can be found in the instructions below.
 
 > [!NOTE]
 > When we process a sample in `inference.py`, we record the model response for each question step in the sample, and then proceed with the next question step by appending the current question and the ***GT answer*** to the prompt history regardless of the correctness of the model response for the current question step.
 > This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.  
 > Note that these GT-Prompt-based accuracy for each stage will be reported as `_w_gt` appended to the stage name (e.g., `criterion_selection_accuracy_w_gt`), while other metrics such as `Completion` are still calculated based on the principle that the evaluation terminates upon the first incorrect response in the model's sequential predictions.
+>
+> **Exception for `initial_diagnostic_question`:** The GT-substitution rule above does ***not*** apply to the `initial_diagnostic_question` step. For this very first step, the model's actual response is kept verbatim in the prompt history (the GT answer is ***not*** injected), and the subsequent reasoning steps proceed from there regardless of whether the model answered the initial diagnostic question correctly. This is because the initial diagnostic question is treated as the model's own standalone diagnostic judgment rather than as a reasoning step to be teacher-forced, so the reasoning chain should unfold on top of the model's real answer.
 
 ### Using Existing Models With the Default Prompt
 
@@ -190,9 +317,14 @@ This includes:
 Of these models, some models are implemented by loading the whole processing pipeline from the huggingface model hub or specific endpoints, while some models are implemented locally in this repository.
 Therefore, we provide running scripts for both types of models.
 
+> [!IMPORTANT]
+> The benchmark is structured as an installable Python package. All internal imports use relative paths (e.g., `from .models import ...`), so modules **cannot** be run directly as standalone scripts (e.g., `python inference.py` will fail with `ImportError`). Instead, use one of the following execution methods:
+> 1. **CLI entry points** (after `pip install -e .`): `ecg-reasoning-benchmark-inference`, `ecg-reasoning-benchmark-evaluate`
+> 2. **Module execution**: `python -m ecg_reasoning_benchmark.inference`, `python -m ecg_reasoning_benchmark.evaluation`
+
 For the locally implemented models (PULSE, GEM, and OpenTSLM), run:
 ```bash
-python inference.py /path/to/data/ \
+ecg-reasoning-benchmark-inference /path/to/data/ \
     --dataset $dataset \
     --model $model_name \
     --ecg-base-dir $ecg_base_dir \
@@ -210,7 +342,7 @@ python inference.py /path/to/data/ \
 
 For other models, run:
 ```bash
-python inference.py /path/to/data/ \
+ecg-reasoning-benchmark-inference /path/to/data/ \
     --dataset $dataset \
     --model $model_name \
     --model-variant $model_variant \
@@ -220,6 +352,7 @@ python inference.py /path/to/data/ \
 ```
 * `$model_name`: can be one of the following: (`hulumed-hf`, `medgemma-hf`, `qwen3-vl-hf`, `llama-3.2-vision-hf`, `gemini`, `gpt`)
 * The additional argument `$model_variant` is required for these models, which indicates the specific variant of the model to be evaluated. This identifier will be appended to the predefined `model_id` depending on `$model_name` to load the model from the huggingface model hub or specific endpoints. To check how it works, see `model_id` field in each model implementation class. The example `$model_variant` for each `$model_name` is as follows:
+    * `ecg-r1-hf`: `SFT`, `RL`
     * `hulumed-hf`: `7B`, `32B`
     * `medgemma-hf`: `4b-it`, `27b-it`, `1.5-4b-it`
     * `qwen3-vl-hf`: `8B-Instruct`, `32B-Instruct`
@@ -230,15 +363,22 @@ python inference.py /path/to/data/ \
 
 ### Adding New Models
 
-To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can implement a new model class in `models/` directory by following the structure of the existing model classes, and then run `inference.py` with the corresponding `$model_name` and `$model_variant`.
+To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can implement a new model class in `ecg_reasoning_benchmark/models/` directory by following the structure of the existing model classes, and then run the inference CLI with the corresponding `$model_name` and `$model_variant`.
 Follow the instructions below to implement a new model class:
-1. Create a new directory and a new Python file for the model implementation under the `models/` directory. Implement the model class in the new Python file by following the structure of the existing model classes, which should extend the `BaseModel` class defined in `models/model.py`. You also need to create `__init__.py` in that directory to import the new model class for registration.
+1. Create a new directory and a new Python file for the model implementation under the `ecg_reasoning_benchmark/models/` directory. Implement the model class in the new Python file by following the structure of the existing model classes, which should extend the `BaseModel` class defined in `ecg_reasoning_benchmark/models/model.py`. You also need to create `__init__.py` in that directory to import the new model class for registration.
 2. This new model class should be decorated with `@register_model(model_name)` to register the model with a unique name for loading the model.
-3. If the base modality of the model is not the `"image"` (i.e., Vision-Language model), you should clarify the base modality of the model by setting the `self.ecg_modality_base` field in the `__init__` method of the model class. Note that we only support the base modality of `"signal"` and `"image"` for now, where the former will input the ECG signal as a 500Hz 12-lead 1D signal array, while the latter will input the ECG signal as a 12-lead ECG chart image by converting the 500Hz signal using [`ecg-plot` Python library](https://github.com/dy1901/ecg_plot).
+3. If the base modality of the model is not the `"image"` (i.e., Vision-Language model), you should clarify the base modality of the model by setting the `self.ecg_modality_base` field in the `__init__` method of the model class. The supported modalities are:
+    * `"image"` (default): the ECG signal is converted to a 12-lead ECG chart image using [`ecg-plot`](https://github.com/dy1901/ecg_plot) and passed to the model as a PIL Image or base64-encoded string.
+    * `"signal"`: the ECG signal is passed as a 500Hz 12-lead 1D signal array (torch.Tensor).
+    * `"text"`: the ECG signal loading and visualization are skipped entirely. Instead, only the wfdb record path is passed to the model via `ecg_path` kwarg in `get_response()`. The model is responsible for loading and processing the ECG signal on its own. This is useful for models that have their own ECG analysis pipeline (e.g., signal-processing-based agents).
 4. For the image-based models (i.e., Vision-Language models), you should also clarify if the model requires base64 encoding for the input ECG image by setting the `require_base64_image` method to return `True` in the model class.
-5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method.
-6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. The conversation history (`Conversations.conversation`) is a list of dictionaries, where each dictionary contains the following fields:
-    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`.
+5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method. All CLI arguments are forwarded as keyword arguments via `build_model(model_name, **vars(args))`, so models can accept additional configuration (e.g., API keys, model-specific parameters) through the CLI without modifying the core inference code.
+6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. Additional keyword arguments are passed through, including `ecg_path` (the wfdb record path without extension, available for all modalities).
+
+    **Accessing conversation turns for prompt construction:** Use `conversation.get_turns_for_prompt()` instead of directly accessing `conversation.conversation[1:]`. This helper method automatically handles the exclusion of the initial diagnostic Q&A from the conversation history in subsequent reasoning turns, while preserving the ECG data (image/signal) from the first user turn. When the conversation has progressed beyond the initial diagnostic question (more than 3 turns including the system prompt), the method returns an ECG-only stub (containing only `image`/`signal` keys, without a `role` key) followed by the remaining turns. Model implementations should use `turn.get("role")` instead of `turn["role"]` to safely handle this stub.
+
+    The conversation turns contain the following fields:
+    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`. Note that the ECG-only stub returned by `get_turns_for_prompt()` does not have a `role` key.
     * For the `system` or `model` role,
         * `text`: the text content of the conversation turn. In other words, the system prompt for the `system` role, and the model response for the `model` role.
     * For the `user` role,
@@ -247,14 +387,15 @@ Follow the instructions below to implement a new model class:
         * `signal` (optional): the ECG signal input, which is a 500Hz 12-lead 1D signal array. Only provided for the signal-based models, and for the very first question turn (i.e., the `initial_diagnostic_question` step) in the conversation history.
         * `image` (optional): the ECG image input, which is a 12-lead ECG chart image as a PIL image object or base64-encoded string depending on the model requirement. Only provided for the image-based models, and for the very first question turn (i.e., the `initial_diagnostic_question` step) in the conversation history.
 > [!NOTE]
-> Note that the first turn of the conversation history (`Conversation.conversation`) is always the system prompt, and the final turn is always the current user question turn asking for the model response. As aforementioned, the very first user question turn (i.e., `Conversation.conversation[1]`) contains `image` or `signal` field for the ECG input.  
+> Note that the first turn of the raw conversation history (`Conversation.conversation`) is always the system prompt, and the final turn is always the current user question turn asking for the model response. The very first user question turn (i.e., `Conversation.conversation[1]`) contains `image` or `signal` field for the ECG input.
+> However, **always use `conversation.get_turns_for_prompt()` for building prompts** rather than accessing `conversation.conversation` directly -- this ensures the initial diagnostic Q&A is properly excluded from subsequent reasoning turns.
 > We strongly recommend you to refer to other pre-existing model implementations for this method to see how to process the conversation history to make the full prompt for the model input.
 7. You can also implement any other methods for the model class as needed, such as additional helper methods for processing the ECG input or generating the model response.
 
 ### Modifying the Prompt Design
 
-The system prompt is defined in the `inference.py` file as a global variable `system_prompt`, which is used as the initial system prompt for all models by default.
-In addition, we also append another default prompt for image-based models in the `initial_diagnostic_question` step to give the information about the ECG paper rate (also known as ECG paper speed), which is defined in the `inference` method of the `Inferencer` class in `inference.py` file.
+The system prompt is defined in `ecg_reasoning_benchmark/inference.py` as a global variable `system_prompt`, which is used as the initial system prompt for all models by default.
+In addition, we also append another default prompt for image-based models in the `initial_diagnostic_question` step to give the information about the ECG paper rate (also known as ECG paper speed), which is defined in the `inference` method of the `Inferencer` class in `ecg_reasoning_benchmark/inference.py`.
 You can modify these prompts as you need to potentially improve the model performance on the benchmark dataset.
 
 For other types of prompts such as the question prompts for each question step to build the prompt history, they are defined in each model class (mainly in `get_response` method for the pre-defined models).
@@ -270,7 +411,7 @@ Note that it only includes some known cases based on the manual analysis of the 
 However, this can be a useful method for a quick evaluation without the need for additional API calls to Gemini, which can be costly and time-consuming when evaluating a large number of samples.
 For using this heuristic string matching method, run:
 ```bash
-python evaluation.py /path/to/results/ \
+ecg-reasoning-benchmark-evaluate /path/to/results/ \
     --dataset $dataset_list \
     --model $model_name_list \
     --evaluator heuristic \
@@ -285,7 +426,7 @@ python evaluation.py /path/to/results/ \
 On the other hand, the Gemini evaluator is based on prompting Gemini to judge the correctness of the model response with respect to the GT answer, which can potentially provide a more accurate judgment by understanding the semantic meaning of the model response and the GT answer, handling the variations in the model responses.
 For using this Gemini evaluator, run:
 ```bash
-python evaluation.py /path/to/results/ \
+ecg-reasoning-benchmark-evaluate /path/to/results/ \
     --dataset $dataset_list \
     --model $model_name_list \
     --evaluator gemini \
