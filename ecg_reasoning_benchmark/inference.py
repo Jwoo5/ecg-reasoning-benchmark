@@ -234,7 +234,9 @@ class Inferencer:
         step["model_response"] = response
 
         # add model turn to conversation with the ground truth answer
-        if "answer" in step:
+        # we do not apply this to initial diagnostic question as it is not regarded as a reasoning step
+        # instead, we add the actual model response to the conversation history for the initial diagnostic question
+        if "answer" in step and step["question_type"] != "initial_diagnostic_question":
             if isinstance(step["answer"], list):
                 answer_str = ", ".join(step["answer"])
             else:
