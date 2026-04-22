@@ -18,6 +18,14 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
 
 # Release Notes
 
+> [!IMPORTANT]
+> **Re-evaluation guidance for the latest release (0.0.2)**
+>
+> If you have already curated model responses against the previous release, please note that re-evaluation is needed to reflect the changes introduced in 0.0.2:
+> * For the diagnoses covered by the **diagnosis-wide sample updates** below (LAFB, LPFB, LVH, 3AVB, PAC, PVC), re-evaluation is **required** -- prior results on these diagnoses are no longer comparable under the updated samples.
+> * For the **individually re-sampled samples from the manual inspection pass**, the original samples were not erroneous, so prior results remain technically valid; however, we still **recommend** re-running on the updated samples for consistency with the latest release.
+> * For **any model evaluated with the 0.0.1 inference code**, re-running inference with the 0.0.2 code is **required**. The 0.0.1 release contained a bug -- accidentally introduced during a code cleanup -- where the GT answer of the `initial_diagnostic_question` step was injected into the dialogue history, contrary to the documented GT-substitution exception for that step. This bug has been fixed in 0.0.2. Note that **the experimental results reported in the paper are unaffected**, since the bug was introduced only after those experiments had already been completed.
+
 <details open>
   <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
 
@@ -105,11 +113,6 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
       </ul>
     </details>
   </blockquote>
-
-> [!IMPORTANT]
-> If you have already curated model responses against the previous release, please note that re-evaluation is needed to reflect these changes:
-> * For the diagnoses covered by the **diagnosis-wide sample updates** above (LAFB, LPFB, LVH, 3AVB, PAC, PVC), re-evaluation is **required** -- prior results on these diagnoses are no longer comparable under the updated samples.
-> * For the **individually re-sampled samples from the manual inspection pass**, the original samples were not erroneous, so prior results remain technically valid; however, we still **recommend** re-running on the updated samples for consistency with the latest release.
 
 </details>
 
