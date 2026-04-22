@@ -16,6 +16,109 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
 
 > While Multimodal Large Language Models (MLLMs) show promising performance in automated electrocardiogram interpretation, it remains unclear whether they genuinely perform actual step-by-step reasoning or just rely on superficial visual cues. To investigate this, we introduce **ECG-Reasoning-Benchmark**, a novel multi-turn evaluation framework comprising over 6,400 samples to systematically assess step-by-step reasoning across 17 core ECG diagnoses. Our comprehensive evaluation of state-of-the-art models reveals a critical failure in executing multi-step logical deduction. Although models possess the medical knowledge to retrieve clinical criteria for a diagnosis, they exhibit near-zero success rates (< 6\% Completion) in maintaining a complete reasoning chain, primarily failing to ground the corresponding ECG findings to the actual visual evidence in the ECG signal. These results demonstrate that current MLLMs bypass actual visual interpretation, exposing a critical flaw in existing training paradigms and underscoring the necessity for robust, reasoning-centric medical AI.
 
+# Release Notes
+
+<details open>
+  <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
+
+* **Diagnosis-wide sample updates.** For the following diagnoses, every sample was regenerated to reflect improvements to the underlying question templates or to correct systematic errors present in the previous release:
+  * `left_anterior_fascicular_block` (LAFB) and `left_posterior_fascicular_block` (LPFB): The Criterion Selection question asking about the LBBB-related rule-out condition was reworded for clarity (e.g., _"To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?"_ → _"To accurately diagnose left anterior fascicular block, which of the following conditions must be ruled out before diagnosis?"_).
+  * `left_ventricular_hypertrophy` (LVH): Fixed an error where certain grounding segments were being sampled incorrectly, and re-sampled all samples from scratch. In addition, the Finding Identification question for amplitude-based criteria (e.g., _"Max R amplitude in aVL > 1.1mV"_) now explicitly instructs that premature beats should be excluded from consideration.
+  * `third_degree_av_block` (3AVB): The distractors in the Criterion Selection question concerning _"Presence of atrial fibrillation"_ were refined to be less ambiguous (e.g., distractors such as _"1:1 AV Conduction"_ were replaced with clearer alternatives).
+  * `premature_atrial_complex` (PAC) and `premature_ventricular_complex` (PVC): Fixed an error where the measurement grounding for some samples was being sampled incorrectly, and re-sampled all the samples from scratch.
+* **Dataset-wide manual inspection pass.** To guarantee the best data quality, every sample in the dataset was manually inspected. Individual samples that did not contain outright errors but had any minor concerns were re-sampled while preserving the overall dataset distribution. The affected sample IDs are listed below.
+
+  <blockquote>
+    <details>
+      <summary><b>Re-sampled individual samples from the manual inspection</b></summary>
+      <ul>
+        <li>
+          <code>complete_left_bundle_branch_block</code> (CLBBB)
+        <ul>
+          <li>
+          <b><i>(source: PTB-XL)</i></b> 414, 421, 424, 427, 429, 430, 435, 436, 438, 439, 449, 450, 455, 461, 462, 463, 464, 465, 467, 474, 489, 494, 506, 509, 513, 590, 601, 602, 606, 610
+          </li>
+          <li>
+          <b><i>(source: MIMIC-IV-ECG)</i></b> 553, 554, 555, 559, 565, 566, 567, 571, 575, 581, 585, 589, 593, 602, 604, 614, 620, 628, 636, 638, 641, 644, 728, 730, 738, 746
+          </li>
+        </ul>
+        <li>
+          <code>complete_right_bundle_branch_block</code> (CRBBB)
+        </li>
+        <ul>
+          <li>
+          <b><i>(source: PTB-XL)</i></b> 775, 776, 780, 783, 784, 788, 800, 804, 807, 811
+          </li>
+          <li>
+          <b><i>(source: MIMIC-IV-ECG)</i></b> 928, 929, 930, 934, 938, 942, 946, 950
+          </li>
+        </ul>
+        <li>
+          <code>left_anterior_fascicular_block</code> (LAFB)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 858, 892, 896, 969, 980
+          </li>
+          <li>
+            <b><i>(source: MIMIC-IV-ECG)</i></b> 956, 1010, 1114
+          </li>
+        </ul>
+        <li>
+          <code>`left_posterior_fascicular_block`</code> (LPFB)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 1086
+          </li>
+        </ul>
+        <li>
+          <code>`anterior_ischemia`</code> (ISCAN)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 2548
+          </li>
+        </ul>
+        <li>
+            <code>`inferior_ischemia`</code> (ISCIN)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 2703, 2705, 2706, 2707, 2714, 2715, 2717, 2732, 2733, 2734, 2739, 2741, 2742, 2743, 2746, 2747, 2755, 2759, 2764, 2766, 2776, 2793, 2796, 2823, 2838, 2839, 2841, 2844, 2874, 2882
+          </li>
+          <li>
+            <b><i>(source: MIMIC-IV-ECG)</i></b> 3013, 3022, 3024, 3025, 3030, 3032, 3036, 3039, 3040, 3042, 3045, 3046, 3057, 3065, 3073, 3084, 3103, 3137
+          </li>
+        </ul>
+        <li>
+          <code>`lateral_ischemia`</code> (ISCLA)
+        </li>
+        <ul>
+          <li>
+            <b><i>(source: PTB-XL)</i></b> 2952, 2981, 3032
+          </li>
+          <li>
+            <b><i>(source: MIMIC-IV-ECG)</i></b> 3224
+          </li>
+        </ul>
+      </ul>
+    </details>
+  </blockquote>
+
+> [!IMPORTANT]
+> If you have already curated model responses against the previous release, please note that re-evaluation is needed to reflect these changes:
+> * For the diagnoses covered by the **diagnosis-wide sample updates** above (LAFB, LPFB, LVH, 3AVB, PAC, PVC), re-evaluation is **required** -- prior results on these diagnoses are no longer comparable under the updated samples.
+> * For the **individually re-sampled samples from the manual inspection pass**, the original samples were not erroneous, so prior results remain technically valid; however, we still **recommend** re-running on the updated samples for consistency with the latest release.
+
+</details>
+
+<details><summary><b><i>0.0.1 (Pre-release)</i></b></summary>
+
+* Initial pre-release of the dataset
+
+</details>
+
 # Dataset Description
 
 The dataset is organized as follows:
@@ -186,6 +289,8 @@ These files will be organized within the provided output directory following the
 > When we process a sample in `inference.py`, we record the model response for each question step in the sample, and then proceed with the next question step by appending the current question and the ***GT answer*** to the prompt history regardless of the correctness of the model response for the current question step.
 > This makes it possible to evaluate the model performance on the individual stage (e.g., `criterion_selection`, `finding_identification`, `ecg_grounding`, and `diagnostic_decision`), as well as the GT-Reasoning-Based Diagnosis Accuracy reported in the paper.  
 > Note that these GT-Prompt-based accuracy for each stage will be reported as `_w_gt` appended to the stage name (e.g., `criterion_selection_accuracy_w_gt`), while other metrics such as `Completion` are still calculated based on the principle that the evaluation terminates upon the first incorrect response in the model's sequential predictions.
+>
+> **Exception for `initial_diagnostic_question`:** The GT-substitution rule above does ***not*** apply to the `initial_diagnostic_question` step. For this very first step, the model's actual response is kept verbatim in the prompt history (the GT answer is ***not*** injected), and the subsequent reasoning steps proceed from there regardless of whether the model answered the initial diagnostic question correctly. This is because the initial diagnostic question is treated as the model's own standalone diagnostic judgment rather than as a reasoning step to be teacher-forced, so the reasoning chain should unfold on top of the model's real answer.
 
 ### Using Existing Models With the Default Prompt
 
