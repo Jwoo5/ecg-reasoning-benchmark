@@ -115,18 +115,25 @@ def evaluate_results(
     assert os.path.exists(data_dir), f"Data directory {data_dir} does not exist."
 
     evaluator.init_metrics("total", reset=True)
-    for dx in os.listdir(data_dir):
-        dx_dir = os.path.join(data_dir, dx)
-        if not os.path.isdir(dx_dir):
-            continue
-        evaluator.init_metrics(dx, reset=True)
-        for fname in glob.glob(os.path.join(dx_dir, "*.json")):
-            try:
-                with open(fname, "r") as f:
-                    result = json.load(f)
-            except json.decoder.JSONDecodeError:
+    with tqdm() as pbar:
+        for dx in os.listdir(data_dir):
+            dx_dir = os.path.join(data_dir, dx)
+            if not os.path.isdir(dx_dir):
                 continue
-            evaluator.evaluate(result)
+            evaluator.init_metrics(dx, reset=True)
+            for fname in glob.glob(os.path.join(dx_dir, "*.json")):
+                pbar.set_description(
+                    f"Evaluating {model} on {dataset} - {dx} | {os.path.basename(fname)}"
+                )
+                pbar.update(1)
+                try:
+                    with open(fname, "r") as f:
+                        result = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    continue
+                evaluator.evaluate(result)
+
+        pbar.set_description(f"Evaluating {model} on {dataset} - Done")
 
     for name in evaluator.metrics.keys():
         reduced_metrics = evaluator.reduce_metrics(name)
