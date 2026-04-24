@@ -1,7 +1,10 @@
 import importlib
+import logging
 import os
 
 from .evaluator import Evaluator
+
+logger = logging.getLogger(__name__)
 
 EVALUATOR_REGISTRY = {}
 
@@ -60,9 +63,12 @@ def import_evaluators(evaluators_dir, namespace):
             evaluator_name = file[: file.find(".py")] if file.endswith(".py") else file
             try:
                 importlib.import_module(f"{namespace}.{evaluator_name}")
-            except (ImportError, ModuleNotFoundError):
-                # skip evaluators whose dependencies are not installed
-                pass
+            except (ImportError, ModuleNotFoundError) as e:
+                # Skip evaluators whose dependencies are not installed, but surface
+                # a warning so users can see which evaluators were omitted and why.
+                # This diagnoses silent registration failures (e.g., Gemini-based
+                # evaluators missing because `google-genai` is not installed).
+                logger.warning(f"Skipped evaluator '{evaluator_name}': {e}")
 
 
 # automatically import any Python files in the evaluators/ directory
