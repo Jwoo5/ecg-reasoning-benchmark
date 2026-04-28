@@ -1,4 +1,5 @@
 import argparse
+import copy
 import glob
 import io
 import json
@@ -102,6 +103,21 @@ def get_parser():
             "is currently processing the same sample concurrently. Enabling this option forces "
             "re-processing such samples to handle (1) case."
         )
+    )
+    parser.add_argument(
+        "--inference-mode",
+        type=str,
+        choices=["default", "forced-commit"],
+        default="default",
+        help=(
+            "inference protocol. 'default' runs the standard single-pass teacher-forced chain. "
+            "'forced-commit' runs one inference per reasoning loop, with GT teacher-forced "
+            "history up to (but excluding) that loop's diagnostic_decision, and restricts the "
+            "decision options to [\"Yes\", \"No\"] to force a binary commit at each reasoning "
+            "depth. The initial diagnostic question is still run with the model's actual "
+            "response kept in history, and ECG modality is attached to that first turn — "
+            "identical to 'default'."
+        ),
     )
 
     return parser
@@ -335,6 +351,121 @@ class Inferencer:
 
         return sample_result
 
+    def _teacher_force_step(self, step: Dict, conversation: Conversation) -> None:
+        """Append (user question+options, model GT answer) to the conversation
+        without running inference. Used by forced-commit inference to build up
+        GT-teacher-forced history prior to each forced diagnostic_decision."""
+        conversation.add_user_turn(step["question"], step["options"])
+        gt = step["answer"]
+        answer_str = ", ".join(gt) if isinstance(gt, list) else gt
+        conversation.add_model_turn(answer_str)
+
+    def inference_forced_commit(
+        self, sample: Dict, ecg_base_dir: str, enable_condensed_chat: bool = False
+    ) -> Dict:
+        """Forced-commit inference protocol.
+
+        For each reasoning loop, the model is prompted with GT teacher-forced history
+        up to (but excluding) that loop's diagnostic_decision, and asked the decision
+        with options restricted to ["Yes", "No"] (no "Further findings required"),
+        forcing a binary commit at each reasoning depth.
+
+        IDQ is still run with the model's actual response kept in history, and ECG
+        modality is attached to that first user turn — identical to default().
+        """
+        dx = sample["metadata"]["target_dx"].replace("_", " ")
+
+        sample_result = sample.copy()
+        sample_result["metadata"]["model"] = self.model_name
+        sample_result["metadata"]["inference_mode"] = "forced-commit"
+
+        ecg_kwargs = dict(
+            source_dataset=sample["metadata"]["data_source"],
+            ecg_id=sample["metadata"]["ecg_id"],
+            base_dir=ecg_base_dir,
+            subject_id=sample["metadata"].get("subject_id", None),
+        )
+
+        if self.model.ecg_modality_base == "text":
+            ecg_path = self.get_ecg_path(**ecg_kwargs)
+            ecg_tensor = None
+            ecg_image = None
+        else:
+            ecg_tensor, sampling_rate, ecg_path = self.get_ecg_signal(**ecg_kwargs)
+            ecg_image = self.visualize_ecg(ecg_tensor, sampling_rate)
+
+        canonical = Conversation(system_prompt)
+
+        # --- IDQ: run identically to default() ---
+        if self.model.ecg_modality_base == "image":
+            sample["data"]["initial_diagnostic_question"]["question"] += (
+                " Note that the red grid in the provided ECG image follows standard calibration: "
+                "one large square (5 mm) represents 0.2 seconds on the horizontal axis and 0.5 mV "
+                "on the vertical axis."
+            )
+
+        idq_response = self.proceed_step(
+            step=sample["data"]["initial_diagnostic_question"],
+            conversation=canonical,
+            ecg_signal=ecg_tensor,
+            ecg_image=ecg_image,
+            return_response=True,
+            require_base64_image=self.model.require_base64_image(),
+            enable_condensed_chat=enable_condensed_chat,
+            verbose=self.verbose,
+            target_dx=dx,
+            ecg_path=ecg_path,
+        )
+        sample_result["data"]["initial_diagnostic_question"]["model_response"] = idq_response
+        if not (
+            idq_response.strip(".").lower() in ["yes", "no"]
+            or idq_response.strip(".").lower().startswith("yes")
+            or idq_response.strip(".").lower().startswith("**yes**")
+            or idq_response.strip(".").lower().endswith("yes")
+            or idq_response.strip(".").lower().endswith("**yes**")
+            or idq_response.strip(".").lower().startswith("no")
+            or idq_response.strip(".").lower().startswith("**no**")
+            or idq_response.strip(".").lower().endswith("no")
+            or idq_response.strip(".").lower().endswith("**no**")
+        ):
+            logger.warning(f"Could not parse IDQ response: {idq_response}")
+            sample_result["metadata"]["parsing_error"] = True
+
+        # --- Per-loop forced-commit decisions ---
+        for loop_idx, loop in enumerate(sample_result["data"]["reasoning"]):
+            # (a) teacher-force the non-decision steps of this loop onto canonical
+            for step_name in ("criterion_selection", "finding_identification", "ecg_grounding"):
+                step = loop[step_name]
+                if step_name == "ecg_grounding":
+                    for g_step in step:
+                        self._teacher_force_step(g_step, canonical)
+                else:
+                    self._teacher_force_step(step, canonical)
+
+            # (b) deep-copy canonical, append restricted decision user turn, infer
+            tmp_conv = copy.deepcopy(canonical)
+            tmp_conv.add_user_turn(
+                loop["diagnostic_decision"]["question"],
+                ["Yes", "No"],
+                ecg_signal=None,
+                ecg_image=None,
+            )
+            response = self.get_response(
+                tmp_conv,
+                enable_condensed_chat=enable_condensed_chat,
+                verbose=self.verbose,
+                target_dx=dx,
+                ecg_path=ecg_path,
+            )
+            loop["diagnostic_decision"]["model_response"] = response
+            loop["diagnostic_decision"]["options_restricted"] = ["Yes", "No"]
+
+            # (c) append the original-options decision + GT answer onto canonical
+            #     so that the next loop's inference sees a consistent history.
+            self._teacher_force_step(loop["diagnostic_decision"], canonical)
+
+        return sample_result
+
 
 def load_data(dataset: str, data_dir: str) -> list:
     """Load benchmark samples from a JSONL file.
@@ -392,7 +523,6 @@ def main(args):
             sample_id = sample["metadata"]["id"]
             dx = sample["metadata"]["target_dx"]
 
-
             save_path = os.path.join(output_dir, model_name, source_dataset, dx, f"{sample_id}.json")
             if not os.path.exists(os.path.dirname(save_path)):
                 os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -408,11 +538,18 @@ def main(args):
             with open(save_path, "w") as f:
                 f.write("")
 
-            result = inferencer.inference(
-                sample,
-                ecg_base_dir,
-                enable_condensed_chat=args.enable_condensed_chat,
-            )
+            if args.inference_mode == "forced-commit":
+                result = inferencer.inference_forced_commit(
+                    sample,
+                    ecg_base_dir,
+                    enable_condensed_chat=args.enable_condensed_chat,
+                )
+            else:
+                result = inferencer.inference(
+                    sample,
+                    ecg_base_dir,
+                    enable_condensed_chat=args.enable_condensed_chat,
+                )
 
             n_total += 1
             if "parsing_error" in result["metadata"] and result["metadata"]["parsing_error"]:

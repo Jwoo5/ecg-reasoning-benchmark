@@ -191,10 +191,16 @@ from ecg_reasoning_benchmark.models import BaseModel, register_model
 from ecg_reasoning_benchmark.evaluators import get_evaluator_cls
 ```
 
-After installation, CLI tools are also available:
+After installation, the following CLI tools are available:
+* `ecg-reasoning-benchmark-inference`: run model inference on benchmark samples to curate model responses (supports both default and `forced-commit` inference modes).
+* `ecg-reasoning-benchmark-evaluate`: compute evaluation metrics (e.g., per-stage accuracy, Completion (Hard / Soft), Depth, GT-RDA) from the curated responses.
+* `ecg-reasoning-benchmark-forced-commit-plot`: render the finding-coverage vs. diagnosis-accuracy curves from `gemini-forced-commit` evaluator outputs.
+
+Run any of them with `--help` to see the full list of arguments:
 ```bash
 ecg-reasoning-benchmark-inference --help
 ecg-reasoning-benchmark-evaluate --help
+ecg-reasoning-benchmark-forced-commit-plot --help
 ```
 
 ## How to Use (Quick Start)
@@ -395,6 +401,35 @@ Follow the instructions below to implement a new model class:
 > We strongly recommend you to refer to other pre-existing model implementations for this method to see how to process the conversation history to make the full prompt for the model input.
 7. You can also implement any other methods for the model class as needed, such as additional helper methods for processing the ECG input or generating the model response.
 
+### Forced-Commit Inference Mode
+
+The default inference protocol described above is intended for computing all stage-level metrics (Completion, per-stage `_w_gt` accuracies, GT-Reasoning-Based Diagnosis Accuracy, etc.) from a single curated chain per sample.
+
+For a complementary experiment that characterizes **how diagnosis accuracy responds to progressively revealed findings**, we provide an alternative protocol via `--inference-mode forced-commit`:
+
+```bash
+ecg-reasoning-benchmark-inference /path/to/data/ \
+    --dataset $dataset \
+    --model $model_name \
+    [--model-variant $model_variant] \
+    --ecg-base-dir $ecg_base_dir \
+    --output-dir $output_dir_forced_commit \
+    --inference-mode forced-commit
+```
+
+Under this protocol:
+* The `initial_diagnostic_question` step is run identically to the default protocol (the model's actual response is kept in history, ECG modality is attached to that first user turn).
+* For **each reasoning loop**, a fresh inference is issued where the prompt contains GT-teacher-forced history through that loop's `criterion_selection` / `finding_identification` / `ecg_grounding`, and the loop's `diagnostic_decision` is asked with the options **restricted to `["Yes", "No"]`** (the `"Further findings are required to confirm the diagnosis"` option is omitted, forcing the model to commit to a binary diagnosis given the evidence it has seen so far).
+* A sample with *N* reasoning loops therefore triggers *N + 1* inference calls (IDQ + one per loop).
+
+> [!NOTE]
+> The output JSONs are saved in the same directory layout as the default mode, but with three marker fields:
+> * `metadata.inference_mode` is set to `"forced-commit"`.
+> * Only `initial_diagnostic_question` and each loop's `diagnostic_decision` carry a `model_response` field (the intermediate `criterion_selection` / `finding_identification` / `ecg_grounding` steps are GT-teacher-forced and not inferred by the model).
+> * Each loop's `diagnostic_decision` additionally records `options_restricted: ["Yes", "No"]`.
+>
+> ***Use a different `--output-dir` from your default-mode runs.*** The two schemas are not interchangeable and the forced-commit evaluator described below will refuse to process default-mode outputs (and vice versa).
+
 ### Modifying the Prompt Design
 
 The system prompt is defined in `ecg_reasoning_benchmark/inference.py` as a global variable `system_prompt`, which is used as the initial system prompt for all models by default.
@@ -445,6 +480,45 @@ ecg-reasoning-benchmark-evaluate /path/to/results/ \
 * `--save-cache`: an optional flag to indicate whether to save the cache to the disk during the evaluation process, which can save the cache for future evaluation runs. The cache will be saved in `~/.cache/ecg-reasoning-benchmark/` directory by default, with the filename encoded with the hash of the evaluator name (e.g., the hash of `gemini-2.5-flash` or `gemini-3-flash-preview`) to distinguish the cache for different Gemini variants.
 * `--load-cache`: an optional flag to indicate whether to load the cache from the disk before the evaluation process.
 * `--save-cache-interval`: an optional argument to specify the interval for saving the cache to the disk during the evaluation process, which can avoid the potential issue of losing the cache due to unexpected interruption during the evaluation process. For example, when `--save-cache-interval 1` is specified, the cache will be saved to the disk for every single (model response, GT answer) pair.
+
+## Evaluating the Forced-Commit Experiment
+
+For model responses curated with `--inference-mode forced-commit` (see *Forced-Commit Inference Mode* above), we provide a dedicated evaluator `gemini-forced-commit` that uses Gemini to judge whether each forced-commit Yes/No response matches the sample-level ground-truth diagnosis (`metadata.dx_label`).
+Unlike the default evaluators, it buckets each data point by **finding-coverage ratio** `(loop_idx + 1) / total_loops` into one of four quartile bins `(0, 25%] / (25%, 50%] / (50%, 75%] / (75%, 100%]` and reports per-bin accuracy + counts, along with the IDQ accuracy as a separate "no-reasoning baseline".
+
+```bash
+ecg-reasoning-benchmark-evaluate /path/to/forced_commit_results/ \
+    --dataset $dataset_list \
+    --model $model_name_list \
+    --evaluator gemini-forced-commit \
+    --gemini-model $gemini_model \
+    --use-cache --save-cache --load-cache --save-cache-interval 1 \
+    --save-dir $save_dir
+```
+* The Gemini-specific flags (`--use-cache`, etc.) behave identically to the default Gemini evaluator. The Gemini API cache is shared across both evaluators when the same `--gemini-model` is used, so forced-commit runs reuse any matching cache hits from default-mode runs.
+* The evaluator asserts `metadata.inference_mode == "forced-commit"` on every sample; pointing it at default-mode outputs will raise an `AssertionError` immediately.
+* CSV output is written to `$save_dir/gemini-forced-commit_$gemini_model/$dataset/{total,$dx}.csv`. Each row corresponds to one model and contains: `idq_{total, correct, accuracy}` and, for each quartile bin, `bin{1..4}_{lo, hi, total, correct, accuracy}`.
+
+### Plotting the Diagnosis-Accuracy vs. Finding-Coverage Curve
+
+After evaluating, use `ecg-reasoning-benchmark-forced-commit-plot` to render the "finding-coverage → diagnosis-accuracy" curve from the evaluator's CSVs:
+
+```bash
+ecg-reasoning-benchmark-forced-commit-plot \
+    --eval-dir $save_dir/gemini-forced-commit_$gemini_model \
+    --dataset $dataset \
+    [--dx total | --all-dx] \
+    [--models $m1 $m2 ...] \
+    [--layout {combined|separate}] \
+    [--output figure.pdf]
+```
+* `--dx` selects which CSV under `<eval-dir>/<dataset>/` to plot (`total` by default; pass a specific diagnosis name to plot per-dx).
+* `--all-dx` renders a separate PDF for **every** CSV under `<eval-dir>/<dataset>/` in a single invocation (ignores `--dx`). When combined with `--output`, that path is interpreted as an **output directory** and each PDF is written to `<output>/<dx>{,_separate}.pdf`; otherwise each PDF is written next to its source CSV.
+* `--models` filters which rows of the CSV are drawn (default: all rows).
+* `--layout combined` (default) plots every requested model on a single axes; `--layout separate` produces a subplot grid with one subplot per model.
+* For each model, the per-bin accuracy is drawn as a curve, and the model's IDQ accuracy is drawn as a transparent horizontal dashed line in the same color (a visual anchor for the "no-reasoning baseline"). A neutral-gray dashed entry labeled `IDQ baseline` is added to the legend so the dashed-line convention is self-explanatory in the figure.
+* The figure is saved to `--output` (default: `<eval-dir>/<dataset>/<dx>.pdf` for combined, `<dx>_separate.pdf` for separate).
+* Figures are styled for direct paper inclusion: colorblind-safe palette (Wong / seaborn `colorblind`), distinct per-model markers for B/W-print legibility, top/right spines removed with a y-only dashed grid, and TrueType font embedding (`pdf.fonttype=42`) so PDFs pass paper-submission font checks.
 
 # Citation
 Please cite this work as:
