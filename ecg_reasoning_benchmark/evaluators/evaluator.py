@@ -97,7 +97,8 @@ class Evaluator:
             },
             "reasoning": {
                 "total": 0,
-                "completed": 0,
+                "completed_hard": 0,
+                "completed_soft": 0,
                 "per_loop": {
                     "total": 0,
                     "depth_total": 0,  # depth should be computed only for those having grounding steps
@@ -151,9 +152,16 @@ class Evaluator:
             else 0.0
         )
 
-        # compute completion
-        reduced_metrics["reasoning"]["completion"] = (
-            reduced_metrics["reasoning"]["completed"] / reduced_metrics["reasoning"]["total"]
+        # compute completion (hard: strict termination; soft: tolerate a wrong
+        # diagnostic_decision when the GT is "further findings are required to
+        # confirm the diagnosis")
+        reduced_metrics["reasoning"]["completion_hard"] = (
+            reduced_metrics["reasoning"]["completed_hard"] / reduced_metrics["reasoning"]["total"]
+            if reduced_metrics["reasoning"]["total"] > 0
+            else 0.0
+        )
+        reduced_metrics["reasoning"]["completion_soft"] = (
+            reduced_metrics["reasoning"]["completed_soft"] / reduced_metrics["reasoning"]["total"]
             if reduced_metrics["reasoning"]["total"] > 0
             else 0.0
         )
@@ -297,13 +305,20 @@ class Evaluator:
             self.metrics["total"]["initial_diagnostic_question"]["correct"] += 1
             self.metrics[dx]["initial_diagnostic_question"]["correct"] += 1
 
-        terminated_early = False
+        # Completion is reported in two flavors:
+        #   - hard: any wrong answer terminates the chain.
+        #   - soft: a wrong `diagnostic_decision` is tolerated when the GT is
+        #     "further findings are required to confirm the diagnosis"; every
+        #     other step is strict. By construction completed_soft >= completed_hard.
+        # `depth_in_loop` stays on hard semantics.
+        terminated_early_hard = False
+        terminated_early_soft = False
         final_dx_correct = False
         final_dx_correct_w_gt_reasoning = False
         # Evaluate stepwise in reasoning
         for loop_idx, loop in enumerate(result["data"]["reasoning"]):
             have_grounding_step = False
-            terminated_early_in_loop = False
+            terminated_early_in_loop_hard = False
             depth_in_loop = 0
             for step_name, step in loop.items():
                 if step_name == "ecg_grounding":
@@ -313,22 +328,31 @@ class Evaluator:
                     have_grounding_step = True
                     depth_per_grounding = 0
                     for g_step in step:
-                        corrected = _eval_step(g_step, terminated_early, metric_names=["total", dx])
+                        corrected = _eval_step(g_step, terminated_early_hard, metric_names=["total", dx])
                         if corrected:
-                            if not terminated_early_in_loop:
+                            if not terminated_early_in_loop_hard:
                                 depth_per_grounding += 1
                         else:
-                            terminated_early = True
-                            terminated_early_in_loop = True
+                            terminated_early_hard = True
+                            terminated_early_soft = True
+                            terminated_early_in_loop_hard = True
                     depth_in_loop += depth_per_grounding / len(step)
                 else:
-                    corrected = _eval_step(step, terminated_early, metric_names=["total", dx])
+                    corrected = _eval_step(step, terminated_early_hard, metric_names=["total", dx])
+                    is_soft_skippable = (
+                        step_name == "diagnostic_decision"
+                        and isinstance(step["answer"], str)
+                        and step["answer"].lower()
+                        == "further findings are required to confirm the diagnosis"
+                    )
                     if corrected:
-                        if not terminated_early_in_loop:
+                        if not terminated_early_in_loop_hard:
                             depth_in_loop += 1
                     else:
-                        terminated_early = True
-                        terminated_early_in_loop = True
+                        terminated_early_hard = True
+                        terminated_early_in_loop_hard = True
+                        if not is_soft_skippable:
+                            terminated_early_soft = True
 
             self.metrics["total"]["reasoning"]["per_loop"]["total"] += 1
             self.metrics[dx]["reasoning"]["per_loop"]["total"] += 1
@@ -354,7 +378,7 @@ class Evaluator:
                         question_type="diagnostic_decision",
                     )
                 
-                if not terminated_early and final_dx_correct_w_gt_reasoning:
+                if not terminated_early_hard and final_dx_correct_w_gt_reasoning:
                     final_dx_correct = True
 
         # gt-reasoning-based diagnosis
@@ -364,9 +388,12 @@ class Evaluator:
             self.metrics["total"]["gt_reasoning_based_diagnosis"]["correct"] += 1
             self.metrics[dx]["gt_reasoning_based_diagnosis"]["correct"] += 1
 
-        if not terminated_early:
-            self.metrics["total"]["reasoning"]["completed"] += 1
-            self.metrics[dx]["reasoning"]["completed"] += 1
+        if not terminated_early_hard:
+            self.metrics["total"]["reasoning"]["completed_hard"] += 1
+            self.metrics[dx]["reasoning"]["completed_hard"] += 1
+        if not terminated_early_soft:
+            self.metrics["total"]["reasoning"]["completed_soft"] += 1
+            self.metrics[dx]["reasoning"]["completed_soft"] += 1
 
     def validate(
         self, question: str, gt: Union[str, List[str]], model_response: str, question_type: str, **kwargs
@@ -386,3 +413,55 @@ class Evaluator:
                 or an integer token count if estimating cost.
         """
         raise NotImplementedError("Evaluator must implement the validate method.")
+
+    def to_csv_row(self, reduced_metrics: dict, model_name: str) -> dict:
+        """Flatten a ``reduced_metrics`` dict returned by :meth:`reduce_metrics`
+        into a single row keyed by column name, suitable for a ``pandas`` DataFrame.
+
+        The default implementation emits the schema used by the built-in
+        teacher-forced evaluators (heuristic / gemini): IDQ accuracy, GT-reasoning
+        diagnosis accuracy, completion (hard/soft), depth, and per-loop stepwise
+        metrics. Subclasses with a different metric shape (e.g., forced-commit
+        evaluators) should override this method.
+
+        Args:
+            reduced_metrics (dict): Output of :meth:`reduce_metrics`.
+            model_name (str): Model identifier to place in the ``model`` column.
+
+        Returns:
+            dict: One row of column -> value suitable for CSV export.
+        """
+        row = {"model": model_name}
+
+        # initial diagnostic question
+        idq_metric = reduced_metrics["initial_diagnostic_question"]
+        row["idq_total"] = idq_metric["total"]
+        row["idq_correct"] = idq_metric["correct"]
+        row["idq_accuracy"] = idq_metric["accuracy"]
+
+        # gt-reasoning-based diagnosis
+        gtd_metric = reduced_metrics["gt_reasoning_based_diagnosis"]
+        row["gt_reasoning_based_diagnosis_total"] = gtd_metric["total"]
+        row["gt_reasoning_based_diagnosis_correct"] = gtd_metric["correct"]
+        row["gt_reasoning_based_diagnosis_accuracy"] = gtd_metric["accuracy"]
+
+        # reasoning
+        row["reasoning_total"] = reduced_metrics["reasoning"]["total"]
+        for key in reduced_metrics["reasoning"]:
+            if key in ["total", "per_loop"]:
+                continue
+            row[key] = reduced_metrics["reasoning"][key]
+
+        # per-loop metrics
+        per_loop = reduced_metrics["reasoning"]["per_loop"]
+        row["per_loop_total"] = per_loop["total"]
+        row["per_loop_depth_total"] = per_loop["depth_total"]
+        row["per_loop_depth_sum"] = per_loop["depth_sum"]
+        row["depth"] = per_loop["depth_avg"]
+        for step in per_loop:
+            if step in ["total", "depth_total", "depth_sum", "depth_avg"]:
+                continue
+            for key in per_loop[step]:
+                row[f"{step}_{key}"] = per_loop[step][key]
+
+        return row
