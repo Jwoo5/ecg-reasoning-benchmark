@@ -1,9 +1,12 @@
 import importlib
+import logging
 import os
 
 import torch
 
 from .model import BaseModel
+
+logger = logging.getLogger(__name__)
 
 MODEL_REGISTRY = {}
 
@@ -81,9 +84,13 @@ def import_models(models_dir, namespace):
             model_name = file[: file.find(".py")] if file.endswith(".py") else file
             try:
                 importlib.import_module(f"{namespace}.{model_name}")
-            except (ImportError, ModuleNotFoundError):
-                # skip models whose dependencies are not installed
-                pass
+            except (ImportError, ModuleNotFoundError) as e:
+                # Skip models whose dependencies are not installed, but surface a
+                # warning so users can see which models were omitted and why. This
+                # diagnoses silent registration failures (e.g., Hugging Face model
+                # stubs missing because `transformers`/etc. are not installed in
+                # the current env).
+                logger.warning(f"Skipped model '{model_name}': {e}")
 
 
 # automatically import any Python files in the models/ directory

@@ -55,44 +55,6 @@ def get_parser():
     return parser
 
 
-def _reduce_to_row(model_name: str, reduced_metrics: dict) -> dict:
-    """Convert reduced metrics into a flat dict suitable for a DataFrame row."""
-    row = {"model": model_name}
-
-    # initial diagnostic question
-    idq_metric = reduced_metrics["initial_diagnostic_question"]
-    row["idq_total"] = idq_metric["total"]
-    row["idq_correct"] = idq_metric["correct"]
-    row["idq_accuracy"] = idq_metric["accuracy"]
-
-    # gt-reasoning-based diagnosis
-    gtd_metric = reduced_metrics["gt_reasoning_based_diagnosis"]
-    row["gt_reasoning_based_diagnosis_total"] = gtd_metric["total"]
-    row["gt_reasoning_based_diagnosis_correct"] = gtd_metric["correct"]
-    row["gt_reasoning_based_diagnosis_accuracy"] = gtd_metric["accuracy"]
-
-    # reasoning
-    row["reasoning_total"] = reduced_metrics["reasoning"]["total"]
-    for key in reduced_metrics["reasoning"]:
-        if key in ["total", "per_loop"]:
-            continue
-        row[key] = reduced_metrics["reasoning"][key]
-
-    # per-loop metrics
-    per_loop = reduced_metrics["reasoning"]["per_loop"]
-    row["per_loop_total"] = per_loop["total"]
-    row["per_loop_depth_total"] = per_loop["depth_total"]
-    row["per_loop_depth_sum"] = per_loop["depth_sum"]
-    row["depth"] = per_loop["depth_avg"]
-    for step in per_loop:
-        if step in ["total", "depth_total", "depth_sum", "depth_avg"]:
-            continue
-        for key in per_loop[step]:
-            row[f"{step}_{key}"] = per_loop[step][key]
-
-    return row
-
-
 def evaluate_results(
     results_dir: str,
     model: str,
@@ -115,24 +77,31 @@ def evaluate_results(
     assert os.path.exists(data_dir), f"Data directory {data_dir} does not exist."
 
     evaluator.init_metrics("total", reset=True)
-    for dx in os.listdir(data_dir):
-        dx_dir = os.path.join(data_dir, dx)
-        if not os.path.isdir(dx_dir):
-            continue
-        evaluator.init_metrics(dx, reset=True)
-        for fname in glob.glob(os.path.join(dx_dir, "*.json")):
-            try:
-                with open(fname, "r") as f:
-                    result = json.load(f)
-            except json.decoder.JSONDecodeError:
+    with tqdm() as pbar:
+        for dx in os.listdir(data_dir):
+            dx_dir = os.path.join(data_dir, dx)
+            if not os.path.isdir(dx_dir):
                 continue
-            evaluator.evaluate(result)
+            evaluator.init_metrics(dx, reset=True)
+            for fname in glob.glob(os.path.join(dx_dir, "*.json")):
+                pbar.set_description(
+                    f"Evaluating {model} on {dataset} - {dx} | {os.path.basename(fname)}"
+                )
+                pbar.update(1)
+                try:
+                    with open(fname, "r") as f:
+                        result = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    continue
+                evaluator.evaluate(result)
+
+        pbar.set_description(f"Evaluating {model} on {dataset} - Done")
 
     for name in evaluator.metrics.keys():
         reduced_metrics = evaluator.reduce_metrics(name)
         if name not in rows:
             rows[name] = []
-        rows[name].append(_reduce_to_row(model, reduced_metrics))
+        rows[name].append(evaluator.to_csv_row(reduced_metrics, model))
 
     return rows
 

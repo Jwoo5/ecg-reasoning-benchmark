@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ecg-reasoning-benchmark"
-version = "0.1.0"
+version = "0.2.0"
 description = "ECG Reasoning Benchmark - evaluation framework for ECG diagnostic reasoning"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "torch",
     "numpy",
@@ -25,6 +25,7 @@ openai = ["openai"]
 [project.scripts]
 ecg-reasoning-benchmark-inference = "ecg_reasoning_benchmark.inference:cli_main"
 ecg-reasoning-benchmark-evaluate = "ecg_reasoning_benchmark.evaluation:cli_main"
+ecg-reasoning-benchmark-forced-commit-plot = "ecg_reasoning_benchmark.plot_forced_commit:cli_main"
 
 [tool.setuptools.packages.find]
 include = ["ecg_reasoning_benchmark*"]
