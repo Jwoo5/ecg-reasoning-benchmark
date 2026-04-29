@@ -50,6 +50,43 @@ _PALETTE = [
 _MARKERS = ["o", "s", "D", "^", "v", "P", "X", "*", "h", "<"]
 
 
+# Mapping from code-level model identifiers (the values stored in the CSV's
+# ``model`` column, which combine the registry name with an optional variant
+# suffix as ``<name>_<variant>``) to the display names used in the paper.
+# Identifiers not present in this mapping are rendered verbatim, so this can
+# be extended incrementally as new models are added.
+_MODEL_DISPLAY_NAMES = {
+    "pulse": "PULSE (7B)",
+    "gem": "GEM (7B)",
+    "ecg-r1-hf_SFT": "ECG-R1-SFT (8B)",
+    "ecg-r1-hf_RL": "ECG-R1-RL (8B)",
+    "opentslm": "OpenTSLM (3B)",
+    "hulumed-hf_7B": "Hulu-Med (7B)",
+    "hulumed-hf_32B": "Hulu-Med (32B)",
+    "medgemma-hf_4b-it": "MedGemma (4B)",
+    "medgemma-hf_27b-it": "MedGemma (27B)",
+    "medgemma-hf_1.5-4b-it": "MedGemma-1.5 (4B)",
+    "qwen3-vl-hf_8B-Instruct": "Qwen3-VL (8B)",
+    "qwen3-vl-hf_32B-Instruct": "Qwen3-VL (32B)",
+    "llama-3.2-vision-hf_11B-Vision-Instruct": "Llama-3.2-Vision (11B)",
+    "llama-3.2-vision-hf_90B-Vision-Instruct": "Llama-3.2-Vision (90B)",
+    "gemini_2.5-flash": "Gemini-2.5-Flash",
+    "gemini_2.5-pro": "Gemini-2.5-Pro",
+    "gemini_3-flash-preview": "Gemini-3-Flash",
+    "gpt_5-mini": "GPT-5-Mini",
+    "gpt_5.2": "GPT-5.2",
+}
+
+
+def _display_name(model: str) -> str:
+    """Return the paper-friendly display name for a model identifier.
+
+    Falls back to the original identifier when the model is not present in
+    :data:`_MODEL_DISPLAY_NAMES`, so unmapped models still render correctly.
+    """
+    return _MODEL_DISPLAY_NAMES.get(model, model)
+
+
 def _apply_paper_style() -> None:
     """Set matplotlib rcParams for a publication-quality appearance.
 
@@ -229,7 +266,7 @@ def _plot_one_axes(
             markeredgewidth=1.2,
             linewidth=2.4,
             color=color,
-            label=model,
+            label=_display_name(model),
             zorder=3,
         )
         idq_acc = row.get("idq_accuracy")
@@ -332,7 +369,7 @@ def render(
                 labels,
                 color_map,
                 marker_map,
-                title=str(row["model"]),
+                title=_display_name(str(row["model"])),
                 ylim=ylim,
                 show_idq_legend_entry=True,
             )
