@@ -95,6 +95,10 @@ class Evaluator:
                 "total": 0,
                 "correct": 0,
             },
+            "self_reasoning_based_diagnosis": {
+                "total": 0,
+                "correct": 0,
+            },
             "reasoning": {
                 "total": 0,
                 "completed_hard": 0,
@@ -149,6 +153,17 @@ class Evaluator:
             reduced_metrics["gt_reasoning_based_diagnosis"]["correct"]
             / reduced_metrics["gt_reasoning_based_diagnosis"]["total"]
             if reduced_metrics["gt_reasoning_based_diagnosis"]["total"] > 0
+            else 0.0
+        )
+
+        # compute accuracy for self-reasoning-based diagnosis: walk the chain
+        # with model predictions until the first yes/no diagnostic_decision; score
+        # 1 if every prior reasoning step was correct and that decision matches
+        # the sample-level dx_label.
+        reduced_metrics["self_reasoning_based_diagnosis"]["accuracy"] = (
+            reduced_metrics["self_reasoning_based_diagnosis"]["correct"]
+            / reduced_metrics["self_reasoning_based_diagnosis"]["total"]
+            if reduced_metrics["self_reasoning_based_diagnosis"]["total"] > 0
             else 0.0
         )
 
@@ -315,6 +330,16 @@ class Evaluator:
         terminated_early_soft = False
         final_dx_correct = False
         final_dx_correct_w_gt_reasoning = False
+        # Self-RDA state: walk the chain with model predictions until the first
+        # yes/no diagnostic_decision emitted by the model, then compare against
+        # dx_label. Non-decision step failures (criterion_selection /
+        # finding_identification / ecg_grounding) break the chain; an
+        # intermediate diagnostic_decision where the model disagrees with the
+        # "further findings" GT also triggers resolution (model emitted yes/no
+        # early).
+        self_rda_reasoning_broken = False
+        self_rda_resolved = False
+        self_rda_correct_flag = False
         # Evaluate stepwise in reasoning
         for loop_idx, loop in enumerate(result["data"]["reasoning"]):
             have_grounding_step = False
@@ -336,6 +361,8 @@ class Evaluator:
                             terminated_early_hard = True
                             terminated_early_soft = True
                             terminated_early_in_loop_hard = True
+                            if not self_rda_resolved:
+                                self_rda_reasoning_broken = True
                     depth_in_loop += depth_per_grounding / len(step)
                 else:
                     corrected = _eval_step(step, terminated_early_hard, metric_names=["total", dx])
@@ -353,6 +380,53 @@ class Evaluator:
                         terminated_early_in_loop_hard = True
                         if not is_soft_skippable:
                             terminated_early_soft = True
+
+                    # Self-RDA resolution at diagnostic_decision
+                    if step_name == "diagnostic_decision" and not self_rda_resolved:
+                        if self_rda_reasoning_broken:
+                            # upstream reasoning already failed -> Self-RDA=0
+                            self_rda_resolved = True
+                            self_rda_correct_flag = False
+                        elif corrected:
+                            if is_soft_skippable:
+                                # GT="further findings" and model matched ->
+                                # keep going; Self-RDA stays unresolved.
+                                pass
+                            else:
+                                # final-loop GT is yes/no and model matched; by
+                                # construction the GT equals dx_label, so the
+                                # model's first yes/no matches dx_label.
+                                self_rda_resolved = True
+                                self_rda_correct_flag = True
+                        else:
+                            if is_soft_skippable:
+                                # model emitted yes/no (or anything other than
+                                # "further findings") when GT expected "further
+                                # findings": this is the first yes/no. Compare
+                                # against dx_label.
+                                if hasattr(self, "_validate_decision"):
+                                    matches_dx = self._validate_decision(
+                                        dx_label_str, step["model_response"]
+                                    )
+                                else:
+                                    matches_dx = self.validate(
+                                        question=step["question"],
+                                        gt=dx_label_str,
+                                        model_response=step["model_response"],
+                                        question_type="diagnostic_decision",
+                                    )
+                                self_rda_resolved = True
+                                self_rda_correct_flag = bool(matches_dx)
+                            else:
+                                # final-loop GT=dx_label and model didn't match:
+                                # either opposite yes/no or "further findings".
+                                # Both give Self-RDA=0.
+                                self_rda_resolved = True
+                                self_rda_correct_flag = False
+                    elif step_name != "diagnostic_decision" and not corrected:
+                        # criterion_selection / finding_identification wrong
+                        if not self_rda_resolved:
+                            self_rda_reasoning_broken = True
 
             self.metrics["total"]["reasoning"]["per_loop"]["total"] += 1
             self.metrics[dx]["reasoning"]["per_loop"]["total"] += 1
@@ -387,6 +461,13 @@ class Evaluator:
         if final_dx_correct_w_gt_reasoning:
             self.metrics["total"]["gt_reasoning_based_diagnosis"]["correct"] += 1
             self.metrics[dx]["gt_reasoning_based_diagnosis"]["correct"] += 1
+
+        # self-reasoning-based diagnosis
+        self.metrics["total"]["self_reasoning_based_diagnosis"]["total"] += 1
+        self.metrics[dx]["self_reasoning_based_diagnosis"]["total"] += 1
+        if self_rda_correct_flag:
+            self.metrics["total"]["self_reasoning_based_diagnosis"]["correct"] += 1
+            self.metrics[dx]["self_reasoning_based_diagnosis"]["correct"] += 1
 
         if not terminated_early_hard:
             self.metrics["total"]["reasoning"]["completed_hard"] += 1
@@ -444,6 +525,12 @@ class Evaluator:
         row["gt_reasoning_based_diagnosis_total"] = gtd_metric["total"]
         row["gt_reasoning_based_diagnosis_correct"] = gtd_metric["correct"]
         row["gt_reasoning_based_diagnosis_accuracy"] = gtd_metric["accuracy"]
+
+        # self-reasoning-based diagnosis
+        srd_metric = reduced_metrics["self_reasoning_based_diagnosis"]
+        row["self_reasoning_based_diagnosis_total"] = srd_metric["total"]
+        row["self_reasoning_based_diagnosis_correct"] = srd_metric["correct"]
+        row["self_reasoning_based_diagnosis_accuracy"] = srd_metric["accuracy"]
 
         # reasoning
         row["reasoning_total"] = reduced_metrics["reasoning"]["total"]
