@@ -370,6 +370,23 @@ ecg-reasoning-benchmark-inference /path/to/data/ \
     * `gpt`: `5-mini`, `5.2`
 * `$output_dir`: the results will be saved in `$output_dir/{$model_name}_{$model_variant}/$dataset/$target_dx/` directory.
 
+### Uniform Random-Guess Baseline
+
+We additionally provide `random-guess`, a content-blind baseline that ignores the ECG and the question and picks **uniformly at random** among the offered options at every step (for the multi-answer lead-grounding step, each option is included independently with probability 1/2). It establishes the chance-level floor for every metric, so that any model's score can be read relative to no-information guessing.
+
+Because it never reads the ECG, it declares `ecg_modality_base = "text"`, which makes the inference pipeline skip ECG signal loading and image rendering entirely -- so it needs neither a GPU/API nor the PhysioNet ECG files (any placeholder `--ecg-base-dir` works). Runs are made reproducible with `--seed`:
+```bash
+ecg-reasoning-benchmark-inference /path/to/data/ \
+    --dataset $dataset \
+    --model random-guess \
+    --model-variant run0 \
+    --seed 0 \
+    --ecg-base-dir /tmp \
+    --output-dir $output_dir
+```
+* `--seed`: random seed for stochastic baselines (deterministic models ignore it). Vary it across runs (e.g., `run0`/`--seed 0`, `run1`/`--seed 1`, ...) to estimate the baseline's mean and confidence interval.
+* Score it with the `heuristic` evaluator: its responses are verbatim option text, so string matching is exact, deterministic, and cost-free.
+
 ### Adding New Models
 
 To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can implement a new model class in `ecg_reasoning_benchmark/models/` directory by following the structure of the existing model classes, and then run the inference CLI with the corresponding `$model_name` and `$model_variant`.

@@ -89,6 +89,15 @@ def get_parser():
         "--rebase", action="store_true", help="whether to re-base and overwrite existing results"
     )
     parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help=(
+            "random seed for stochastic baselines (e.g., the 'random-guess' model). "
+            "Deterministic models ignore it."
+        ),
+    )
+    parser.add_argument(
         "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
     )
     parser.add_argument(
