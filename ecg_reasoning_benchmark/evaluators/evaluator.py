@@ -404,8 +404,8 @@ class Evaluator:
                                 # "further findings") when GT expected "further
                                 # findings": this is the first yes/no. Compare
                                 # against dx_label.
-                                if hasattr(self, "_validate_decision"):
-                                    matches_dx = self._validate_decision(
+                                if hasattr(self, "_validate_diagnostic_decision"):
+                                    matches_dx = self._validate_diagnostic_decision(
                                         dx_label_str, step["model_response"]
                                     )
                                 else:
@@ -439,8 +439,8 @@ class Evaluator:
                 self.metrics[dx]["reasoning"]["per_loop"]["depth_sum"] += depth_in_loop
 
             if loop_idx == len(result["data"]["reasoning"]) - 1:
-                if hasattr(self, "_validate_decision"):
-                    final_dx_correct_w_gt_reasoning = self._validate_decision(
+                if hasattr(self, "_validate_diagnostic_decision"):
+                    final_dx_correct_w_gt_reasoning = self._validate_diagnostic_decision(
                         loop["diagnostic_decision"]["answer"], loop["diagnostic_decision"]["model_response"]
                     )
                     
