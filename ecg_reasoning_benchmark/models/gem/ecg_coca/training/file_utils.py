@@ -71,7 +71,10 @@ def pt_load(file_path, map_location=None):
         logging.info('Loading remote checkpoint, which may take a bit.')
     of = fsspec.open(file_path, "rb")
     with of as f:
-        out = torch.load(f, map_location=map_location)
+        # weights_only=False restores the pre-torch-2.6 default; this is the GEM ECG-tower
+        # checkpoint (a trusted local file) which stores numpy scalars that the weights_only
+        # loader rejects.
+        out = torch.load(f, map_location=map_location, weights_only=False)
     return out
 
 def check_exists(file_path):
