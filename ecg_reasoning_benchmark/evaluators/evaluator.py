@@ -20,6 +20,7 @@ class Evaluator:
         "wave_grounding_accuracy_w_gt",
         "measurement_grounding_accuracy_w_gt",
         "diagnostic_decision_accuracy_w_gt",
+        "error_samples",
     )
 
     @staticmethod
@@ -125,6 +126,8 @@ class Evaluator:
                 "total": 0,
                 "correct": 0,
             },
+            # samples that did not run at all.
+            "error_samples": 0,
             "reasoning": {
                 "total": 0,
                 "completed_hard": 0,
@@ -274,6 +277,40 @@ class Evaluator:
         return reduced_metrics
 
     # built-in evaluation implementations
+    def _validate_step(
+        self, question: str, gt, model_response, question_type: str, **kwargs
+    ) -> bool:
+        """Validate one step, standing in for :meth:`validate` when there is no answer."""
+        if isinstance(model_response, str) and model_response.strip():
+            return self.validate(
+                question=question,
+                gt=gt,
+                model_response=model_response,
+                question_type=question_type,
+                **kwargs,
+            )
+
+        return False
+
+    def _validate_decision(self, gt, step: dict) -> bool:
+        """Judge one diagnostic_decision step.
+
+        Some evaluators expose ``_validate_diagnostic_decision``, which reads
+        yes/no straight off the text instead of asking the judge. It expects a
+        string, so a step with no answer is routed through the same guard as
+        every other step.
+        """
+        response = step.get("model_response")
+        answered = isinstance(response, str) and bool(response.strip())
+        if answered and hasattr(self, "_validate_diagnostic_decision"):
+            return self._validate_diagnostic_decision(gt, response)
+        return self._validate_step(
+            question=step.get("question", ""),
+            gt=gt,
+            model_response=response,
+            question_type="diagnostic_decision",
+        )
+
     def evaluate(self, result: dict) -> Optional[int]:
         """Evaluate a single sample result and save metrics.
         For those evaluators that have `estimate_cost` argument (e.g., GeminiEvaluator), this method
@@ -291,27 +328,27 @@ class Evaluator:
             # in dry-run mode, we do not evaluate metrics and just calculate token usage instead to
             # estimate cost
             total_input_tokens = 0
-            total_input_tokens += self.validate(
+            total_input_tokens += self._validate_step(
                 question=result["data"]["initial_diagnostic_question"]["question"],
                 gt=dx_label_str,
-                model_response=result["data"]["initial_diagnostic_question"]["model_response"],
+                model_response=result["data"]["initial_diagnostic_question"].get("model_response"),
                 question_type="initial_diagnostic_question",
             )
             for loop_idx, loop in enumerate(result["data"]["reasoning"]):
                 for step_name, step in loop.items():
                     if step_name == "ecg_grounding":
                         for g_step in step:
-                            total_input_tokens += self.validate(
+                            total_input_tokens += self._validate_step(
                                 question=g_step["question"],
                                 gt=g_step["answer"],
-                                model_response=g_step["model_response"],
+                                model_response=g_step.get("model_response"),
                                 question_type=g_step["question_type"],
                             )
                     else:
-                        total_input_tokens += self.validate(
+                        total_input_tokens += self._validate_step(
                             question=step["question"],
                             gt=step["answer"],
-                            model_response=step["model_response"],
+                            model_response=step.get("model_response"),
                             question_type=step_name,
                         )
             return total_input_tokens
@@ -331,6 +368,12 @@ class Evaluator:
                 f"Call init_metrics('{dx}') before evaluate() on samples with target_dx='{dx}'."
             )
 
+        if result["metadata"].get("error"):
+            # The sample did not run
+            self.metrics["total"]["error_samples"] += 1
+            self.metrics[dx]["error_samples"] += 1
+            return None
+
         # Evaluate initial diagnostic question
         initial_diagnostic_question_result = result["data"]["initial_diagnostic_question"]
         self.metrics["total"]["initial_diagnostic_question"]["total"] += 1
@@ -339,10 +382,10 @@ class Evaluator:
         def _eval_step(step, terminated_early, metric_names) -> bool:
             question = step["question"]
             gt = step["answer"]
-            model_response = step["model_response"]
+            model_response = step.get("model_response")
             step_name = step["question_type"]
 
-            corrected = self.validate(
+            corrected = self._validate_step(
                 question=question, gt=gt, model_response=model_response, question_type=step_name
             )
             for name in metric_names:
@@ -355,8 +398,8 @@ class Evaluator:
         self.metrics["total"]["reasoning"]["total"] += 1
         self.metrics[dx]["reasoning"]["total"] += 1
         question = initial_diagnostic_question_result["question"]
-        model_response = initial_diagnostic_question_result["model_response"]
-        initial_dx_correct = self.validate(
+        model_response = initial_diagnostic_question_result.get("model_response")
+        initial_dx_correct = self._validate_step(
             question=question,
             gt=dx_label_str,
             model_response=model_response,
@@ -453,17 +496,7 @@ class Evaluator:
                                 # "further findings") when GT expected "further
                                 # findings": this is the first yes/no. Compare
                                 # against dx_label.
-                                if hasattr(self, "_validate_diagnostic_decision"):
-                                    matches_dx = self._validate_diagnostic_decision(
-                                        dx_label_str, step["model_response"]
-                                    )
-                                else:
-                                    matches_dx = self.validate(
-                                        question=step["question"],
-                                        gt=dx_label_str,
-                                        model_response=step["model_response"],
-                                        question_type="diagnostic_decision",
-                                    )
+                                matches_dx = self._validate_decision(dx_label_str, step)
                                 self_rda_resolved = True
                                 self_rda_correct_flag = bool(matches_dx)
                                 self_rda_early_commit = True
@@ -489,19 +522,9 @@ class Evaluator:
                 self.metrics[dx]["reasoning"]["per_loop"]["depth_sum"] += depth_in_loop
 
             if loop_idx == len(result["data"]["reasoning"]) - 1:
-                if hasattr(self, "_validate_diagnostic_decision"):
-                    final_dx_correct_w_gt_reasoning = self._validate_diagnostic_decision(
-                        loop["diagnostic_decision"]["answer"], loop["diagnostic_decision"]["model_response"]
-                    )
-                    
-                else:
-                    final_dx_correct_w_gt_reasoning = self.validate(
-                        question=loop["diagnostic_decision"]["question"],
-                        gt=loop["diagnostic_decision"]["answer"],
-                        model_response=loop["diagnostic_decision"]["model_response"],
-                        question_type="diagnostic_decision",
-                    )
-                
+                final_dx_correct_w_gt_reasoning = self._validate_decision(
+                    loop["diagnostic_decision"]["answer"], loop["diagnostic_decision"]
+                )
 
                 if not terminated_early_hard and final_dx_correct_w_gt_reasoning:
                     final_dx_correct = True
@@ -617,6 +640,10 @@ class Evaluator:
                 continue
             for key in per_loop[step]:
                 row[f"{step}_{key}"] = per_loop[step][key]
+
+        # samples that never ran, kept next to the accuracies they are absent from
+        if "error_samples" in reduced_metrics:
+            row["error_samples"] = reduced_metrics["error_samples"]
 
         ordered = {col: row[col] for col in self.CSV_LEADING_COLUMNS if col in row}
         ordered.update(row)
