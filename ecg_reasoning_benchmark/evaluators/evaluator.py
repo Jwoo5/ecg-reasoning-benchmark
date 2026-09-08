@@ -3,6 +3,25 @@ from typing import List, Optional, Union
 
 
 class Evaluator:
+    #: Column order at the front of every CSV written by :meth:`to_csv_row`.
+    CSV_LEADING_COLUMNS = (
+        "model",
+        "idq_accuracy",
+        "completion_hard",
+        "completion_soft",
+        "depth",
+        "gt_reasoning_based_diagnosis_accuracy",
+        "self_reasoning_based_diagnosis_accuracy",
+        "early_commit_rate",
+        "early_commit_accuracy",
+        "criterion_selection_accuracy_w_gt",
+        "finding_identification_accuracy_w_gt",
+        "lead_grounding_accuracy_w_gt",
+        "wave_grounding_accuracy_w_gt",
+        "measurement_grounding_accuracy_w_gt",
+        "diagnostic_decision_accuracy_w_gt",
+    )
+
     @staticmethod
     def parse_arguments(args):
         """Parse evaluator-specific arguments.
@@ -99,6 +118,13 @@ class Evaluator:
                 "total": 0,
                 "correct": 0,
             },
+            # samples whose Self-RDA resolved at an intermediate diagnostic_decision, i.e. the
+            # model committed to yes/no before the final loop while its chain was still clean.
+            # `total` counts those commits, `correct` the ones matching dx_label.
+            "early_commit": {
+                "total": 0,
+                "correct": 0,
+            },
             "reasoning": {
                 "total": 0,
                 "completed_hard": 0,
@@ -164,6 +190,26 @@ class Evaluator:
             reduced_metrics["self_reasoning_based_diagnosis"]["correct"]
             / reduced_metrics["self_reasoning_based_diagnosis"]["total"]
             if reduced_metrics["self_reasoning_based_diagnosis"]["total"] > 0
+            else 0.0
+        )
+
+        # decompose Self-RDA into its early-commit part: `rate` is how often the model shortcut
+        # at all, `accuracy` is conditional on having committed early (was the shortcut right?),
+        # and `correct_rate` puts the same numerator as `accuracy` over all samples (how much of
+        # Self-RDA comes from shortcuts rather than full chains).
+        reduced_metrics["early_commit"]["rate"] = (
+            reduced_metrics["early_commit"]["total"] / reduced_metrics["reasoning"]["total"]
+            if reduced_metrics["reasoning"]["total"] > 0
+            else 0.0
+        )
+        reduced_metrics["early_commit"]["accuracy"] = (
+            reduced_metrics["early_commit"]["correct"] / reduced_metrics["early_commit"]["total"]
+            if reduced_metrics["early_commit"]["total"] > 0
+            else 0.0
+        )
+        reduced_metrics["early_commit"]["correct_rate"] = (
+            reduced_metrics["early_commit"]["correct"] / reduced_metrics["reasoning"]["total"]
+            if reduced_metrics["reasoning"]["total"] > 0
             else 0.0
         )
 
@@ -340,6 +386,9 @@ class Evaluator:
         self_rda_reasoning_broken = False
         self_rda_resolved = False
         self_rda_correct_flag = False
+        # set when the resolution above happened at an intermediate decision (an early commit on a
+        # clean chain) rather than at the final loop, so Self-RDA can be split by where it came from
+        self_rda_early_commit = False
         # Evaluate stepwise in reasoning
         for loop_idx, loop in enumerate(result["data"]["reasoning"]):
             have_grounding_step = False
@@ -417,6 +466,7 @@ class Evaluator:
                                     )
                                 self_rda_resolved = True
                                 self_rda_correct_flag = bool(matches_dx)
+                                self_rda_early_commit = True
                             else:
                                 # final-loop GT=dx_label and model didn't match:
                                 # either opposite yes/no or "further findings".
@@ -452,6 +502,7 @@ class Evaluator:
                         question_type="diagnostic_decision",
                     )
                 
+
                 if not terminated_early_hard and final_dx_correct_w_gt_reasoning:
                     final_dx_correct = True
 
@@ -468,6 +519,14 @@ class Evaluator:
         if self_rda_correct_flag:
             self.metrics["total"]["self_reasoning_based_diagnosis"]["correct"] += 1
             self.metrics[dx]["self_reasoning_based_diagnosis"]["correct"] += 1
+
+        # early-commit breakdown of self-reasoning-based diagnosis
+        if self_rda_early_commit:
+            self.metrics["total"]["early_commit"]["total"] += 1
+            self.metrics[dx]["early_commit"]["total"] += 1
+            if self_rda_correct_flag:
+                self.metrics["total"]["early_commit"]["correct"] += 1
+                self.metrics[dx]["early_commit"]["correct"] += 1
 
         if not terminated_early_hard:
             self.metrics["total"]["reasoning"]["completed_hard"] += 1
@@ -532,6 +591,14 @@ class Evaluator:
         row["self_reasoning_based_diagnosis_correct"] = srd_metric["correct"]
         row["self_reasoning_based_diagnosis_accuracy"] = srd_metric["accuracy"]
 
+        # early-commit breakdown of self-reasoning-based diagnosis
+        ec_metric = reduced_metrics["early_commit"]
+        row["early_commit_total"] = ec_metric["total"]
+        row["early_commit_correct"] = ec_metric["correct"]
+        row["early_commit_rate"] = ec_metric["rate"]
+        row["early_commit_accuracy"] = ec_metric["accuracy"]
+        row["correct_early_commit_rate"] = ec_metric["correct_rate"]
+
         # reasoning
         row["reasoning_total"] = reduced_metrics["reasoning"]["total"]
         for key in reduced_metrics["reasoning"]:
@@ -551,4 +618,6 @@ class Evaluator:
             for key in per_loop[step]:
                 row[f"{step}_{key}"] = per_loop[step][key]
 
-        return row
+        ordered = {col: row[col] for col in self.CSV_LEADING_COLUMNS if col in row}
+        ordered.update(row)
+        return ordered
