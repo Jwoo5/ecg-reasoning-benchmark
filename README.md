@@ -18,16 +18,25 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
 
 # Release Notes
 
+<details open>
+  <summary><b><i>1.0.0</i></b></summary>
+
+* **Accepted at NeurIPS 2026.** ECG-Reasoning-Benchmark has been accepted to the NeurIPS 2026 Evaluations and Datasets Track.
+* **Official release.** The question-answer samples in `data/` are identical to 0.0.2, so results obtained on 0.0.2 remain valid and comparable.
+* **Automatic ECG analysis results.** Added the automatic ECG analysis results underlying the benchmark for every ECG it uses (2,871 from PTB-XL and 3,317 from MIMIC-IV-ECG): wave boundaries and measurements for each beat and lead, ECG findings, and diagnoses. They are distributed, together with `descriptions.json` describing their keys, through the [Hugging Face dataset](https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark) and the assets of this release. See [Automatic ECG Analysis Results](#automatic-ecg-analysis-results) below.
+
+</details>
+
+<details>
+  <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
+
 > [!IMPORTANT]
-> **Re-evaluation guidance for the latest release (0.0.2)**
+> **Re-evaluation guidance for 0.0.2**
 >
 > If you have already curated model responses against the previous release, please note that re-evaluation is needed to reflect the changes introduced in 0.0.2:
 > * For the diagnoses covered by the **diagnosis-wide sample updates** below (LAFB, LPFB, LVH, 3AVB, PAC, PVC), re-evaluation is **required** -- prior results on these diagnoses are no longer comparable under the updated samples.
 > * For the **individually re-sampled samples from the manual inspection pass**, the original samples were not erroneous, so prior results remain technically valid; however, we still **recommend** re-running on the updated samples for consistency with the latest release.
 > * For **any model evaluated with the 0.0.1 inference code**, re-running inference with the 0.0.2 code is **required**. The 0.0.1 release contained a bug -- accidentally introduced during a code cleanup -- where the GT answer of the `initial_diagnostic_question` step was injected into the dialogue history, contrary to the documented GT-substitution exception for that step. This bug has been fixed in 0.0.2. Note that **the experimental results reported in the paper are unaffected**, since the bug was introduced only after those experiments had already been completed.
-
-<details open>
-  <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
 
 * **Diagnosis-wide sample updates.** For the following diagnoses, every sample was regenerated to reflect improvements to the underlying question templates or to correct systematic errors present in the previous release:
   * `left_anterior_fascicular_block` (LAFB) and `left_posterior_fascicular_block` (LPFB): The Criterion Selection question asking about the LBBB-related rule-out condition was reworded for clarity (e.g., _"To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?"_ → _"To accurately diagnose left anterior fascicular block, which of the following conditions must be ruled out before diagnosis?"_).
@@ -73,7 +82,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-          <code>`left_posterior_fascicular_block`</code> (LPFB)
+          <code>left_posterior_fascicular_block</code> (LPFB)
         </li>
         <ul>
           <li>
@@ -81,7 +90,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-          <code>`anterior_ischemia`</code> (ISCAN)
+          <code>anterior_ischemia</code> (ISCAN)
         </li>
         <ul>
           <li>
@@ -89,7 +98,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-            <code>`inferior_ischemia`</code> (ISCIN)
+            <code>inferior_ischemia</code> (ISCIN)
         </li>
         <ul>
           <li>
@@ -100,7 +109,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-          <code>`lateral_ischemia`</code> (ISCLA)
+          <code>lateral_ischemia</code> (ISCLA)
         </li>
         <ul>
           <li>
@@ -130,6 +139,7 @@ data
 ├── mimic_iv_ecg.jsonl
 └── ptbxl.jsonl
 ```
+`data/` holds the multi-turn QA reasoning samples described below. The automatic ECG analysis results for the ECGs they use are distributed separately through the [Hugging Face dataset](https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark) and the [GitHub release assets](https://github.com/Jwoo5/ecg-reasoning-benchmark/releases) (see [Automatic ECG Analysis Results](#automatic-ecg-analysis-results)).
 * Each `.jsonl` file contains the full set of multi-turn QA reasoning samples for its respective data source (i.e., MIMIC-IV-ECG and PTB-XL).
 * Each line in the `.jsonl` file represents a single JSON object containing the `metadata` and `data` for one reasoning sample:
 > * `metadata`: contains metadata information about the sample:
@@ -169,11 +179,32 @@ data
 >               * `"wave_grounding"`: a question asking for the grounding of a specific ECG finding to the actual waveforms in the ECG signal (e.g., `"Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds."`).
 >               * `"measurement_grounding"`: a question asking for the grounding of a specific ECG finding to the actual measurements in the ECG signal (e.g., `"For the selected segment, which range does the measured QRS duration fall into?"`).
 >       * `diagnostic_decision`
->           * `question`: a question asking for the decision of the diagnosis based onthe identified ECG findings (e.g., `"Based onthe finding identified above, does this ECG suggestthe presence of anterior ischemia?"`).
->           * `options`: a list of possible answer options forthe question, which is `["Yes", "No", "Further findings are required to confirmthe diagnosis"]` for all samples of this reasoning step.
+>           * `question`: a question asking for the decision of the diagnosis based on the identified ECG findings (e.g., `"Based on the finding identified above, does this ECG suggest the presence of anterior ischemia?"`).
+>           * `options`: a list of possible answer options for the question, which is `["Yes", "No", "Further findings are required to confirm the diagnosis"]` for all samples of this reasoning step.
 >           * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
 >           * `answer_idx`: the index of the correct answer in the `options` list.
 >           * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
+
+## Automatic ECG Analysis Results
+
+The automatic ECG analysis results for every ECG used in the benchmark are distributed through `data/analysis/` of the [Hugging Face dataset](https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark) and the assets of the [GitHub releases](https://github.com/Jwoo5/ecg-reasoning-benchmark/releases) from 1.0.0 on, one record per ECG:
+* `mimic_iv_ecg.parquet` (3,317 ECGs) and `ptbxl.parquet` (2,871 ECGs).
+* A record is linked to the QA samples by `metadata.ecg_id` within the same data source. Several QA samples can share one ECG.
+* `descriptions.json`, distributed alongside them, mirrors the structure of a record and describes every key, including its unit and definition.
+
+Each record contains:
+* `metadata`: `data_source`, `ecg_id`, `sampling_rate` (Hz), and `duration_s`.
+* `features`: measured values.
+  * `global`: values shared by all 12 leads, whose wave boundaries are aligned: onset and offset times and durations of the QRS complexes, P waves, T waves, and ST segments; RR, PR, QT, and QTc intervals; the QRS axis of each beat and its median; and flags for atrial fibrillation or flutter and for possible premature beats.
+  * `lead_level`: values for each lead (`I`, `II`, `III`, `aVR`, `aVL`, `aVF`, `V1`-`V6`): QRS amplitudes and shape, R wave peak time and position, Q wave duration and amplitude, QRS morphology labels (qR, rS, RS, RSR', rSr', notched, slurred R, slurred S, dominant S), P and T wave amplitudes and shapes, and ST segment amplitudes.
+* `findings`: ECG findings derived from the features, `global` (e.g., axis deviation, prolonged PR interval, atrial fibrillation) and `lead_level` for each lead (e.g., ST elevation, ST depression, T wave inversion, pathological Q waves).
+* `diagnoses`: `true` or `false` for each of the 17 benchmark diagnoses.
+
+Conventions:
+* Times are in seconds from the start of the recording, durations and intervals in milliseconds (except RR intervals, in seconds), amplitudes in millivolts, and axes in degrees.
+* Per-beat lists, global or lead-level, have one entry per detected beat in the same order. Lists of P waves, T waves, and ST segments have one entry per detected wave or segment and are not aligned with the per-beat lists.
+* `null` marks a value that does not exist, e.g., the PR interval of a P wave not paired with a QRS complex.
+* The time ranges in the options of wave grounding questions are wave onset and offset times rounded to 0.01 s, so an option can be matched to its wave in these lists.
 
 ## Installation
 
@@ -221,6 +252,20 @@ mimic_dataset = load_dataset("Jwoo5/ECG-Reasoning-Benchmark", "mimic_iv_ecg", sp
 ptbxl_dataset = load_dataset("Jwoo5/ECG-Reasoning-Benchmark", "ptbxl", split="test")
 ```
 
+The automatic ECG analysis results are not registered as configurations, so load them by passing their file as `data_files`:
+
+```python
+# Load the analysis results of the MIMIC-IV-ECG ECGs and look one up for a QA sample
+mimic_analysis = load_dataset(
+    "Jwoo5/ECG-Reasoning-Benchmark", data_files={"test": "data/analysis/mimic_iv_ecg.parquet"}, split="test"
+)
+analysis_by_ecg = {record["metadata"]["ecg_id"]: record for record in mimic_analysis}
+
+record = analysis_by_ecg[mimic_dataset[0]["metadata"]["ecg_id"]]
+print(record["features"]["global"]["QRS_Duration_ms"])  # QRS duration of each beat
+print(record["findings"]["lead_level"]["V1"]["st_elevation"])  # ST elevation in lead V1
+```
+
 ### Option 2: Loading Local Files Directly
 
 If you cloned this repository and want to load the data locally, you can use the provided `.jsonl` files in the `data/` directory by parsing them line by line as JSON objects.
@@ -241,6 +286,8 @@ mimic_dataset = load_jsonl("data/mimic_iv_ecg.jsonl")
 # Load PTB-XL-sourced samples
 ptbxl_dataset = load_jsonl("data/ptbxl.jsonl")
 ```
+
+The analysis result files are not stored in this repository. To read them locally, download `ptbxl.parquet`, `mimic_iv_ecg.parquet`, and `descriptions.json` from the assets of the [GitHub release](https://github.com/Jwoo5/ecg-reasoning-benchmark/releases) or from `data/analysis/` of the Hugging Face dataset (e.g., `huggingface_hub.hf_hub_download("Jwoo5/ECG-Reasoning-Benchmark", "data/analysis/ptbxl.parquet", repo_type="dataset")`), and read them with any Parquet reader, e.g., `pandas.read_parquet(path)`.
 
 ### Example for accessing the first sample in the MIMIC-IV-ECG-sourced dataset
 
@@ -370,6 +417,23 @@ ecg-reasoning-benchmark-inference /path/to/data/ \
     * `gpt`: `5-mini`, `5.2`
 * `$output_dir`: the results will be saved in `$output_dir/{$model_name}_{$model_variant}/$dataset/$target_dx/` directory.
 
+### Uniform Random-Guess Baseline
+
+We additionally provide `random-guess`, a content-blind baseline that ignores the ECG and the question and picks **uniformly at random** among the offered options at every step (for the multi-answer lead-grounding step, each option is included independently with probability 1/2). It establishes the chance-level floor for every metric, so that any model's score can be read relative to no-information guessing.
+
+Because it never reads the ECG, it declares `ecg_modality_base = "text"`, which makes the inference pipeline skip ECG signal loading and image rendering entirely -- so it needs neither a GPU/API nor the PhysioNet ECG files (any placeholder `--ecg-base-dir` works). Runs are made reproducible with `--seed`:
+```bash
+ecg-reasoning-benchmark-inference /path/to/data/ \
+    --dataset $dataset \
+    --model random-guess \
+    --model-variant run0 \
+    --seed 0 \
+    --ecg-base-dir /tmp \
+    --output-dir $output_dir
+```
+* `--seed`: random seed for stochastic baselines (deterministic models ignore it). Vary it across runs (e.g., `run0`/`--seed 0`, `run1`/`--seed 1`, ...) to estimate the baseline's mean and confidence interval.
+* Score it with the `heuristic` evaluator: its responses are verbatim option text, so string matching is exact, deterministic, and cost-free.
+
 ### Adding New Models
 
 To add new models for evaluation on **ECG-Reasoning-Benchmark**, you can implement a new model class in `ecg_reasoning_benchmark/models/` directory by following the structure of the existing model classes, and then run the inference CLI with the corresponding `$model_name` and `$model_variant`.
@@ -384,10 +448,10 @@ Follow the instructions below to implement a new model class:
 5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method. All CLI arguments are forwarded as keyword arguments via `build_model(model_name, **vars(args))`, so models can accept additional configuration (e.g., API keys, model-specific parameters) through the CLI without modifying the core inference code.
 6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. Additional keyword arguments are passed through, including `ecg_path` (the wfdb record path without extension, available for all modalities).
 
-    **Accessing conversation turns for prompt construction:** Use `conversation.get_turns_for_prompt()` instead of directly accessing `conversation.conversation[1:]`. This helper method automatically handles the exclusion of the initial diagnostic Q&A from the conversation history in subsequent reasoning turns, while preserving the ECG data (image/signal) from the first user turn. When the conversation has progressed beyond the initial diagnostic question (more than 3 turns including the system prompt), the method returns an ECG-only stub (containing only `image`/`signal` keys, without a `role` key) followed by the remaining turns. Model implementations should use `turn.get("role")` instead of `turn["role"]` to safely handle this stub.
+    **Accessing conversation turns for prompt construction:** Use `conversation.get_turns_for_prompt()` instead of directly accessing `conversation.conversation[1:]`. This helper method returns the whole dialogue history except the system prompt, starting with the initial diagnostic question, which carries the ECG data (image/signal), and the model's own answer to it, followed by the reasoning turns.
 
     The conversation turns contain the following fields:
-    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`. Note that the ECG-only stub returned by `get_turns_for_prompt()` does not have a `role` key.
+    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`.
     * For the `system` or `model` role,
         * `text`: the text content of the conversation turn. In other words, the system prompt for the `system` role, and the model response for the `model` role.
     * For the `user` role,
@@ -477,7 +541,7 @@ ecg-reasoning-benchmark-evaluate /path/to/results/ \
 ```
 * `$gemini_model`: the specific variant of Gemini to be used as the evaluator (e.g., `gemini-2.5-flash`, `gemini-3-flash-preview`).
 * `--use-cache`: an optional flag to indicate whether to use the cache for storing the evaluation results from Gemini, which can avoid the redundant API calls to Gemini for the same evaluation samples to save the cost and time for evaluation. Specifically, when this flag is enabled, the evaluation result for each (model response, GT answer) pair will be stored in the internal cache directory in the `GeminiEvaluator` instance. Then, when the same (model response, GT answer) pair appears in the evaluation samples, the evaluation result will be retrieved from the cache instead of making API calls to Gemini. Enabling this functionality is highly recommended when evaluating a large number of samples, which can significantly reduce the cost and time for evaluation.
-* `--save-cache`: an optional flag to indicate whether to save the cache to the disk during the evaluation process, which can save the cache for future evaluation runs. The cache will be saved in `~/.cache/ecg-reasoning-benchmark/` directory by default, with the filename encoded with the hash of the evaluator name (e.g., the hash of `gemini-2.5-flash` or `gemini-3-flash-preview`) to distinguish the cache for different Gemini variants.
+* `--save-cache`: an optional flag to indicate whether to save the cache to the disk during the evaluation process, which can save the cache for future evaluation runs. The cache will be saved in `~/.cache/ecg_reasoning_benchmark/` directory by default (or in `$ERB_CACHE` if set), with the filename encoded with the hash of the evaluator name (e.g., the hash of `gemini-2.5-flash` or `gemini-3-flash-preview`) to distinguish the cache for different Gemini variants.
 * `--load-cache`: an optional flag to indicate whether to load the cache from the disk before the evaluation process.
 * `--save-cache-interval`: an optional argument to specify the interval for saving the cache to the disk during the evaluation process, which can avoid the potential issue of losing the cache due to unexpected interruption during the evaluation process. For example, when `--save-cache-interval 1` is specified, the cache will be saved to the disk for every single (model response, GT answer) pair.
 
@@ -521,7 +585,7 @@ ecg-reasoning-benchmark-forced-commit-plot \
 * Figures are styled for direct paper inclusion: colorblind-safe palette (Wong / seaborn `colorblind`), distinct per-model markers for B/W-print legibility, top/right spines removed with a y-only dashed grid, and TrueType font embedding (`pdf.fonttype=42`) so PDFs pass paper-submission font checks.
 
 # Citation
-Please cite this work as:
+Please cite this work as follows. We will update this entry to the NeurIPS 2026 proceedings version once it becomes available.
 ```
 @article{oh2026ecg,
   title={ECG-Reasoning-Benchmark: A Benchmark for Evaluating Clinical Reasoning Capabilities in ECG Interpretation},

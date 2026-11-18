@@ -17,6 +17,7 @@ import wfdb
 from PIL import Image
 from tqdm import tqdm
 
+from .errors import UnusableModelOutput
 from .models import BaseModel, build_model, get_model_name
 from .utils import Conversation, base64_image_encoder
 
@@ -89,6 +90,15 @@ def get_parser():
         "--rebase", action="store_true", help="whether to re-base and overwrite existing results"
     )
     parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help=(
+            "random seed for stochastic baselines (e.g., the 'random-guess' model). "
+            "Deterministic models ignore it."
+        ),
+    )
+    parser.add_argument(
         "--debug", action="store_true", help="whether to run in debug mode with verbose logging"
     )
     parser.add_argument(
@@ -121,6 +131,22 @@ def get_parser():
     )
 
     return parser
+
+
+def iter_steps(sample_result: Dict):
+    """Yield every step of a sample result, grounding steps included."""
+    yield sample_result["data"]["initial_diagnostic_question"]
+    for loop in sample_result["data"]["reasoning"]:
+        for step in loop.values():
+            if isinstance(step, list):
+                yield from step
+            else:
+                yield step
+
+
+def count_failed_steps(sample_result: Dict) -> int:
+    """Number of steps in *sample_result* that recorded a failure."""
+    return sum(1 for step in iter_steps(sample_result) if "error" in step)
 
 
 class Inferencer:
@@ -243,16 +269,26 @@ class Inferencer:
             ecg_image = base64_image_encoder(ecg_image)
 
         conversation.add_user_turn(question, indexed_options, ecg_signal=ecg_signal, ecg_image=ecg_image)
-        response = self.get_response(
-            conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose,
-            target_dx=target_dx, ecg_path=ecg_path,
-        )
-        step["model_response"] = response
+        try:
+            response = self.get_response(
+                conversation, enable_condensed_chat=enable_condensed_chat, verbose=verbose,
+                target_dx=target_dx, ecg_path=ecg_path,
+            )
+        except UnusableModelOutput as e:
+            # A step the model could not answer
+            logger.warning(
+                f"Step '{step.get('question_type')}' failed ({type(e).__name__}: {e}); "
+                "recording it unanswered and continuing with the next step."
+            )
+            step["error"] = f"{type(e).__name__}: {e}"
+            response = None
+        else:
+            step["model_response"] = response
 
         # add model turn to conversation with the ground truth answer
         # we do not apply this to initial diagnostic question as it is not regarded as a reasoning step
         # instead, we add the actual model response to the conversation history for the initial diagnostic question
-        if "answer" in step and step["question_type"] != "initial_diagnostic_question":
+        if step["question_type"] != "initial_diagnostic_question":
             if isinstance(step["answer"], list):
                 answer_str = ", ".join(step["answer"])
             else:
@@ -260,10 +296,38 @@ class Inferencer:
 
             conversation.add_model_turn(answer_str)
         else:
-            conversation.add_model_turn(response)
+            conversation.add_model_turn(response or "")
 
         if return_response:
             return response
+
+    def run_sample(
+        self,
+        sample: Dict,
+        ecg_base_dir: str,
+        inference_mode: str = "default",
+        enable_condensed_chat: bool = False,
+    ) -> Dict:
+        """Run one sample, recording a failure on it."""
+        try:
+            if inference_mode == "forced-commit":
+                return self.inference_forced_commit(
+                    sample, ecg_base_dir, enable_condensed_chat=enable_condensed_chat
+                )
+            return self.inference(
+                sample, ecg_base_dir, enable_condensed_chat=enable_condensed_chat
+            )
+        except Exception as e:
+            result = copy.deepcopy(sample)
+            # Same name the successful path writes, so the field does not
+            # depend on which way the sample went.
+            result["metadata"]["model"] = self.model_name
+            result["metadata"]["error"] = f"{type(e).__name__}: {e}"
+            logger.warning(
+                f"Sample {sample['metadata'].get('id')} did not run "
+                f"({type(e).__name__}: {e}); recording it unanswered."
+            )
+            return result
 
     def inference(self, sample: Dict, ecg_base_dir: str, enable_condensed_chat: bool = False) -> Dict:
         dx = sample["metadata"]["target_dx"].replace("_", " ")
@@ -348,6 +412,11 @@ class Inferencer:
                         enable_condensed_chat=enable_condensed_chat,
                         ecg_path=ecg_path,
                     )
+
+        # Record how many steps failed
+        n_failed_steps = count_failed_steps(sample_result)
+        if n_failed_steps:
+            sample_result["metadata"]["n_failed_steps"] = n_failed_steps
 
         return sample_result
 
@@ -464,6 +533,11 @@ class Inferencer:
             #     so that the next loop's inference sees a consistent history.
             self._teacher_force_step(loop["diagnostic_decision"], canonical)
 
+        # Record how many steps failed
+        n_failed_steps = count_failed_steps(sample_result)
+        if n_failed_steps:
+            sample_result["metadata"]["n_failed_steps"] = n_failed_steps
+
         return sample_result
 
 
@@ -538,21 +612,19 @@ def main(args):
             with open(save_path, "w") as f:
                 f.write("")
 
-            if args.inference_mode == "forced-commit":
-                result = inferencer.inference_forced_commit(
-                    sample,
-                    ecg_base_dir,
-                    enable_condensed_chat=args.enable_condensed_chat,
-                )
-            else:
-                result = inferencer.inference(
-                    sample,
-                    ecg_base_dir,
-                    enable_condensed_chat=args.enable_condensed_chat,
-                )
+            result = inferencer.run_sample(
+                sample,
+                ecg_base_dir,
+                inference_mode=args.inference_mode,
+                enable_condensed_chat=args.enable_condensed_chat,
+            )
 
             n_total += 1
-            if "parsing_error" in result["metadata"] and result["metadata"]["parsing_error"]:
+            if (
+                result["metadata"].get("parsing_error")
+                or result["metadata"].get("error")
+                or result["metadata"].get("n_failed_steps")
+            ):
                 n_failed += 1
 
             pbar.set_description(

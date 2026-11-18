@@ -3,6 +3,26 @@ from typing import List, Optional, Union
 
 
 class Evaluator:
+    #: Column order at the front of every CSV written by :meth:`to_csv_row`.
+    CSV_LEADING_COLUMNS = (
+        "model",
+        "idq_accuracy",
+        "completion_hard",
+        "completion_soft",
+        "depth",
+        "gt_reasoning_based_diagnosis_accuracy",
+        "self_reasoning_based_diagnosis_accuracy",
+        "early_commit_rate",
+        "early_commit_accuracy",
+        "criterion_selection_accuracy_w_gt",
+        "finding_identification_accuracy_w_gt",
+        "lead_grounding_accuracy_w_gt",
+        "wave_grounding_accuracy_w_gt",
+        "measurement_grounding_accuracy_w_gt",
+        "diagnostic_decision_accuracy_w_gt",
+        "error_samples",
+    )
+
     @staticmethod
     def parse_arguments(args):
         """Parse evaluator-specific arguments.
@@ -95,6 +115,19 @@ class Evaluator:
                 "total": 0,
                 "correct": 0,
             },
+            "self_reasoning_based_diagnosis": {
+                "total": 0,
+                "correct": 0,
+            },
+            # samples whose Self-RDA resolved at an intermediate diagnostic_decision, i.e. the
+            # model committed to yes/no before the final loop while its chain was still clean.
+            # `total` counts those commits, `correct` the ones matching dx_label.
+            "early_commit": {
+                "total": 0,
+                "correct": 0,
+            },
+            # samples that did not run at all.
+            "error_samples": 0,
             "reasoning": {
                 "total": 0,
                 "completed_hard": 0,
@@ -149,6 +182,37 @@ class Evaluator:
             reduced_metrics["gt_reasoning_based_diagnosis"]["correct"]
             / reduced_metrics["gt_reasoning_based_diagnosis"]["total"]
             if reduced_metrics["gt_reasoning_based_diagnosis"]["total"] > 0
+            else 0.0
+        )
+
+        # compute accuracy for self-reasoning-based diagnosis: walk the chain
+        # with model predictions until the first yes/no diagnostic_decision; score
+        # 1 if every prior reasoning step was correct and that decision matches
+        # the sample-level dx_label.
+        reduced_metrics["self_reasoning_based_diagnosis"]["accuracy"] = (
+            reduced_metrics["self_reasoning_based_diagnosis"]["correct"]
+            / reduced_metrics["self_reasoning_based_diagnosis"]["total"]
+            if reduced_metrics["self_reasoning_based_diagnosis"]["total"] > 0
+            else 0.0
+        )
+
+        # decompose Self-RDA into its early-commit part: `rate` is how often the model shortcut
+        # at all, `accuracy` is conditional on having committed early (was the shortcut right?),
+        # and `correct_rate` puts the same numerator as `accuracy` over all samples (how much of
+        # Self-RDA comes from shortcuts rather than full chains).
+        reduced_metrics["early_commit"]["rate"] = (
+            reduced_metrics["early_commit"]["total"] / reduced_metrics["reasoning"]["total"]
+            if reduced_metrics["reasoning"]["total"] > 0
+            else 0.0
+        )
+        reduced_metrics["early_commit"]["accuracy"] = (
+            reduced_metrics["early_commit"]["correct"] / reduced_metrics["early_commit"]["total"]
+            if reduced_metrics["early_commit"]["total"] > 0
+            else 0.0
+        )
+        reduced_metrics["early_commit"]["correct_rate"] = (
+            reduced_metrics["early_commit"]["correct"] / reduced_metrics["reasoning"]["total"]
+            if reduced_metrics["reasoning"]["total"] > 0
             else 0.0
         )
 
@@ -213,6 +277,40 @@ class Evaluator:
         return reduced_metrics
 
     # built-in evaluation implementations
+    def _validate_step(
+        self, question: str, gt, model_response, question_type: str, **kwargs
+    ) -> bool:
+        """Validate one step, standing in for :meth:`validate` when there is no answer."""
+        if isinstance(model_response, str) and model_response.strip():
+            return self.validate(
+                question=question,
+                gt=gt,
+                model_response=model_response,
+                question_type=question_type,
+                **kwargs,
+            )
+
+        return False
+
+    def _validate_decision(self, gt, step: dict) -> bool:
+        """Judge one diagnostic_decision step.
+
+        Some evaluators expose ``_validate_diagnostic_decision``, which reads
+        yes/no straight off the text instead of asking the judge. It expects a
+        string, so a step with no answer is routed through the same guard as
+        every other step.
+        """
+        response = step.get("model_response")
+        answered = isinstance(response, str) and bool(response.strip())
+        if answered and hasattr(self, "_validate_diagnostic_decision"):
+            return self._validate_diagnostic_decision(gt, response)
+        return self._validate_step(
+            question=step.get("question", ""),
+            gt=gt,
+            model_response=response,
+            question_type="diagnostic_decision",
+        )
+
     def evaluate(self, result: dict) -> Optional[int]:
         """Evaluate a single sample result and save metrics.
         For those evaluators that have `estimate_cost` argument (e.g., GeminiEvaluator), this method
@@ -230,27 +328,27 @@ class Evaluator:
             # in dry-run mode, we do not evaluate metrics and just calculate token usage instead to
             # estimate cost
             total_input_tokens = 0
-            total_input_tokens += self.validate(
+            total_input_tokens += self._validate_step(
                 question=result["data"]["initial_diagnostic_question"]["question"],
                 gt=dx_label_str,
-                model_response=result["data"]["initial_diagnostic_question"]["model_response"],
+                model_response=result["data"]["initial_diagnostic_question"].get("model_response"),
                 question_type="initial_diagnostic_question",
             )
             for loop_idx, loop in enumerate(result["data"]["reasoning"]):
                 for step_name, step in loop.items():
                     if step_name == "ecg_grounding":
                         for g_step in step:
-                            total_input_tokens += self.validate(
+                            total_input_tokens += self._validate_step(
                                 question=g_step["question"],
                                 gt=g_step["answer"],
-                                model_response=g_step["model_response"],
+                                model_response=g_step.get("model_response"),
                                 question_type=g_step["question_type"],
                             )
                     else:
-                        total_input_tokens += self.validate(
+                        total_input_tokens += self._validate_step(
                             question=step["question"],
                             gt=step["answer"],
-                            model_response=step["model_response"],
+                            model_response=step.get("model_response"),
                             question_type=step_name,
                         )
             return total_input_tokens
@@ -270,6 +368,12 @@ class Evaluator:
                 f"Call init_metrics('{dx}') before evaluate() on samples with target_dx='{dx}'."
             )
 
+        if result["metadata"].get("error"):
+            # The sample did not run
+            self.metrics["total"]["error_samples"] += 1
+            self.metrics[dx]["error_samples"] += 1
+            return None
+
         # Evaluate initial diagnostic question
         initial_diagnostic_question_result = result["data"]["initial_diagnostic_question"]
         self.metrics["total"]["initial_diagnostic_question"]["total"] += 1
@@ -278,10 +382,10 @@ class Evaluator:
         def _eval_step(step, terminated_early, metric_names) -> bool:
             question = step["question"]
             gt = step["answer"]
-            model_response = step["model_response"]
+            model_response = step.get("model_response")
             step_name = step["question_type"]
 
-            corrected = self.validate(
+            corrected = self._validate_step(
                 question=question, gt=gt, model_response=model_response, question_type=step_name
             )
             for name in metric_names:
@@ -294,8 +398,8 @@ class Evaluator:
         self.metrics["total"]["reasoning"]["total"] += 1
         self.metrics[dx]["reasoning"]["total"] += 1
         question = initial_diagnostic_question_result["question"]
-        model_response = initial_diagnostic_question_result["model_response"]
-        initial_dx_correct = self.validate(
+        model_response = initial_diagnostic_question_result.get("model_response")
+        initial_dx_correct = self._validate_step(
             question=question,
             gt=dx_label_str,
             model_response=model_response,
@@ -315,6 +419,19 @@ class Evaluator:
         terminated_early_soft = False
         final_dx_correct = False
         final_dx_correct_w_gt_reasoning = False
+        # Self-RDA state: walk the chain with model predictions until the first
+        # yes/no diagnostic_decision emitted by the model, then compare against
+        # dx_label. Non-decision step failures (criterion_selection /
+        # finding_identification / ecg_grounding) break the chain; an
+        # intermediate diagnostic_decision where the model disagrees with the
+        # "further findings" GT also triggers resolution (model emitted yes/no
+        # early).
+        self_rda_reasoning_broken = False
+        self_rda_resolved = False
+        self_rda_correct_flag = False
+        # set when the resolution above happened at an intermediate decision (an early commit on a
+        # clean chain) rather than at the final loop, so Self-RDA can be split by where it came from
+        self_rda_early_commit = False
         # Evaluate stepwise in reasoning
         for loop_idx, loop in enumerate(result["data"]["reasoning"]):
             have_grounding_step = False
@@ -336,6 +453,8 @@ class Evaluator:
                             terminated_early_hard = True
                             terminated_early_soft = True
                             terminated_early_in_loop_hard = True
+                            if not self_rda_resolved:
+                                self_rda_reasoning_broken = True
                     depth_in_loop += depth_per_grounding / len(step)
                 else:
                     corrected = _eval_step(step, terminated_early_hard, metric_names=["total", dx])
@@ -354,6 +473,44 @@ class Evaluator:
                         if not is_soft_skippable:
                             terminated_early_soft = True
 
+                    # Self-RDA resolution at diagnostic_decision
+                    if step_name == "diagnostic_decision" and not self_rda_resolved:
+                        if self_rda_reasoning_broken:
+                            # upstream reasoning already failed -> Self-RDA=0
+                            self_rda_resolved = True
+                            self_rda_correct_flag = False
+                        elif corrected:
+                            if is_soft_skippable:
+                                # GT="further findings" and model matched ->
+                                # keep going; Self-RDA stays unresolved.
+                                pass
+                            else:
+                                # final-loop GT is yes/no and model matched; by
+                                # construction the GT equals dx_label, so the
+                                # model's first yes/no matches dx_label.
+                                self_rda_resolved = True
+                                self_rda_correct_flag = True
+                        else:
+                            if is_soft_skippable:
+                                # model emitted yes/no (or anything other than
+                                # "further findings") when GT expected "further
+                                # findings": this is the first yes/no. Compare
+                                # against dx_label.
+                                matches_dx = self._validate_decision(dx_label_str, step)
+                                self_rda_resolved = True
+                                self_rda_correct_flag = bool(matches_dx)
+                                self_rda_early_commit = True
+                            else:
+                                # final-loop GT=dx_label and model didn't match:
+                                # either opposite yes/no or "further findings".
+                                # Both give Self-RDA=0.
+                                self_rda_resolved = True
+                                self_rda_correct_flag = False
+                    elif step_name != "diagnostic_decision" and not corrected:
+                        # criterion_selection / finding_identification wrong
+                        if not self_rda_resolved:
+                            self_rda_reasoning_broken = True
+
             self.metrics["total"]["reasoning"]["per_loop"]["total"] += 1
             self.metrics[dx]["reasoning"]["per_loop"]["total"] += 1
             # we only count depth for those having grounding steps so that the depth metric is ranged
@@ -365,19 +522,10 @@ class Evaluator:
                 self.metrics[dx]["reasoning"]["per_loop"]["depth_sum"] += depth_in_loop
 
             if loop_idx == len(result["data"]["reasoning"]) - 1:
-                if hasattr(self, "_validate_decision"):
-                    final_dx_correct_w_gt_reasoning = self._validate_decision(
-                        loop["diagnostic_decision"]["answer"], loop["diagnostic_decision"]["model_response"]
-                    )
-                    
-                else:
-                    final_dx_correct_w_gt_reasoning = self.validate(
-                        question=loop["diagnostic_decision"]["question"],
-                        gt=loop["diagnostic_decision"]["answer"],
-                        model_response=loop["diagnostic_decision"]["model_response"],
-                        question_type="diagnostic_decision",
-                    )
-                
+                final_dx_correct_w_gt_reasoning = self._validate_decision(
+                    loop["diagnostic_decision"]["answer"], loop["diagnostic_decision"]
+                )
+
                 if not terminated_early_hard and final_dx_correct_w_gt_reasoning:
                     final_dx_correct = True
 
@@ -387,6 +535,21 @@ class Evaluator:
         if final_dx_correct_w_gt_reasoning:
             self.metrics["total"]["gt_reasoning_based_diagnosis"]["correct"] += 1
             self.metrics[dx]["gt_reasoning_based_diagnosis"]["correct"] += 1
+
+        # self-reasoning-based diagnosis
+        self.metrics["total"]["self_reasoning_based_diagnosis"]["total"] += 1
+        self.metrics[dx]["self_reasoning_based_diagnosis"]["total"] += 1
+        if self_rda_correct_flag:
+            self.metrics["total"]["self_reasoning_based_diagnosis"]["correct"] += 1
+            self.metrics[dx]["self_reasoning_based_diagnosis"]["correct"] += 1
+
+        # early-commit breakdown of self-reasoning-based diagnosis
+        if self_rda_early_commit:
+            self.metrics["total"]["early_commit"]["total"] += 1
+            self.metrics[dx]["early_commit"]["total"] += 1
+            if self_rda_correct_flag:
+                self.metrics["total"]["early_commit"]["correct"] += 1
+                self.metrics[dx]["early_commit"]["correct"] += 1
 
         if not terminated_early_hard:
             self.metrics["total"]["reasoning"]["completed_hard"] += 1
@@ -445,6 +608,20 @@ class Evaluator:
         row["gt_reasoning_based_diagnosis_correct"] = gtd_metric["correct"]
         row["gt_reasoning_based_diagnosis_accuracy"] = gtd_metric["accuracy"]
 
+        # self-reasoning-based diagnosis
+        srd_metric = reduced_metrics["self_reasoning_based_diagnosis"]
+        row["self_reasoning_based_diagnosis_total"] = srd_metric["total"]
+        row["self_reasoning_based_diagnosis_correct"] = srd_metric["correct"]
+        row["self_reasoning_based_diagnosis_accuracy"] = srd_metric["accuracy"]
+
+        # early-commit breakdown of self-reasoning-based diagnosis
+        ec_metric = reduced_metrics["early_commit"]
+        row["early_commit_total"] = ec_metric["total"]
+        row["early_commit_correct"] = ec_metric["correct"]
+        row["early_commit_rate"] = ec_metric["rate"]
+        row["early_commit_accuracy"] = ec_metric["accuracy"]
+        row["correct_early_commit_rate"] = ec_metric["correct_rate"]
+
         # reasoning
         row["reasoning_total"] = reduced_metrics["reasoning"]["total"]
         for key in reduced_metrics["reasoning"]:
@@ -464,4 +641,10 @@ class Evaluator:
             for key in per_loop[step]:
                 row[f"{step}_{key}"] = per_loop[step][key]
 
-        return row
+        # samples that never ran, kept next to the accuracies they are absent from
+        if "error_samples" in reduced_metrics:
+            row["error_samples"] = reduced_metrics["error_samples"]
+
+        ordered = {col: row[col] for col in self.CSV_LEADING_COLUMNS if col in row}
+        ordered.update(row)
+        return ordered

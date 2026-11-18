@@ -89,6 +89,21 @@ class GeminiModel(BaseModel):
             config=config,
         )
 
+    def _log_usage(self, response):
+        """Append (prompt, output, total) token counts to GEMINI_USAGE_LOG, for cost estimation."""
+        path = os.environ.get("GEMINI_USAGE_LOG")
+        um = getattr(response, "usage_metadata", None)
+        if not path or um is None:
+            return
+        p = getattr(um, "prompt_token_count", 0) or 0
+        c = getattr(um, "candidates_token_count", 0) or 0
+        t = getattr(um, "total_token_count", 0) or 0
+        try:
+            with open(path, "a") as f:
+                f.write(f"{p}\t{c}\t{t}\n")
+        except OSError:
+            pass
+
     def get_response(
         self, conversation, enable_condensed_chat: bool = False, verbose: bool = False, **kwargs
     ) -> str:
@@ -146,6 +161,9 @@ class GeminiModel(BaseModel):
             system_instruction=system,
             thinking_config=types.ThinkingConfig(thinking_budget=self.thinking_budget),
             temperature=0.0,
+            # service tier ("flex" for discounted best-effort processing) is opt-in via env;
+            # unset -> default (standard). The tier changes only price/priority, not the model.
+            service_tier=os.environ.get("GEMINI_SERVICE_TIER") or None,
         )
 
         if verbose:
@@ -162,6 +180,7 @@ class GeminiModel(BaseModel):
                 retry_count += 1
             if retry_count > 0:
                 print(f"\n**Note: had to retry {retry_count} times to get a non-empty response.**\n")
+            self._log_usage(response)
             response = response.text.strip()
         except Exception as e:
             raise RuntimeError(f"Failed to get response: {e}")

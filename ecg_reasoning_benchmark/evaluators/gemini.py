@@ -66,7 +66,7 @@ class GeminiEvaluator(Evaluator):
 
         parser.add_argument("--api-key", type=str, default=None, help="Google Gemini API key")
         parser.add_argument(
-            "--gemini-model", type=str, default="gemini-2.0-flash", help="Gemini model to use"
+            "--gemini-model", type=str, default="gemini-3-flash-preview", help="Gemini model to use"
         )
         parser.add_argument(
             "--estimate-cost",
@@ -202,6 +202,9 @@ class GeminiEvaluator(Evaluator):
             )
             gt = ", ".join(gt)
 
+        if not isinstance(model_response, str):
+            model_response = str(model_response)
+
         prompt_text = self._get_evaluation_prompt(question, gt, model_response)
 
         try:
@@ -219,23 +222,25 @@ class GeminiEvaluator(Evaluator):
 
             # generate content with deterministic configuration
             result = self._generate_with_retry(prompt_text)
-
-            result_text = result.text.strip()
-            lines = result_text.split("\n")
-
-            decision_line = lines[0].strip().upper()
-            # reasoning = lines[1].strip() if len(lines) > 1 else "No reasoning provided."
-
-            is_aligned = False
-            if "TRUE" in decision_line:
-                is_aligned = True
-            elif "FALSE" in decision_line:
+            if result is None:
                 is_aligned = False
             else:
-                # fallback check if the model was verbose
-                is_aligned = "TRUE" in result_text.upper()
-                if not is_aligned:
-                    print(f"Warning: Unexpected evaluation output format:\n{result_text}")
+                result_text = result.text.strip()
+                lines = result_text.split("\n")
+
+                decision_line = lines[0].strip().upper()
+                # reasoning = lines[1].strip() if len(lines) > 1 else "No reasoning provided."
+
+                is_aligned = False
+                if "TRUE" in decision_line:
+                    is_aligned = True
+                elif "FALSE" in decision_line:
+                    is_aligned = False
+                else:
+                    # fallback check if the model was verbose
+                    is_aligned = "TRUE" in result_text.upper()
+                    if not is_aligned:
+                        print(f"Warning: Unexpected evaluation output format:\n{result_text}")
 
             if self.use_cache:
                 if self.cache_size == -1 or len(self.cache) < self.cache_size:

@@ -288,7 +288,7 @@ def _plot_one_axes(
     # Soft horizontal padding so markers don't touch the spines.
     pad = (mids[-1] - mids[0]) * 0.08 if len(mids) > 1 else 5.0
     ax.set_xlim(mids[0] - pad, mids[-1] + pad)
-    ax.set_title(title, pad=10)
+    # ax.set_title(title, pad=10)
     ax.grid(True, axis="y", alpha=0.7)
     ax.set_axisbelow(True)
 
@@ -375,7 +375,7 @@ def render(
             )
         for j in range(n_models, rows * cols):
             axes[j // cols][j % cols].axis("off")
-        fig.suptitle(base_title, y=1.02, fontsize=15, fontweight="bold")
+        # fig.suptitle(base_title, y=1.02, fontsize=15, fontweight="bold")
 
     fig.tight_layout()
     os.makedirs(os.path.dirname(os.path.abspath(output_path)) or ".", exist_ok=True)
