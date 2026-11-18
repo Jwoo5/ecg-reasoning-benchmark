@@ -18,16 +18,25 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
 
 # Release Notes
 
+<details open>
+  <summary><b><i>1.0.0</i></b></summary>
+
+* **Accepted at NeurIPS 2026.** ECG-Reasoning-Benchmark has been accepted to the NeurIPS 2026 Evaluations and Datasets Track.
+* **Official release.** The question-answer samples in `data/` are identical to 0.0.2, so results obtained on 0.0.2 remain valid and comparable.
+* **Automatic ECG analysis results.** Added the automatic ECG analysis results underlying the benchmark for every ECG it uses (2,871 from PTB-XL and 3,317 from MIMIC-IV-ECG): wave boundaries and measurements for each beat and lead, ECG findings, and diagnoses. They are distributed, together with `descriptions.json` describing their keys, through the [Hugging Face dataset](https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark) and the assets of this release. See [Automatic ECG Analysis Results](#automatic-ecg-analysis-results) below.
+
+</details>
+
+<details>
+  <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
+
 > [!IMPORTANT]
-> **Re-evaluation guidance for the latest release (0.0.2)**
+> **Re-evaluation guidance for 0.0.2**
 >
 > If you have already curated model responses against the previous release, please note that re-evaluation is needed to reflect the changes introduced in 0.0.2:
 > * For the diagnoses covered by the **diagnosis-wide sample updates** below (LAFB, LPFB, LVH, 3AVB, PAC, PVC), re-evaluation is **required** -- prior results on these diagnoses are no longer comparable under the updated samples.
 > * For the **individually re-sampled samples from the manual inspection pass**, the original samples were not erroneous, so prior results remain technically valid; however, we still **recommend** re-running on the updated samples for consistency with the latest release.
 > * For **any model evaluated with the 0.0.1 inference code**, re-running inference with the 0.0.2 code is **required**. The 0.0.1 release contained a bug -- accidentally introduced during a code cleanup -- where the GT answer of the `initial_diagnostic_question` step was injected into the dialogue history, contrary to the documented GT-substitution exception for that step. This bug has been fixed in 0.0.2. Note that **the experimental results reported in the paper are unaffected**, since the bug was introduced only after those experiments had already been completed.
-
-<details open>
-  <summary><b><i>0.0.2 (Pre-release)</i></b></summary>
 
 * **Diagnosis-wide sample updates.** For the following diagnoses, every sample was regenerated to reflect improvements to the underlying question templates or to correct systematic errors present in the previous release:
   * `left_anterior_fascicular_block` (LAFB) and `left_posterior_fascicular_block` (LPFB): The Criterion Selection question asking about the LBBB-related rule-out condition was reworded for clarity (e.g., _"To accurately diagnose left anterior fascicular block, which of the following diagnostic criteria should be evaluated?"_ → _"To accurately diagnose left anterior fascicular block, which of the following conditions must be ruled out before diagnosis?"_).
@@ -576,7 +585,7 @@ ecg-reasoning-benchmark-forced-commit-plot \
 * Figures are styled for direct paper inclusion: colorblind-safe palette (Wong / seaborn `colorblind`), distinct per-model markers for B/W-print legibility, top/right spines removed with a y-only dashed grid, and TrueType font embedding (`pdf.fonttype=42`) so PDFs pass paper-submission font checks.
 
 # Citation
-Please cite this work as:
+Please cite this work as follows. We will update this entry to the NeurIPS 2026 proceedings version once it becomes available.
 ```
 @article{oh2026ecg,
   title={ECG-Reasoning-Benchmark: A Benchmark for Evaluating Clinical Reasoning Capabilities in ECG Interpretation},
