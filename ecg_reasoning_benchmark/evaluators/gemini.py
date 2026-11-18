@@ -66,7 +66,7 @@ class GeminiEvaluator(Evaluator):
 
         parser.add_argument("--api-key", type=str, default=None, help="Google Gemini API key")
         parser.add_argument(
-            "--gemini-model", type=str, default="gemini-2.0-flash", help="Gemini model to use"
+            "--gemini-model", type=str, default="gemini-3-flash-preview", help="Gemini model to use"
         )
         parser.add_argument(
             "--estimate-cost",
