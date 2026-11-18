@@ -73,7 +73,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-          <code>`left_posterior_fascicular_block`</code> (LPFB)
+          <code>left_posterior_fascicular_block</code> (LPFB)
         </li>
         <ul>
           <li>
@@ -81,7 +81,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-          <code>`anterior_ischemia`</code> (ISCAN)
+          <code>anterior_ischemia</code> (ISCAN)
         </li>
         <ul>
           <li>
@@ -89,7 +89,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-            <code>`inferior_ischemia`</code> (ISCIN)
+            <code>inferior_ischemia</code> (ISCIN)
         </li>
         <ul>
           <li>
@@ -100,7 +100,7 @@ This is the official repository for distributing ECG-Reasoning-Benchmark.
           </li>
         </ul>
         <li>
-          <code>`lateral_ischemia`</code> (ISCLA)
+          <code>lateral_ischemia</code> (ISCLA)
         </li>
         <ul>
           <li>
@@ -169,8 +169,8 @@ data
 >               * `"wave_grounding"`: a question asking for the grounding of a specific ECG finding to the actual waveforms in the ECG signal (e.g., `"Within the selected leads, in which of the following waves can you observe the QRS complex with ST-segment depression? The options below refer to time ranges on the ECG signal, provided in seconds."`).
 >               * `"measurement_grounding"`: a question asking for the grounding of a specific ECG finding to the actual measurements in the ECG signal (e.g., `"For the selected segment, which range does the measured QRS duration fall into?"`).
 >       * `diagnostic_decision`
->           * `question`: a question asking for the decision of the diagnosis based onthe identified ECG findings (e.g., `"Based onthe finding identified above, does this ECG suggestthe presence of anterior ischemia?"`).
->           * `options`: a list of possible answer options forthe question, which is `["Yes", "No", "Further findings are required to confirmthe diagnosis"]` for all samples of this reasoning step.
+>           * `question`: a question asking for the decision of the diagnosis based on the identified ECG findings (e.g., `"Based on the finding identified above, does this ECG suggest the presence of anterior ischemia?"`).
+>           * `options`: a list of possible answer options for the question, which is `["Yes", "No", "Further findings are required to confirm the diagnosis"]` for all samples of this reasoning step.
 >           * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
 >           * `answer_idx`: the index of the correct answer in the `options` list.
 >           * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
@@ -401,10 +401,10 @@ Follow the instructions below to implement a new model class:
 5. Implement classmethod `build_model`, which builds the model instance. This can call the `__init__` method of the model class to initialize the model instance, and also include any additional processing steps for building the model before calling the `__init__` method. All CLI arguments are forwarded as keyword arguments via `build_model(model_name, **vars(args))`, so models can accept additional configuration (e.g., API keys, model-specific parameters) through the CLI without modifying the core inference code.
 6. Implement `get_response` method, which generates a response based on the conversation history. This method should take the `utils.Conversation` instance as input, and return the generated response as a string. Additional keyword arguments are passed through, including `ecg_path` (the wfdb record path without extension, available for all modalities).
 
-    **Accessing conversation turns for prompt construction:** Use `conversation.get_turns_for_prompt()` instead of directly accessing `conversation.conversation[1:]`. This helper method automatically handles the exclusion of the initial diagnostic Q&A from the conversation history in subsequent reasoning turns, while preserving the ECG data (image/signal) from the first user turn. When the conversation has progressed beyond the initial diagnostic question (more than 3 turns including the system prompt), the method returns an ECG-only stub (containing only `image`/`signal` keys, without a `role` key) followed by the remaining turns. Model implementations should use `turn.get("role")` instead of `turn["role"]` to safely handle this stub.
+    **Accessing conversation turns for prompt construction:** Use `conversation.get_turns_for_prompt()` instead of directly accessing `conversation.conversation[1:]`. This helper method returns the whole dialogue history except the system prompt, starting with the initial diagnostic question, which carries the ECG data (image/signal), and the model's own answer to it, followed by the reasoning turns.
 
     The conversation turns contain the following fields:
-    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`. Note that the ECG-only stub returned by `get_turns_for_prompt()` does not have a `role` key.
+    * `role`: the role of the speaker, which can be either one of `"system"`, `"user"`, and `"model"`.
     * For the `system` or `model` role,
         * `text`: the text content of the conversation turn. In other words, the system prompt for the `system` role, and the model response for the `model` role.
     * For the `user` role,
@@ -494,7 +494,7 @@ ecg-reasoning-benchmark-evaluate /path/to/results/ \
 ```
 * `$gemini_model`: the specific variant of Gemini to be used as the evaluator (e.g., `gemini-2.5-flash`, `gemini-3-flash-preview`).
 * `--use-cache`: an optional flag to indicate whether to use the cache for storing the evaluation results from Gemini, which can avoid the redundant API calls to Gemini for the same evaluation samples to save the cost and time for evaluation. Specifically, when this flag is enabled, the evaluation result for each (model response, GT answer) pair will be stored in the internal cache directory in the `GeminiEvaluator` instance. Then, when the same (model response, GT answer) pair appears in the evaluation samples, the evaluation result will be retrieved from the cache instead of making API calls to Gemini. Enabling this functionality is highly recommended when evaluating a large number of samples, which can significantly reduce the cost and time for evaluation.
-* `--save-cache`: an optional flag to indicate whether to save the cache to the disk during the evaluation process, which can save the cache for future evaluation runs. The cache will be saved in `~/.cache/ecg-reasoning-benchmark/` directory by default, with the filename encoded with the hash of the evaluator name (e.g., the hash of `gemini-2.5-flash` or `gemini-3-flash-preview`) to distinguish the cache for different Gemini variants.
+* `--save-cache`: an optional flag to indicate whether to save the cache to the disk during the evaluation process, which can save the cache for future evaluation runs. The cache will be saved in `~/.cache/ecg_reasoning_benchmark/` directory by default (or in `$ERB_CACHE` if set), with the filename encoded with the hash of the evaluator name (e.g., the hash of `gemini-2.5-flash` or `gemini-3-flash-preview`) to distinguish the cache for different Gemini variants.
 * `--load-cache`: an optional flag to indicate whether to load the cache from the disk before the evaluation process.
 * `--save-cache-interval`: an optional argument to specify the interval for saving the cache to the disk during the evaluation process, which can avoid the potential issue of losing the cache due to unexpected interruption during the evaluation process. For example, when `--save-cache-interval 1` is specified, the cache will be saved to the disk for every single (model response, GT answer) pair.
 
