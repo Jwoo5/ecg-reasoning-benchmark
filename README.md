@@ -130,6 +130,7 @@ data
 ├── mimic_iv_ecg.jsonl
 └── ptbxl.jsonl
 ```
+`data/` holds the multi-turn QA reasoning samples described below. The automatic ECG analysis results for the ECGs they use are distributed separately through the [Hugging Face dataset](https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark) and the [GitHub release assets](https://github.com/Jwoo5/ecg-reasoning-benchmark/releases) (see [Automatic ECG Analysis Results](#automatic-ecg-analysis-results)).
 * Each `.jsonl` file contains the full set of multi-turn QA reasoning samples for its respective data source (i.e., MIMIC-IV-ECG and PTB-XL).
 * Each line in the `.jsonl` file represents a single JSON object containing the `metadata` and `data` for one reasoning sample:
 > * `metadata`: contains metadata information about the sample:
@@ -174,6 +175,27 @@ data
 >           * `answer`: the correct answer for the question, which is one of the options provided in the `options` field.
 >           * `answer_idx`: the index of the correct answer in the `options` list.
 >           * `question_type`: the type of the question, which is `"diagnostic_decision"` for all samples of this reasoning step.
+
+## Automatic ECG Analysis Results
+
+The automatic ECG analysis results for every ECG used in the benchmark are distributed through `data/analysis/` of the [Hugging Face dataset](https://huggingface.co/datasets/Jwoo5/ECG-Reasoning-Benchmark) and the assets of the [GitHub releases](https://github.com/Jwoo5/ecg-reasoning-benchmark/releases) from 1.0.0 on, one record per ECG:
+* `mimic_iv_ecg.parquet` (3,317 ECGs) and `ptbxl.parquet` (2,871 ECGs).
+* A record is linked to the QA samples by `metadata.ecg_id` within the same data source. Several QA samples can share one ECG.
+* `descriptions.json`, distributed alongside them, mirrors the structure of a record and describes every key, including its unit and definition.
+
+Each record contains:
+* `metadata`: `data_source`, `ecg_id`, `sampling_rate` (Hz), and `duration_s`.
+* `features`: measured values.
+  * `global`: values shared by all 12 leads, whose wave boundaries are aligned: onset and offset times and durations of the QRS complexes, P waves, T waves, and ST segments; RR, PR, QT, and QTc intervals; the QRS axis of each beat and its median; and flags for atrial fibrillation or flutter and for possible premature beats.
+  * `lead_level`: values for each lead (`I`, `II`, `III`, `aVR`, `aVL`, `aVF`, `V1`-`V6`): QRS amplitudes and shape, R wave peak time and position, Q wave duration and amplitude, QRS morphology labels (qR, rS, RS, RSR', rSr', notched, slurred R, slurred S, dominant S), P and T wave amplitudes and shapes, and ST segment amplitudes.
+* `findings`: ECG findings derived from the features, `global` (e.g., axis deviation, prolonged PR interval, atrial fibrillation) and `lead_level` for each lead (e.g., ST elevation, ST depression, T wave inversion, pathological Q waves).
+* `diagnoses`: `true` or `false` for each of the 17 benchmark diagnoses.
+
+Conventions:
+* Times are in seconds from the start of the recording, durations and intervals in milliseconds (except RR intervals, in seconds), amplitudes in millivolts, and axes in degrees.
+* Per-beat lists, global or lead-level, have one entry per detected beat in the same order. Lists of P waves, T waves, and ST segments have one entry per detected wave or segment and are not aligned with the per-beat lists.
+* `null` marks a value that does not exist, e.g., the PR interval of a P wave not paired with a QRS complex.
+* The time ranges in the options of wave grounding questions are wave onset and offset times rounded to 0.01 s, so an option can be matched to its wave in these lists.
 
 ## Installation
 
@@ -221,6 +243,20 @@ mimic_dataset = load_dataset("Jwoo5/ECG-Reasoning-Benchmark", "mimic_iv_ecg", sp
 ptbxl_dataset = load_dataset("Jwoo5/ECG-Reasoning-Benchmark", "ptbxl", split="test")
 ```
 
+The automatic ECG analysis results are not registered as configurations, so load them by passing their file as `data_files`:
+
+```python
+# Load the analysis results of the MIMIC-IV-ECG ECGs and look one up for a QA sample
+mimic_analysis = load_dataset(
+    "Jwoo5/ECG-Reasoning-Benchmark", data_files={"test": "data/analysis/mimic_iv_ecg.parquet"}, split="test"
+)
+analysis_by_ecg = {record["metadata"]["ecg_id"]: record for record in mimic_analysis}
+
+record = analysis_by_ecg[mimic_dataset[0]["metadata"]["ecg_id"]]
+print(record["features"]["global"]["QRS_Duration_ms"])  # QRS duration of each beat
+print(record["findings"]["lead_level"]["V1"]["st_elevation"])  # ST elevation in lead V1
+```
+
 ### Option 2: Loading Local Files Directly
 
 If you cloned this repository and want to load the data locally, you can use the provided `.jsonl` files in the `data/` directory by parsing them line by line as JSON objects.
@@ -241,6 +277,8 @@ mimic_dataset = load_jsonl("data/mimic_iv_ecg.jsonl")
 # Load PTB-XL-sourced samples
 ptbxl_dataset = load_jsonl("data/ptbxl.jsonl")
 ```
+
+The analysis result files are not stored in this repository. To read them locally, download `ptbxl.parquet`, `mimic_iv_ecg.parquet`, and `descriptions.json` from the assets of the [GitHub release](https://github.com/Jwoo5/ecg-reasoning-benchmark/releases) or from `data/analysis/` of the Hugging Face dataset (e.g., `huggingface_hub.hf_hub_download("Jwoo5/ECG-Reasoning-Benchmark", "data/analysis/ptbxl.parquet", repo_type="dataset")`), and read them with any Parquet reader, e.g., `pandas.read_parquet(path)`.
 
 ### Example for accessing the first sample in the MIMIC-IV-ECG-sourced dataset
 
